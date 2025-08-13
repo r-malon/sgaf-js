@@ -1,0 +1,63 @@
+// schema.prisma
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model AF {
+  id          Int      @id @default(autoincrement())
+  numero      String   @unique
+  fornecedor  String
+  descricao   String
+  data_inicio DateTime
+  data_fim    DateTime
+  status      Boolean
+  
+  items       Item[]
+  
+  @@map("AF")
+}
+
+model Local {
+  id   Int    @id @default(autoincrement())
+  nome String @unique
+  
+  items Item[]
+  
+  @@map("Local")
+}
+
+model Item {
+  id               Int     @id @default(autoincrement())
+  AF_id            Int
+  Local_id         Int
+  descricao        String
+  banda_maxima     Int
+  banda_instalada  Int
+  data_instalacao  DateTime
+  quantidade       Int
+  status           Boolean
+  
+  af               AF      @relation(fields: [AF_id], references: [id], onDelete: Restrict)
+  local            Local   @relation(fields: [Local_id], references: [id], onDelete: Restrict)
+  valores          Valor[]
+  
+  @@map("Item")
+}
+
+model Valor {
+  id          Int     @id @default(autoincrement())
+  Item_id     Int
+  valor       Int
+  data_inicio DateTime
+  data_fim    DateTime?
+  
+  item        Item    @relation(fields: [Item_id], references: [id], onDelete: Cascade)
+  
+  @@map("Valor")
+}
