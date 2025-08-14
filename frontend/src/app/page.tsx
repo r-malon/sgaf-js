@@ -1,57 +1,33 @@
 "use client"
+
+import { API_BASE_URL } from "@/lib/config"
 import { DataTable } from "@/components/data-table"
 import { AFDialogForm } from "@/components/af-dialog-form"
-//import AFDataTable from '../components/AFDataTable';
+import useSWR, { mutate } from "swr"
 import { columns, AF } from "./columns"
-import useSWR from 'swr'
+import { handleDelete, handleEdit } from "./handlers"
 
-const srv = "http://[::1]:3001"
-const fetcher = (...args) => fetch(...args).then(res => res.json())
-
-function useAF() {
-  const { data, error, isLoading } = useSWR(`${srv}/af`, fetcher)
- 
-  return {
-    af: data,
-    isLoading,
-    isError: error
-  }
-}
+const fetcher = (url: string) =>
+  fetch(url).then((res) => {
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    return res.json()
+  })
 
 export default function Home() {
-  const { af, isLoading, isError } = useAF()
+  const { data, error, loading } = useSWR<AF[]>(`${API_BASE_URL}/af`, fetcher, {
+    refreshInterval: 5000,
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+  })
+  console.log(data, error, loading)
 
-  if (isLoading) return <h1>Loading...</h1>
-  if (isError) return <Error />
-
-  const handleEdit = (af: AFData) => {
-    router.push(`${srv}/af/${af.id}/edit`);
-  };
-
-  const handleDelete = async (af: AFData) => {
-    await fetch(`${srv}/af/${af.id}`, { method: 'DELETE' });
-    // Refresh data
-  };
-
-  const handleCreateItem = (af: AFData) => {
-    router.push(`${srv}/af/`);
-  };
-
-  const handleShowItems = (af: AFData) => {
-    router.push(`${srv}/af/${af.id}`);
-  };
+  if (loading) return <h1>Loading...</h1>
+  if (error) return <Error />
 
   return (
   <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
     <AFDialogForm />
-    <DataTable
-      columns={columns}
-      data={af}
-      onPatch={handleEdit}
-      onDelete={handleDelete}
-      onPost={handleCreateItem}
-      onGet={handleShowItems}
-    />
+    <DataTable columns={columns} data={data ?? []} />
   </div>
   );
 }
