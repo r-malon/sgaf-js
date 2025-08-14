@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { PrismaCrudModule } from 'nestjs-prisma-crud';
 import { PrismaService } from './prisma.service';
 import { AfModule } from './af/af.module';
@@ -18,7 +16,7 @@ import { ItemModule } from './item/item.module';
 		LocalModule,
 		ItemModule,
 	],
-	controllers: [AppController],
-	providers: [AppService],
+	controllers: [],
+	providers: [],
 })
 export class AppModule {}

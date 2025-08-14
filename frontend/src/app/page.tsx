@@ -1,88 +1,52 @@
 "use client"
-//import { DataTable } from "@/components/ui/data-table"
-import AFDataTable from '../components/AFDataTable';
+import { DataTable } from "@/components/data-table"
+import { AFDialogForm } from "@/components/af-dialog-form"
+//import AFDataTable from '../components/AFDataTable';
+import { columns, AF } from "./columns"
+import useSWR from 'swr'
 
-// Sample data to demonstrate the table functionality
-const sampleAFs: AFData[] = [
-  {
-    id: 1,
-    numero: "AF-2025-001",
-    fornecedor: "TechCorp Ltda",
-    descricao: "Fornecimento de equipamentos de rede para expansão da infraestrutura",
-    data_inicio: "2025-01-01",
-    data_fim: "2025-12-31",
-    status: true,
-    valorTotal: 150000, // Value in cents for precise calculations
-    quantidadeItens: 5
-  },
-  {
-    id: 2,
-    numero: "AF-2025-002", 
-    fornecedor: "DataSys Solutions",
-    descricao: "Serviços de conectividade e manutenção",
-    data_inicio: "2025-02-15",
-    data_fim: "2025-08-15",
-    status: true,
-    valorTotal: 89500,
-    quantidadeItens: 3
-  },
-  {
-    id: 3,
-    numero: "AF-2024-045",
-    fornecedor: "NetWork Brasil",
-    descricao: "Infraestrutura de telecomunicações avançada",
-    data_inicio: "2024-10-01",
-    data_fim: "2025-03-31",
-    status: false,
-    valorTotal: 245000,
-    quantidadeItens: 8
-  },
-  {
-    id: 4,
-    numero: "AF-2025-003",
-    fornecedor: "Conecta Fibra",
-    descricao: "Instalação de fibra óptica residencial",
-    data_inicio: "2025-03-01",
-    data_fim: "2025-09-30",
-    status: true,
-    valorTotal: 320000,
-    quantidadeItens: 12
-  },
-  {
-    id: 5,
-    numero: "AF-2024-078",
-    fornecedor: "TechCorp Ltda",
-    descricao: "Upgrade de equipamentos existentes",
-    data_inicio: "2024-11-15",
-    data_fim: "2025-05-15",
-    status: false,
-    valorTotal: 178000,
-    quantidadeItens: 6
+const srv = "http://[::1]:3001"
+const fetcher = (...args) => fetch(...args).then(res => res.json())
+
+function useAF() {
+  const { data, error, isLoading } = useSWR(`${srv}/af`, fetcher)
+ 
+  return {
+    af: data,
+    isLoading,
+    isError: error
   }
-];
+}
 
 export default function Home() {
+  const { af, isLoading, isError } = useAF()
+
+  if (isLoading) return <h1>Loading...</h1>
+  if (isError) return <Error />
+
   const handleEdit = (af: AFData) => {
-    router.push(`/af/${af.id}/edit`);
+    router.push(`${srv}/af/${af.id}/edit`);
   };
 
   const handleDelete = async (af: AFData) => {
-    await fetch(`/af/${af.id}`, { method: 'DELETE' });
+    await fetch(`${srv}/af/${af.id}`, { method: 'DELETE' });
     // Refresh data
   };
 
   const handleCreateItem = (af: AFData) => {
-    router.push(`/af/`);
+    router.push(`${srv}/af/`);
   };
 
   const handleShowItems = (af: AFData) => {
-    router.push(`/af/${af.id}`);
+    router.push(`${srv}/af/${af.id}`);
   };
 
   return (
   <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-    <AFDataTable
-      data={sampleAFs}
+    <AFDialogForm />
+    <DataTable
+      columns={columns}
+      data={af}
       onPatch={handleEdit}
       onDelete={handleDelete}
       onPost={handleCreateItem}

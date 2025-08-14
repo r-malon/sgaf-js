@@ -1,12 +1,16 @@
 "use client"
 
+import * as React from "react"
 import {
   ColumnDef,
+  ColumnFiltersState,
+  SortingState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-
 import {
   Table,
   TableBody,
@@ -15,8 +19,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { ArrowUpDown } from "lucide-react"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -27,13 +32,35 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      sorting,
+      columnFilters,
+    },
   })
 
   return (
+    <div>
+    <div className="flex items-center py-4">
+      <Input
+        placeholder="Busca fornecedor"
+        value={(table.getColumn("fornecedor")?.getFilterValue() as string) ?? ""}
+        onChange={(event) =>
+          table.getColumn("fornecedor")?.setFilterValue(event.target.value)
+        }
+        className="max-w-sm"
+      />
+    </div>
     <div className="overflow-hidden rounded-md border">
       <Table>
         <TableHeader>
@@ -78,5 +105,6 @@ export function DataTable<TData, TValue>({
         </TableBody>
       </Table>
     </div>
+  </div>
   )
 }
