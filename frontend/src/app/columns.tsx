@@ -5,16 +5,10 @@ import { Button } from "@/components/ui/button"
 import { ArrowUpDown, Plus, Trash2, Pencil } from "lucide-react"
 import { DataTableColumnHeader } from "@/components/data-table-column-header"
 import { handleDelete, handleEdit } from "./handlers"
-
-export type AF = {
-  id: number
-  numero: string
-  fornecedor: string
-  descricao: string
-  data_inicio: string
-  data_fim: string
-  status: boolean
-}
+import { AFDialog } from "@/components/af-dialog"
+import { AF } from "./types"
+import { API_BASE_URL } from "@/lib/config"
+import { mutate } from "swr"
 
 export const columns: ColumnDef<AF>[] = [
   {
@@ -55,11 +49,12 @@ export const columns: ColumnDef<AF>[] = [
       const af = row.original
       return (
         <div className="flex gap-2">
-          <Button variant="secondary" size="sm" onClick={() => handleEdit(af)}>
-            <Pencil className="h-4 w-4" />
-          </Button>
-          <Button variant="destructive" size="sm" onClick={() => handleDelete(af.id)}>
+          <AFDialog af={af} triggerLabel="Editar" />
+          <Button variant="destructive" size="sm" onClick={() => handleDelete("af", "AF", af.id)}>
             <Trash2 className="h-4 w-4" />
+          </Button>
+          <Button size="sm" onClick={() => handleDelete(af.id)}>
+            <Plus className="h-4 w-4" /> Item
           </Button>
           <Button size="sm" onClick={() => handleDelete(af.id)}>
             <Plus className="h-4 w-4" /> Item

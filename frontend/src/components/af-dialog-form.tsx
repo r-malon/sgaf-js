@@ -42,51 +42,53 @@ const afSchema = z.object({
 
 type AFFormData = z.infer<typeof afSchema>
 
-export function AFDialogForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    watch,
-    reset,
-  } = useForm<AFFormData>({
+interface AFDialogFormProps {
+  af?: any
+  onCreate: (af: any) => void
+  onEdit: (af: any) => void
+}
+
+export function AFDialogForm({ af, onCreate, onEdit }: AFDialogFormProps) {
+  const isEditMode = Boolean(af)
+
+  const form = useForm<AFFormData>({
     resolver: zodResolver(afSchema),
     defaultValues: {
-      numero: "",
-      fornecedor: "",
-      descricao: "",
-      data_inicio: null,
-      data_fim: null,
-      status: true,
+      numero: af?.numero ?? "",
+      fornecedor: af?.fornecedor ?? "",
+      descricao: af?.descricao ?? "",
+      data_inicio: af ? af.data_inicio.slice(0, 10) : "",
+      data_fim: af ? af.data_fim.slice(0, 10) : "",
+      status: af?.status ?? true,
     },
-    mode: "onBlur",
   })
 
-  const onSubmit = async (data: AFFormData) => {
-    try {
-      const response = await axios.post(`${API_BASE_URL}/af`, data)
+  async function onSubmit(values: AFFormData) {
+    const payload = {
+      ...values,
+      id: af?.id ?? undefined,
+    }
 
-      if (response.status === 201) {
-        toast.success("AF criada com sucesso!")
-        reset()
+    try {
+      if (isEditMode) {
+        await handleEdit("af", "AF", payload as any)
       } else {
-        toast.error("Falha ao criar AF!")
+        await handleCreate("af", "AF", payload as any)
       }
-    } catch (error) {
-      toast.error("Erro ao enviar dados!")
-      console.error("Error submitting data:", error)
+      form.reset()
+    } catch {
+      // Errors are already shown in toast
     }
   }
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Nova AF</Button>
+        <Button>{isEditMode ? <Pencil className="h-4 w-4" /> : "Nova AF"}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Criar nova AF</DialogTitle>
+          <DialogTitle>{isEditMode ? "Editar AF" : "Nova AF"}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -161,7 +163,7 @@ export function AFDialogForm() {
             />
           </div>
 
-          <Button type="submit" className="w-full">Salvar</Button>
+          <Button type="submit" className="w-full">{isEditMode ? "Salvar" : "Criar"}</Button>
         </form>
       </DialogContent>
     </Dialog>
