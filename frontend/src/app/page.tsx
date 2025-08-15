@@ -2,6 +2,7 @@
 
 import { API_BASE_URL } from "@/lib/config"
 import { DataTable } from "@/components/data-table"
+import { DataTableFilter } from "@/components/data-table-filter"
 import { AFDialogForm } from "@/components/af-dialog-form"
 import useSWR, { mutate } from "swr"
 import { columns, AF } from "./columns"
@@ -19,15 +20,18 @@ export default function Home() {
     revalidateOnFocus: true,
     revalidateOnReconnect: true,
   })
-  console.log(data, error, loading)
 
   if (loading) return <h1>Loading...</h1>
   if (error) return <Error />
 
   return (
-  <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+  <>
     <AFDialogForm />
-    <DataTable columns={columns} data={data ?? []} />
-  </div>
+    <div className="flex gap-4 py-4">
+      <DataTableFilter table={table} columnId="fornecedor" placeholder="Fornecedor" />
+      <DataTableFilter table={table} columnId="numero" placeholder="Número" />
+    </div>
+    <DataTable columns={columns} data={data?.data ?? []} />
+  </>
   );
 }

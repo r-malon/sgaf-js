@@ -8,6 +8,10 @@ export class AfService extends PrismaCrudService {
       model: 'AF',
       allowedJoins: [],
       defaultJoins: [],
+      paginationConfig: {
+        defaultPageSize: 10000,
+        maxPageSize: 10000,
+      },
     });
   }
 }

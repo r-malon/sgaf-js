@@ -36,10 +36,12 @@ export const columns: ColumnDef<AF>[] = [
   {
     accessorKey: "data_inicio",
     header: "Início",
+    cell: ({ row }) => row.original.data_inicio.slice(0, 10),
   },
   {
     accessorKey: "data_fim",
     header: "Fim",
+    cell: ({ row }) => row.original.data_fim.slice(0, 10),
   },
   {
     accessorKey: "status",
@@ -58,6 +60,9 @@ export const columns: ColumnDef<AF>[] = [
           </Button>
           <Button variant="destructive" size="sm" onClick={() => handleDelete(af.id)}>
             <Trash2 className="h-4 w-4" />
+          </Button>
+          <Button size="sm" onClick={() => handleDelete(af.id)}>
+            <Plus className="h-4 w-4" /> Item
           </Button>
         </div>
       )

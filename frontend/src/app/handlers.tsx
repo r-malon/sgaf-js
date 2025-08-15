@@ -1,4 +1,10 @@
-async function handleDelete(id: number) {
+"use client"
+
+import { API_BASE_URL } from "@/lib/config"
+import { mutate } from "swr"
+import { columns, AF } from "./columns"
+
+export async function handleDelete(id: number) {
   mutate(`${API_BASE_URL}/af`, (current: AF[] = []) => current.filter((af) => af.id !== id), false)
 
   try {
@@ -11,7 +17,7 @@ async function handleDelete(id: number) {
   }
 }
 
-async function handleEdit(af: AF) {
+export async function handleEdit(af: AF) {
   const updated: AF = {
     ...af,
     fornecedor: af.fornecedor + " (editado)",

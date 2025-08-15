@@ -32,7 +32,6 @@ export function DataTableColumnHeader<TData, TValue>({
       ) : (
         <ChevronsUpDown />
       )}
-      <ArrowUpDown className="ml-2 h-4 w-4" />
     </Button>
   )
 }

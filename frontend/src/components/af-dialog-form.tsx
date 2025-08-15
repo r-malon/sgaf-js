@@ -22,19 +22,20 @@ import { cn } from "@/lib/utils"
 
 const afSchema = z.object({
   numero: z.string().regex(/^\d+\/\d{4}$/, {
-    message: "Número deve ter dígitos, barra e ano (ex: 123/2025)",
+      message: "Número deve ter dígitos, barra e ano (ex: 123/2025)",
   }),
   fornecedor: z.string().min(1, "Fornecedor é obrigatório"),
-  descricao: z.string().optional(),
-  data_inicio: z.string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, { message: "Data de início inválida" })
-    .refine((date) => !isNaN(Date.parse(date)), { message: "Data de início inválida" }),
-  data_fim: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, { message: "Data de fim inválida" })
-    .refine((date) => !isNaN(Date.parse(date)), { message: "Data de fim inválida" }),
+  descricao: z.string().trim().optional(),
+  data_inicio: z.coerce.date({
+    required_error: "Data de início é obrigatória",
+    invalid_type_error: "Data de início inválida",
+  }),
+  data_fim: z.coerce.date({
+    required_error: "Data de fim é obrigatória",
+    invalid_type_error: "Data de fim inválida",
+  }),
   status: z.boolean(),
-}).refine((data) => new Date(data.data_fim) >= new Date(data.data_inicio), {
+}).refine((data) => data.data_fim >= data.data_inicio, {
   message: "Data de fim não pode ser anterior à data de início",
   path: ["data_fim"],
 })
@@ -55,8 +56,8 @@ export function AFDialogForm() {
       numero: "",
       fornecedor: "",
       descricao: "",
-      data_inicio: new Date(),
-      data_fim: new Date(),
+      data_inicio: null,
+      data_fim: null,
       status: true,
     },
     mode: "onBlur",
@@ -128,6 +129,7 @@ export function AFDialogForm() {
             <Input
               id="data_inicio"
               type="date"
+              required
               {...register("data_inicio")}
               className={cn(errors.data_inicio && "border-red-500 focus-visible:ring-red-500")}
             />
@@ -141,6 +143,7 @@ export function AFDialogForm() {
             <Input
               id="data_fim"
               type="date"
+              required
               {...register("data_fim")}
               className={cn(errors.data_fim && "border-red-500 focus-visible:ring-red-500")}
             />
