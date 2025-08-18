@@ -2,26 +2,41 @@
 
 import * as React from "react"
 import { z, ZodType } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+} from "@/components/ui/form"
 
-type FieldConfig = {
-  name: string
-  label: string
-  type: "text" | "number" | "date" | "switch"
-}
+export type FieldConfig =
+  | { name: string; label: string; type: "text"; description?: string }
+  | { name: string; label: string; type: "textarea"; description?: string }
+  | { name: string; label: string; type: "date"; description?: string }
+  | { name: string; label: string; type: "switch"; description?: string }
 
 interface GenericDialogFormProps<TSchema extends ZodType<any, any>> {
   schema: TSchema
   defaultValues: z.infer<TSchema>
   fields: FieldConfig[]
-  title: string
-  triggerLabel: string
+  title: React.ReactElement | string
+  triggerLabel: React.ReactElement | string
   onSubmit: (values: z.infer<TSchema>) => Promise<void>
 }
 
@@ -33,14 +48,15 @@ export function GenericDialogForm<TSchema extends ZodType<any, any>>({
   triggerLabel,
   onSubmit,
 }: GenericDialogFormProps<TSchema>) {
+  const [open, setOpen] = React.useState(false)
+
   const form = useForm<z.infer<TSchema>>({
     resolver: zodResolver(schema),
     defaultValues,
+    mode: "onBlur",
   })
 
-  const [open, setOpen] = React.useState(false)
-
-  async function handleSubmit(values: z.infer<TSchema>) {
+  const handleSubmit = async (values: z.infer<TSchema>) => {
     await onSubmit(values)
     setOpen(false)
     form.reset(defaultValues)
@@ -49,36 +65,68 @@ export function GenericDialogForm<TSchema extends ZodType<any, any>>({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">{triggerLabel}</Button>
+        <Button variant="outline">
+          {triggerLabel}
+        </Button>
       </DialogTrigger>
+
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-          {fields.map((field) => (
-            <div key={field.name}>
-              <Label htmlFor={field.name}>{field.label}</Label>
-              {field.type === "text" && (
-                <Input id={field.name} {...form.register(field.name)} />
-              )}
-              {field.type === "number" && (
-                <Input type="number" id={field.name} {...form.register(field.name)} />
-              )}
-              {field.type === "date" && (
-                <Input type="date" id={field.name} {...form.register(field.name)} />
-              )}
-              {field.type === "switch" && (
-                <Switch
-                  id={field.name}
-                  checked={form.watch(field.name) as unknown as boolean}
-                  onCheckedChange={(checked) => form.setValue(field.name, checked as any)}
-                />
-              )}
-            </div>
-          ))}
-          <Button type="submit">Salvar</Button>
-        </form>
+
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+            {fields.map((field) => (
+              <FormField
+                key={field.name}
+                control={form.control}
+                name={field.name}
+                render={({ field: controlledField }) => (
+                  <FormItem>
+                    <FormLabel>{field.label}</FormLabel>
+                    {(() => {
+                      let controlEl: React.ReactElement
+                      switch (field.type) {
+                        case "text":
+                          controlEl = <Input {...controlledField} />
+                          break
+                        case "textarea":
+                          controlEl = <Textarea {...controlledField} />
+                          break
+                        case "date":
+                          controlEl = <Input type="date" {...controlledField} />
+                          break
+                        case "switch":
+                          controlEl = (
+                            <Switch
+                              checked={Boolean(controlledField.value)}
+                              onCheckedChange={controlledField.onChange}
+                            />
+                          )
+                          break
+                        default:
+                          throw new Error(
+                            `Unsupported field type "${field.type}" in GenericDialogForm`
+                          )
+                      }
+                      return <FormControl>{controlEl}</FormControl>
+                    })()}
+
+                    {field.description && (
+                      <FormDescription>{field.description}</FormDescription>
+                    )}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ))}
+
+            <Button type="submit" className="w-full">
+              Salvar
+            </Button>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )
