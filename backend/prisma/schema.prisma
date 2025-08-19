@@ -12,7 +12,7 @@ model AF {
   id          Int      @id @default(autoincrement())
   numero      String   @unique
   fornecedor  String
-  descricao   String
+  descricao   String?
   data_inicio DateTime
   data_fim    DateTime
   status      Boolean
@@ -35,7 +35,7 @@ model Item {
   id               Int     @id @default(autoincrement())
   AF_id            Int
   Local_id         Int
-  descricao        String
+  descricao        String?
   banda_maxima     Int
   banda_instalada  Int
   data_instalacao  DateTime

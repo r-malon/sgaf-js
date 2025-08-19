@@ -1,24 +1,34 @@
 import { z } from "zod"
 
 export const afSchema = z.object({
-  numero: z.string().regex(/^\d+\/\d{4}$/, {
-    message: "Número deve ter dígitos, barra e ano (ex: 123/2025)",
-  }),
-  fornecedor: z.string().min(1, "Fornecedor é obrigatório"),
+  numero: z.string({
+    error: (issue) =>
+      issue.code === "invalid_type"
+        ? "Número inválido"
+        : "Número é obrigatório",
+  }).regex(/^\d+\/\d{4}$/, "Formato obrigatório: nnn/AAAA"),
+  fornecedor: z.string({
+    error: () => "Fornecedor é obrigatório",
+  }).min(1),
   descricao: z.string().trim().optional(),
   data_inicio: z.coerce.date({
-    required_error: "Data de início é obrigatória",
-    invalid_type_error: "Data de início inválida",
+    error: (issue) =>
+      issue.code === "invalid_type"
+        ? "Data de início inválida"
+        : "Data de início é obrigatória",
   }),
   data_fim: z.coerce.date({
-    required_error: "Data de fim é obrigatória",
-    invalid_type_error: "Data de fim inválida",
+    error: (issue) =>
+      issue.code === "invalid_type"
+        ? "Data final inválida"
+        : "Data final é obrigatória",
   }),
-  status: z.boolean(),
+  status: z.boolean({
+    error: () => "Status inválido",
+  }),
 }).refine((data) => data.data_fim >= data.data_inicio, {
-  message: "Data de fim não pode ser anterior à data de início",
+  message: "Data final não pode ser anterior à data de início",
   path: ["data_fim"],
 })
 
 export type AF = z.infer<typeof afSchema>
-

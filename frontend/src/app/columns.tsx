@@ -6,7 +6,7 @@ import { Plus, Trash2, Pencil } from "lucide-react"
 import { DataTableColumnHeader } from "@/components/data-table-column-header"
 import { useEntityHandlers } from "./handlers"
 import { AFDialog } from "@/components/af-dialog"
-import { AF } from "./types"
+import { AF } from "@sgaf/shared"
 
 export const afColumns: ColumnDef<AF>[] = [
   {

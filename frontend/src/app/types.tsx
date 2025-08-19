@@ -1,3 +1,4 @@
+/*
 export interface AF {
   id: number
   numero: string
@@ -7,7 +8,7 @@ export interface AF {
   data_fim: string
   status: boolean
 }
-
+*/
 export interface APIResponse<T> {
   data: T[]
   totalRecords: number

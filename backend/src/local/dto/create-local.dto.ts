@@ -1,6 +1,4 @@
-import { IsNumber, IsNotEmpty } from 'class-validator';
+import { createZodDto } from "nestjs-zod"
+import { localSchema } from "@sgaf/shared"
 
-export class CreateLocalDto {
-	@IsNotEmpty()
-	nome: string
-}
+export class CreateLocalDto extends createZodDto(localSchema) {}

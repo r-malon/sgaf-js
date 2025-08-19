@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    /* Modern JS & Node 24 */
+    "target": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+
+    /* Path & Imports */
+    "baseUrl": "./",
+    "resolvePackageJsonExports": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
+    /* Type Safety */
+    "strict": true,
+    "strictNullChecks": true,
+    "noImplicitAny": false,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Decorators (for NestJS) */
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+
+    /* Output */
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
+
+    /* QoL */
+    "removeComments": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "composite": true,
+    "noFallthroughCasesInSwitch": true
+  }
+}

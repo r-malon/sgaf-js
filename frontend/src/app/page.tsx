@@ -5,7 +5,8 @@ import { DataTable } from "@/components/data-table"
 import { DataTableFilter } from "@/components/data-table-filter"
 import { AFDialog } from "@/components/af-dialog"
 import useSWR from "swr"
-import { AF, APIResponse } from "./types"
+import { AF } from "@sgaf/shared"
+import { APIResponse } from "./types"
 import { afColumns } from "./columns"
 import { handleDelete, handleEdit } from "./handlers"
 import { useReactTable, getCoreRowModel, getFilteredRowModel, getSortedRowModel, SortingState } from "@tanstack/react-table"
@@ -20,7 +21,7 @@ const fetcher = (url: string) =>
 
 export default function Home() {
   const { data, error, isLoading } = useSWR<APIResponse<AF>>(`${API_BASE_URL}/af`, fetcher, {
-    refreshInterval: 5000,
+    refreshInterval: 6000,
     revalidateOnFocus: true,
     revalidateOnReconnect: true,
   })
