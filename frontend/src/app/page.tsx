@@ -4,6 +4,7 @@ import { API_BASE_URL } from "@/lib/config"
 import { DataTable } from "@/components/data-table"
 import { DataTableFilter } from "@/components/data-table-filter"
 import { AFDialog } from "@/components/af-dialog"
+import { LocalDialog } from "@/components/local-dialog"
 import useSWR from "swr"
 import { AF } from "@sgaf/shared"
 import { APIResponse } from "./types"
@@ -50,6 +51,7 @@ export default function Home() {
         <DataTableFilter table={afTable} columnId="fornecedor" placeholder="Buscar fornecedor" />
         <DataTableFilter table={afTable} columnId="numero" placeholder="Buscar número" />
         <AFDialog />
+        <LocalDialog />
       </div>
 
       <DataTable table={afTable} /> {/*columns={afColumns} data={data?.data ?? []} />*/}

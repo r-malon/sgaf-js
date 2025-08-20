@@ -1,0 +1,33 @@
+import { Prisma } from "@prisma/client"
+
+function normalize(value: string) {
+  return value
+    .normalize("NFD") // split accents
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase()
+}
+
+export const normalizedSearch = Prisma.defineExtension({
+  name: "normalizedSearch",
+  query: {
+    local: {
+      async findMany({ args, query }) {
+        if (args.where?.nome && typeof args.where.nome === "string") {
+          const normalized = normalize(args.where.nome)
+          return query({
+            ...args,
+            where: {
+              ...args.where,
+              // use contains for flexible search
+              nome: {
+                contains: normalized,
+                mode: "insensitive",
+              },
+            },
+          })
+        }
+        return query(args)
+      },
+    },
+  },
+})
