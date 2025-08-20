@@ -10,7 +10,7 @@
     "dev": "npm-run-all -p dev:frontend dev:backend",
     "dev:frontend": "npm run dev -w frontend",
     "dev:backend": "npm run start:dev -w backend",
-    "clean": "rimraf frontend/dist backend/dist shared/dist frontend/tsconfig.tsbuildinfo backend/tsconfig.tsbuildinfo backend/tsconfig.build.tsbuildinfo shared/tsconfig.tsbuildinfo"
+    "clean": "rimraf frontend/dist frontend/.next backend/dist shared/dist **/*.tsbuildinfo"
   },
   "dependencies": {
     "npm-run-all": "^4.1.5",

@@ -86,31 +86,40 @@ export function GenericDialogForm<TSchema extends ZodType<any, any>>({
                   <FormItem>
                     <FormLabel>{field.label}</FormLabel>
                     {(() => {
-                      let controlEl: React.ReactElement
                       switch (field.type) {
                         case "text":
-                          controlEl = <Input {...controlledField} />
-                          break
+                          return (
+                            <FormControl>
+                              <Input {...controlledField} />
+                            </FormControl>
+                          )
                         case "textarea":
-                          controlEl = <Textarea {...controlledField} />
-                          break
+                          return (
+                            <FormControl>
+                              <Textarea {...controlledField} />
+                            </FormControl>
+                          )
                         case "date":
-                          controlEl = <Input type="date" {...controlledField} />
-                          break
+                          return (
+                            <FormControl>
+                              <Input type="date" {...controlledField} />
+                            </FormControl>
+                          )
                         case "switch":
-                          controlEl = (
-                            <Switch
-                              checked={Boolean(controlledField.value)}
-                              onCheckedChange={controlledField.onChange}
-                            />
+                          return (
+                            <FormControl>
+                              <Switch
+                                checked={Boolean(controlledField.value)}
+                                onCheckedChange={controlledField.onChange}
+                              />
+                            </FormControl>
                           )
-                          break
                         default:
-                          throw new Error(
+                          /*throw new Error(
                             `Unsupported field type "${field.type}" in GenericDialogForm`
-                          )
+                          )*/
+                          return null
                       }
-                      return <FormControl>{controlEl}</FormControl>
                     })()}
 
                     {field.description && (
