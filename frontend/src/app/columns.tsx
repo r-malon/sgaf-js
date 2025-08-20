@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
-import { Plus, Trash2, Pencil } from "lucide-react"
+import { Check, X, Plus, Trash2, Pencil } from "lucide-react"
 import { DataTableColumnHeader } from "@/components/data-table-column-header"
 import { useEntityHandlers } from "./handlers"
 import { AFActionCell } from "@/components/af-action-cell"
@@ -35,7 +35,7 @@ export const afColumns: ColumnDef<AF>[] = [
   {
     accessorKey: "status",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Ativa?" />,
-    cell: ({ row }) => (row.original.status ? "✅" : "❌"),
+    cell: ({ row }) => (row.original.status ? <Check strokeWidth={4} color="green" /> : <X strokeWidth={4} color="red" />),
   },
   {
     id: "actions",
