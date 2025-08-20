@@ -5,10 +5,7 @@ export const localSchema = z.object({
     error: () => "Endereço é obrigatório",
   })
   .trim()
-  .min(1, "Endereço é obrigatório")
-  .transform((v) =>
-    v.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase()
-  ),
+  .min(5, "Endereço deve ter min. 5 letras")
 })
 
 export type Local = z.infer<typeof localSchema>

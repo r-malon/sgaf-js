@@ -1,16 +1,20 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common'
 import { PrismaClient } from '@prisma/client'
-import { normalizedSearch } from "./extensions/normalized-search"
+import { normalizedSearch } from './prisma/extensions/normalized-search'
 
 @Injectable()
 export class PrismaService
-	extends PrismaClient
-	implements OnModuleInit, OnModuleDestroy
+  extends PrismaClient
+  implements OnModuleInit, OnModuleDestroy
 {
-	async onModuleInit() {
-		await this.$connect()
-	}
-	async onModuleDestroy() {
-		await this.$disconnect()
-	}
+  constructor() {
+    super()
+    this.$extends(normalizedSearch)
+  }
+  async onModuleInit() {
+    await this.$connect()
+  }
+  async onModuleDestroy() {
+    await this.$disconnect()
+  }
 }

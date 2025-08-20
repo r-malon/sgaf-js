@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client"
 
-function normalize(value: string) {
-  return value
+function normalize(str: string) {
+  return str
     .normalize("NFD") // split accents
     .replace(/\p{Diacritic}/gu, "")
     .toLowerCase()
