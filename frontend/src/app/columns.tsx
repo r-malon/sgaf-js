@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Plus, Trash2, Pencil } from "lucide-react"
 import { DataTableColumnHeader } from "@/components/data-table-column-header"
 import { useEntityHandlers } from "./handlers"
+import { AFActionCell } from "@/components/af-action-cell"
 import { AFDialog } from "@/components/af-dialog"
 import { AF } from "@sgaf/shared"
 
@@ -39,42 +40,6 @@ export const afColumns: ColumnDef<AF>[] = [
   {
     id: "actions",
     header: "Ações",
-    cell: ({ row }) => {
-      const af = row.original
-      const { handleEdit, handleDelete } = useEntityHandlers("af")
-
-      return (
-        <div className="flex gap-2">
-          <AFDialog
-            af={af}
-            triggerLabel={<Pencil className="h-4 w-4" />}
-            title="Editar AF"
-            onSubmit={(values) => handleEdit(af.id, values)}
-          />
-
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => handleDelete(af.id)}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-
-          {/* Placeholders */}
-          <Button
-            size="sm"
-            onClick={() => console.log(`Add item to AF ${af.id}`)}
-          >
-            <Plus className="h-4 w-4" /> Item
-          </Button>
-          <Button
-            size="sm"
-            onClick={() => console.log(`List items of AF ${af.id}`)}
-          >
-            List Items
-          </Button>
-        </div>
-      )
-    },
+    cell: ({ row }) => <AFActionCell af={row.original} />,
   },
 ]
