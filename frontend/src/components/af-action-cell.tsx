@@ -1,4 +1,4 @@
-import { Pencil, Plus, Trash2 } from "lucide-react"
+import { Pencil, Plus, Trash2, List } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { AFDialog } from "@/components/af-dialog"
 import { useEntityHandlers } from "@/app/handlers"
@@ -16,7 +16,7 @@ export function AFActionCell({ af }: { af: any }) {
           render: (af) => (
             <AFDialog
               af={af}
-              triggerLabel={<Pencil className="h-4 w-4" />}
+              triggerLabel={<Pencil />}
               title="Editar AF"
               onSubmit={(values) => handleEdit(af.id, values)}
             />
@@ -27,10 +27,10 @@ export function AFActionCell({ af }: { af: any }) {
           render: (af) => (
             <Button
               variant="destructive"
-              size="sm"
+              size="icon"
               onClick={() => handleDelete(af.id)}
             >
-              <Trash2 className="h-4 w-4" />
+              <Trash2 />
             </Button>
           ),
         },
@@ -41,7 +41,7 @@ export function AFActionCell({ af }: { af: any }) {
               size="sm"
               onClick={() => console.log(`Add item to AF ${af.id}`)}
             >
-              <Plus className="h-4 w-4" /> Item
+              <Plus strokeWidth={4} /> Item
             </Button>
           ),
         },
@@ -53,7 +53,7 @@ export function AFActionCell({ af }: { af: any }) {
               size="sm"
               onClick={() => console.log(`List items of AF ${af.id}`)}
             >
-              List Items
+              <List strokeWidth={4} /> Items
             </Button>
           ),
         },

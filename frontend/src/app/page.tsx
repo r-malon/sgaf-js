@@ -5,6 +5,7 @@ import { DataTable } from "@/components/data-table"
 import { DataTableFilter } from "@/components/data-table-filter"
 import { AFDialog } from "@/components/af-dialog"
 import { LocalDialog } from "@/components/local-dialog"
+import { LocalCombobox } from "@/components/local-combobox"
 import useSWR from "swr"
 import { AF } from "@sgaf/shared"
 import { APIResponse } from "./types"
@@ -48,13 +49,17 @@ export default function Home() {
   return (
     <div className="p-4 space-y-4">
       <div className="flex gap-4 items-center">
+        <LocalDialog />
+        <LocalCombobox />
+      </div>
+
+      <div className="flex gap-4 items-center">
         <DataTableFilter table={afTable} columnId="fornecedor" placeholder="Buscar fornecedor" />
         <DataTableFilter table={afTable} columnId="numero" placeholder="Buscar número" />
         <AFDialog />
-        <LocalDialog />
       </div>
 
-      <DataTable table={afTable} /> {/*columns={afColumns} data={data?.data ?? []} />*/}
+      <DataTable table={afTable} />
     </div>
   );
 }
