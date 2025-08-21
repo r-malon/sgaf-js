@@ -20,11 +20,7 @@ import { ChevronsUpDown, Trash2, Pencil } from "lucide-react"
 import { API_BASE_URL } from "@/lib/config"
 import { useEntityHandlers } from "@/app/handlers"
 import { LocalDialog } from "@/components/local-dialog"
-
-interface Local {
-  id: number
-  nome: string
-}
+import { Local } from "@sgaf/shared"
 
 const fetcher = async (url: string): Promise<Local[]> => {
   const res = await fetch(url)
@@ -34,12 +30,12 @@ const fetcher = async (url: string): Promise<Local[]> => {
   return [] // fallback safe return
 }
 
-export function LocalCombobox() {
+export function LocalCombobox(readonly: boolean = false) {
   const [open, setOpen] = React.useState(false)
   const [selected, setSelected] = React.useState<Local | null>(null)
 
   const { data: locals = [] } = useSWR<Local[]>(`${API_BASE_URL}/local`, fetcher)
-  const { handleEdit, handleDelete } = useEntityHandlers("Local")
+  const { handleEdit, handleDelete } = useEntityHandlers("local")
 
   async function handleRemove(id: number) {
     await handleDelete(id)
@@ -87,7 +83,7 @@ export function LocalCombobox() {
         </PopoverContent>
       </Popover>
 
-      {selected && (
+      {selected && !readonly && (
         <div className="flex gap-2 mt-2">
           <LocalDialog
             key={selected?.id}

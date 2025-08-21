@@ -1,8 +1,9 @@
 import { Pencil, Plus, Trash2, List } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { AFDialog } from "@/components/af-dialog"
 import { useEntityHandlers } from "@/app/handlers"
 import { ActionCell } from "@/components/action-cell"
+import { AFDialog } from "@/components/af-dialog"
+import { ItemDialog } from "@/components/item-dialog"
 
 export function AFActionCell({ af }: { af: any }) {
   const { handleEdit, handleDelete } = useEntityHandlers("af")
@@ -37,12 +38,13 @@ export function AFActionCell({ af }: { af: any }) {
         {
           key: "add-item",
           render: (af) => (
-            <Button
-              size="sm"
-              onClick={() => console.log(`Add item to AF ${af.id}`)}
-            >
-              <Plus strokeWidth={4} /> Item
-            </Button>
+            <ItemDialog
+              triggerLabel={<><Plus strokeWidth={4} /> Item</>}
+              title="Adicionar Item"
+              onSubmit={async (values) => {
+                await handleCreate({ ...values, AF_id: af.id })
+              }}
+            />
           ),
         },
         {
