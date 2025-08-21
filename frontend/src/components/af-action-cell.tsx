@@ -53,7 +53,7 @@ export function AFActionCell({ af }: { af: any }) {
               size="sm"
               onClick={() => console.log(`List items of AF ${af.id}`)}
             >
-              <List strokeWidth={4} /> Items
+              <List strokeWidth={4} /> Itens
             </Button>
           ),
         },
