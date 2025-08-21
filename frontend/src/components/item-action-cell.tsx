@@ -39,7 +39,7 @@ export function ItemActionCell({ item }: { item: any }) {
           render: (item) => (
             <Button
               size="sm"
-              onClick={() => console.log(`Add item to Item ${item.id}`)}
+              onClick={() => console.log(`Adicionar valor ao Item ${item.id}`)}
             >
               <Plus strokeWidth={4} /> Valor
             </Button>
@@ -47,11 +47,11 @@ export function ItemActionCell({ item }: { item: any }) {
         },
         {
           key: "list-valors",
-          show: (item) => item.items?.length > 0,
+          show: (item) => item.valors?.length > 0,
           render: (item) => (
             <Button
               size="sm"
-              onClick={() => console.log(`List items of Item ${item.id}`)}
+              onClick={() => console.log(`Listar valores ao Item ${item.id}`)}
             >
               <List strokeWidth={4} /> Valores
             </Button>
