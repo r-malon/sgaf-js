@@ -8,10 +8,10 @@ import { API_BASE_URL } from "@/lib/config"
 import { mutate } from "swr"
 
 interface AFDialogProps {
-  af?: any
+  af?: z.infer<typeof afSchema>
   triggerLabel?: React.ReactElement | string
   title?: React.ReactElement | string
-  onSubmit?: (values: any) => Promise<void>
+  onSubmit?: (values: z.infer<typeof afSchema>) => Promise<void>
 }
 
 export function AFDialog({

@@ -28,6 +28,7 @@ import {
 export type FieldConfig =
   | { name: string; label: string; type: "text"; description?: string }
   | { name: string; label: string; type: "textarea"; description?: string }
+  | { name: string; label: string; type: "number"; description?: string }
   | { name: string; label: string; type: "date"; description?: string }
   | { name: string; label: string; type: "switch"; description?: string }
 
@@ -97,6 +98,12 @@ export function GenericDialogForm<TSchema extends ZodType<any, any>>({
                           return (
                             <FormControl>
                               <Textarea {...controlledField} />
+                            </FormControl>
+                          )
+                        case "number":
+                          return (
+                            <FormControl>
+                              <Input type="number" min="0" {...controlledField} />
                             </FormControl>
                           )
                         case "date":

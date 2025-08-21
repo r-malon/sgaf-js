@@ -90,6 +90,7 @@ export function LocalCombobox() {
       {selected && (
         <div className="flex gap-2 mt-2">
           <LocalDialog
+            key={selected?.id}
             local={selected}
             triggerLabel={<Pencil />}
             title="Editar local"
