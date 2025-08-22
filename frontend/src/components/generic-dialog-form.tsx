@@ -24,11 +24,13 @@ import {
   FormDescription,
   FormMessage,
 } from "@/components/ui/form"
+import { MoneyInput } from "@/components/money-input"
 
 export type FieldConfig =
   | { name: string; label: string; type: "text"; description?: string }
   | { name: string; label: string; type: "textarea"; description?: string }
   | { name: string; label: string; type: "number"; description?: string }
+  | { name: string; label: string; type: "money"; description?: string }
   | { name: string; label: string; type: "date"; description?: string }
   | { name: string; label: string; type: "switch"; description?: string }
   | {
@@ -118,9 +120,21 @@ export function GenericDialogForm<TSchema extends ZodType<any, any>>({
                             </FormControl>
                           )
                         case "number":
+                          // Input type="text" bypasses Firefox’s buggy type="number"
                           return (
                             <FormControl>
-                              <Input type="number" min="0" {...controlledField} />
+                              <Input type="text" inputMode="numeric" pattern="\d*" min="0" {...controlledField}
+                                onChange={(e) => {
+                                  const onlyDigits = e.target.value.replace(/\D/g, "")
+                                  controlledField.onChange(onlyDigits ? parseInt(onlyDigits, 10) : undefined)
+                                }}
+                              />
+                            </FormControl>
+                          )
+                        case "money":
+                          return (
+                            <FormControl>
+                              <MoneyInput {...controlledField} />
                             </FormControl>
                           )
                         case "date":
