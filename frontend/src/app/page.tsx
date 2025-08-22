@@ -44,7 +44,7 @@ export default function Home() {
     onSortingChange: setSorting,
   })
 
-  if (isLoading) return <h1>Loading...</h1>
+  if (isLoading) return <h1>Carregando...</h1>
 
   return (
     <div className="p-4 space-y-4">

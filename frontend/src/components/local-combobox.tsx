@@ -27,25 +27,55 @@ const fetcher = async (url: string): Promise<Local[]> => {
   const json = await res.json()
   if (Array.isArray(json)) return json
   if (json?.data && Array.isArray(json.data)) return json.data
-  return [] // fallback safe return
+  return []
 }
 
-export function LocalCombobox(readonly: boolean = false) {
+type LocalComboboxProps = {
+  value?: number | null
+  onChange?: (localId: number | null, local: Local | null) => void
+  readOnly?: boolean
+  className?: string
+}
+
+export function LocalCombobox({
+  value,
+  onChange,
+  readOnly = false,
+  className,
+}: LocalComboboxProps) {
   const [open, setOpen] = React.useState(false)
-  const [selected, setSelected] = React.useState<Local | null>(null)
+  // Uncontrolled fallback when `value` is not provided
+  const [internalId, setInternalId] = React.useState<number | null>(value ?? null)
+
+  // Keep internal state in sync if parent controls the value
+  React.useEffect(() => {
+    if (value !== undefined) setInternalId(value)
+  }, [value])
 
   const { data: locals = [] } = useSWR<Local[]>(`${API_BASE_URL}/local`, fetcher)
   const { handleEdit, handleDelete } = useEntityHandlers("local")
 
+  const selectedId = value ?? internalId
+  const selected =
+    (locals.find((l) => l.id === selectedId) as Local | undefined) ?? null
+
+  const setSelected = (next: Local | null) => {
+    onChange?.(next?.id ?? null, next)
+    if (value === undefined) setInternalId(next?.id ?? null) // uncontrolled mode
+    setOpen(false)
+  }
+
   async function handleRemove(id: number) {
     await handleDelete(id)
-    if (selected?.id === id) {
-      setSelected(null)
+    if ((value ?? internalId) === id) {
+      // clear selection in both modes
+      onChange?.(null, null)
+      if (value === undefined) setInternalId(null)
     }
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className={`flex items-start gap-2 ${className ?? ""}`}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -53,13 +83,13 @@ export function LocalCombobox(readonly: boolean = false) {
             role="combobox"
             aria-expanded={open}
             size="sm"
-            className="w-[200px] justify-between"
+            className="w-[220px] justify-between"
           >
             {selected ? selected.nome : "Selecionar local..."}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[200px] p-0">
+        <PopoverContent className="w-[220px] p-0">
           <Command>
             <CommandInput placeholder="Buscar local..." />
             <CommandList>
@@ -69,10 +99,7 @@ export function LocalCombobox(readonly: boolean = false) {
                   <CommandItem
                     key={local.id}
                     value={local.nome}
-                    onSelect={() => {
-                      setSelected(local)
-                      setOpen(false)
-                    }}
+                    onSelect={() => setSelected(local)}
                   >
                     {local.nome}
                   </CommandItem>
@@ -83,17 +110,19 @@ export function LocalCombobox(readonly: boolean = false) {
         </PopoverContent>
       </Popover>
 
-      {selected && !readonly && (
-        <div className="flex gap-2 mt-2">
+      {selected && !readOnly && (
+        <div className="flex gap-2">
           <LocalDialog
-            key={selected?.id}
+            key={selected.id}
             local={selected}
             triggerLabel={<Pencil />}
             title="Editar local"
             onSubmit={async (values) => {
-              if (!selected) return
               await handleEdit(selected.id, values)
-              setSelected(null)
+              // Keep selection pointing to the same id; data will refresh via SWR
+              // If you prefer to clear after edit, uncomment the next two lines:
+              // onChange?.(null, null)
+              // if (value === undefined) setInternalId(null)
             }}
           />
           <Button

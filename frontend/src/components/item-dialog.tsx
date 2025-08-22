@@ -50,9 +50,9 @@ export function ItemDialog({
           type: "custom",
           render: (field) => (
             <LocalCombobox
-              readonly={true}
               value={field.value}
-              onChange={field.onChange}
+              onChange={(id) => field.onChange(id)}
+              readOnly
             />
           ),
         },

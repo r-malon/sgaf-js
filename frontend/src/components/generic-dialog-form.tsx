@@ -31,6 +31,17 @@ export type FieldConfig =
   | { name: string; label: string; type: "number"; description?: string }
   | { name: string; label: string; type: "date"; description?: string }
   | { name: string; label: string; type: "switch"; description?: string }
+  | {
+    name: string
+    label: string
+    type: "custom"
+    description?: string
+    render: (field: {
+      value: any
+      onChange: (val: any) => void
+      name: string
+    }) => React.ReactNode
+  }
 
 interface GenericDialogFormProps<TSchema extends ZodType<any, any>> {
   schema: TSchema
@@ -88,6 +99,12 @@ export function GenericDialogForm<TSchema extends ZodType<any, any>>({
                     <FormLabel>{field.label}</FormLabel>
                     {(() => {
                       switch (field.type) {
+                        case "custom":
+                          return (
+                            <FormControl>
+                              {field.render(controlledField)}
+                            </FormControl>
+                          )
                         case "text":
                           return (
                             <FormControl>
