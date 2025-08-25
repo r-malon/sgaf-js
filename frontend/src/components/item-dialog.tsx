@@ -46,7 +46,6 @@ export function ItemDialog({
         { name: "status", label: "Ativo?", type: "switch" },
         {
           name: "Local_id",
-          label: "Local",
           type: "custom",
           render: (field) => (
             <LocalCombobox
