@@ -1,7 +1,7 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Check, X } from "lucide-react"
+import { Minus, Check, X } from "lucide-react"
 import { DataTableColumnHeader } from "@/components/data-table-column-header"
 import { AFActionCell } from "@/components/af-action-cell"
 import { DescriptionCell } from "@/components/description-cell"
@@ -19,7 +19,15 @@ export const afColumns: ColumnDef<AF>[] = [
   {
     accessorKey: "descricao",
     header: "Descrição",
-    cell: ({ row }) => <DescriptionCell text={row.original.descricao} />,
+    cell: ({ row }) => {
+      const descricao = row.original.descricao
+      if (descricao == null) return <Minus strokeWidth={4} color="gray" />
+      return descricao.length > 20 ? (
+        <DescriptionCell trunc={20} text={descricao} />
+      ) : (
+        <span>{descricao}</span>
+      )
+    },
   },
   {
     accessorKey: "data_inicio",

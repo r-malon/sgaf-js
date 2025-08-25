@@ -1,7 +1,7 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Check, X } from "lucide-react"
+import { Minus, Check, X } from "lucide-react"
 import { DataTableColumnHeader } from "@/components/data-table-column-header"
 import { ItemActionCell } from "@/components/item-action-cell"
 import { DescriptionCell } from "@/components/description-cell"
@@ -11,7 +11,15 @@ export const itemColumns: ColumnDef<Item>[] = [
   {
     accessorKey: "descricao",
     header: "Descrição",
-    cell: ({ row }) => <DescriptionCell text={row.original.descricao} />,
+    cell: ({ row }) => {
+      const descricao = row.original.descricao
+      if (descricao == null) return <Minus strokeWidth={4} color="gray" />
+      return descricao.length > 20 ? (
+        <DescriptionCell text={descricao} />
+      ) : (
+        <span>{descricao}</span>
+      )
+    },
   },
   {
     accessorKey: "banda_maxima",

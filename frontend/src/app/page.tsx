@@ -13,24 +13,21 @@ import { useReactTable, getCoreRowModel, getFilteredRowModel, getSortedRowModel,
 import useSWR from "swr"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
-
-const fetcher = (url: string) =>
-  fetch(url).then((res) => {
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    return res.json()
-  })
+import { handleFetch } from "@/app/handlers"
 
 export default function Home() {
-  const { data, error, isLoading } = useSWR<APIResponse<AF>>(`${API_BASE_URL}/af`, fetcher, {
-    refreshInterval: 6000,
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true,
-  })
+  const { data, error, isLoading } = useSWR<APIResponse<AF>>(
+    `${API_BASE_URL}/af`,
+    (url) => handleFetch<APIResponse<AF>>(url),
+    {
+      refreshInterval: 6000,
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+    }
+  )
 
   useEffect(() => {
-    if (error) {
-      toast.error(error.message ?? "Não foi possível obter os dados.")
-    }
+    if (error) toast.error(error.message)
   }, [error])
 
   const [sorting, setSorting] = useState<SortingState>([])
@@ -61,5 +58,5 @@ export default function Home() {
 
       <DataTable table={afTable} />
     </div>
-  );
+  )
 }

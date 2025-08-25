@@ -8,58 +8,52 @@ function getCachedData(cache: ReturnType<typeof useSWRConfig>["cache"], key: str
   return cache.get(key)?.data
 }
 
+export async function handleFetch<T>(url: string, options?: RequestInit): Promise<T> {
+  const res = await fetch(url, options)
+  const data = await res.json()
+
+  if (!res.ok) throw new Error(`HTTP ${data.statusCode}: ${data.message}`)
+
+  return data
+}
+
 export function useEntityHandlers(entityName: string) {
   const { mutate, cache } = useSWRConfig()
   const url = `${API_BASE_URL}/${entityName.toLowerCase()}`
 
-  async function handleCreate<T>(data: T) {
+  async function doRequest<T>(path: string, options: RequestInit, successMsg: string) {
     const previous = getCachedData(cache, url)
     try {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      })
-      if (!res.ok) throw new Error(await res.text())
+      await handleFetch(path, options)
       await mutate(url)
-      toast.success(`${entityName} adicionado(a) com sucesso.`)
+      toast.success(successMsg)
     } catch (error: any) {
       if (previous) mutate(url, previous, false)
-      toast.error(`Erro ao criar ${entityName}: ${error.message}`)
+      toast.error(error.message, { className: "bg-red-500 text-white" })
       throw error
     }
+  }
+
+  async function handleCreate<T>(data: T) {
+    return doRequest(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    }, `${entityName} adicionado(a) com sucesso.`)
   }
 
   async function handleEdit<T>(id: number, data: T) {
-    const previous = getCachedData(cache, url)
-    try {
-      const res = await fetch(`${url}/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      })
-      if (!res.ok) throw new Error(await res.text())
-      await mutate(url)
-      toast.success(`${entityName} editado(a) com sucesso.`)
-    } catch (error: any) {
-      if (previous) mutate(url, previous, false)
-      toast.error(`Erro ao atualizar ${entityName}: ${error.message}`)
-      throw error
-    }
+    return doRequest(`${url}/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    }, `${entityName} editado(a) com sucesso.`)
   }
 
   async function handleDelete(id: number) {
-    const previous = getCachedData(cache, url)
-    try {
-      const res = await fetch(`${url}/${id}`, { method: "DELETE" })
-      if (!res.ok) throw new Error(await res.text())
-      await mutate(url)
-      toast.success(`${entityName} deletado(a) com sucesso.`)
-    } catch (error: any) {
-      if (previous) mutate(url, previous, false)
-      toast.error(`Erro ao remover ${entityName}: ${error.message}`)
-      throw error
-    }
+    return doRequest(`${url}/${id}`, {
+      method: "DELETE",
+    }, `${entityName} removido(a) com sucesso.`)
   }
 
   return { handleCreate, handleEdit, handleDelete }
