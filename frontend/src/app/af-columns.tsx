@@ -21,7 +21,7 @@ export const afColumns: ColumnDef<AF>[] = [
     header: "Descrição",
     cell: ({ row }) => {
       const descricao = row.original.descricao
-      if (descricao == null) return <Minus strokeWidth={4} color="gray" />
+      if (descricao == null) return <Minus strokeWidth={4} color="lightgray" />
       return descricao.length > 20 ? (
         <DescriptionCell trunc={20} text={descricao} />
       ) : (

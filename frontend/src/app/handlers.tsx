@@ -10,9 +10,16 @@ function getCachedData(cache: ReturnType<typeof useSWRConfig>["cache"], key: str
 
 export async function handleFetch<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(url, options)
-  const data = await res.json()
+  let data: T | null = null
 
-  if (!res.ok) throw new Error(`HTTP ${data.statusCode}: ${data.message}`)
+  const text = await res.text()
+  if (text)
+    data = JSON.parse(text)
+
+  if (!res.ok) {
+    toast.error(`HTTP ${res.status} ${res.statusText}`, { description: data.message })
+    throw new Error(`HTTP ${data.statusCode}: ${data.message}`)
+  }
 
   return data
 }
@@ -28,9 +35,8 @@ export function useEntityHandlers(entityName: string) {
       await mutate(url)
       toast.success(successMsg)
     } catch (error: any) {
-      if (previous) mutate(url, previous, false)
-      toast.error(error.message, { className: "bg-red-500 text-white" })
-      throw error
+      if (previous)
+        mutate(url, previous, false)
     }
   }
 
