@@ -7,16 +7,16 @@ import { LocalModule } from './local/local.module'
 import { ItemModule } from './item/item.module'
 
 @Module({
-	imports: [
-		PrismaCrudModule.register({
-			prismaService: PrismaService,
-		}),
-		AfModule,
-		ValorModule,
-		LocalModule,
-		ItemModule,
-	],
-	controllers: [],
-	providers: [],
+  imports: [
+    PrismaCrudModule.register({
+      prismaService: PrismaService,
+    }),
+    AfModule,
+    ValorModule,
+    LocalModule,
+    ItemModule,
+  ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
