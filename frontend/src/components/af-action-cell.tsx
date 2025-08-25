@@ -7,6 +7,7 @@ import { ItemDialog } from "@/components/item-dialog"
 
 export function AFActionCell({ af }: { af: any }) {
   const { handleEdit, handleDelete } = useEntityHandlers("af")
+  const { handleCreate } = useEntityHandlers("item")
 
   return (
     <ActionCell

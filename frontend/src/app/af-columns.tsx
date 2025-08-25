@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Check, X } from "lucide-react"
 import { DataTableColumnHeader } from "@/components/data-table-column-header"
 import { AFActionCell } from "@/components/af-action-cell"
+import { DescriptionCell } from "@/components/description-cell"
 import { AF } from "@sgaf/shared"
 
 export const afColumns: ColumnDef<AF>[] = [
@@ -18,6 +19,7 @@ export const afColumns: ColumnDef<AF>[] = [
   {
     accessorKey: "descricao",
     header: "Descrição",
+    cell: ({ row }) => <DescriptionCell text={row.original.descricao} />,
   },
   {
     accessorKey: "data_inicio",
