@@ -27,15 +27,15 @@ import {
 import { MoneyInput } from "@/components/money-input"
 
 export type FieldConfig =
-  | { name: string; label: string; type: "text"; description?: string }
-  | { name: string; label: string; type: "textarea"; description?: string }
-  | { name: string; label: string; type: "number"; description?: string }
-  | { name: string; label: string; type: "money"; description?: string }
-  | { name: string; label: string; type: "date"; description?: string }
-  | { name: string; label: string; type: "switch"; description?: string }
+  | { name: string; label?: string; type: "text"; description?: string }
+  | { name: string; label?: string; type: "textarea"; description?: string }
+  | { name: string; label?: string; type: "number"; description?: string }
+  | { name: string; label?: string; type: "money"; description?: string }
+  | { name: string; label?: string; type: "date"; description?: string }
+  | { name: string; label?: string; type: "switch"; description?: string }
   | {
     name: string
-    label: string
+    label?: string
     type: "custom"
     description?: string
     render: (field: {
@@ -98,7 +98,7 @@ export function GenericDialogForm<TSchema extends ZodType<any, any>>({
                 name={field.name}
                 render={({ field: controlledField }) => (
                   <FormItem>
-                    <FormLabel>{field.label}</FormLabel>
+                    {field.label && <FormLabel>{field.label}</FormLabel>}
                     {(() => {
                       switch (field.type) {
                         case "custom":
