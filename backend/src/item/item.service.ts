@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaCrudService } from 'nestjs-prisma-crud';
+import { Injectable } from '@nestjs/common'
+import { PrismaCrudService } from 'nestjs-prisma-crud'
 
 @Injectable()
 export class ItemService extends PrismaCrudService {
@@ -8,6 +8,6 @@ export class ItemService extends PrismaCrudService {
       model: 'Item',
       allowedJoins: [],
       defaultJoins: [],
-    });
+    })
   }
 }
