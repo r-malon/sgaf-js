@@ -12,6 +12,7 @@ export async function handleFetch<T>(url: string, options?: RequestInit): Promis
   const res = await fetch(url, options)
   let data: T | null = null
 
+  // DELETE response usually empty
   const text = await res.text()
   if (text)
     data = JSON.parse(text)

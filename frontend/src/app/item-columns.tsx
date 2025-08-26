@@ -15,7 +15,7 @@ export const itemColumns: ColumnDef<Item>[] = [
       const descricao = row.original.descricao
       if (descricao == null) return <Minus strokeWidth={4} color="lightgray" />
       return descricao.length > 20 ? (
-        <DescriptionCell text={descricao} />
+        <DescriptionCell trunc={20} text={descricao} />
       ) : (
         <span>{descricao}</span>
       )

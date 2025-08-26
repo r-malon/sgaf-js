@@ -1,8 +1,7 @@
 # compiled output
-/dist
-/shared/dist
-/node_modules
-/build
+dist/
+node_modules/
+build/
 *.exe
 *.db*
 *.pdf
