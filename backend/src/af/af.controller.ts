@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common'
 import { AfService } from './af.service'
 import { CreateAfDto } from './dto/create-af.dto'
 import { UpdateAfDto } from './dto/update-af.dto'
@@ -8,35 +8,27 @@ export class AfController {
   constructor(private readonly afService: AfService) {}
 
   @Post()
-  async create(@Body() createAfDto: CreateAfDto, @Query('crudQuery') crudQuery: string) {
-    const created = await this.afService.create(createAfDto, { crudQuery })
-    return created
+  async create(@Body() createAfDto: CreateAfDto) {
+    return await this.afService.create(createAfDto)
   }
 
   @Get()
-  async findMany(@Query('crudQuery') crudQuery: string) {
-    const matches = await this.afService.findMany({ crudQuery })
-    return matches
+  async findMany() {
+    return await this.afService.findMany()
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number, @Query('crudQuery') crudQuery: string) {
-    const match = await this.afService.findOne(id, { crudQuery })
-    return match
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.afService.findOne(+id)
   }
 
   @Patch(':id')
-  async update(
-    @Param('id') id: number,
-    @Body() updateAfDto: UpdateAfDto,
-    @Query('crudQuery') crudQuery: string,
-  ) {
-    const updated = await this.afService.update(id, updateAfDto, { crudQuery })
-    return updated
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateAfDto: UpdateAfDto) {
+    return await this.afService.update(+id, updateAfDto)
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number, @Query('crudQuery') crudQuery: string) {
-    return this.afService.remove(id, { crudQuery })
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return await this.afService.delete(+id)
   }
 }

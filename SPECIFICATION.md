@@ -1,10 +1,10 @@
 # Sistema de Gestão de Autorizações de Fornecimento (SGAF)
 
-## **1\. Objetivo**
+## **1. Objetivo**
 
 Desenvolver um sistema web para gerenciar Autorizações de Fornecimento (AFs), seus respectivos itens e locais de instalação, permitindo controle completo de períodos, valores e histórico de alterações.
 
-## **2\. Funcionalidades Principais**
+## **2. Funcionalidades Principais**
 
 ### **2.1. Gestão de Autorizações de Fornecimento**
 
@@ -36,7 +36,7 @@ Desenvolver um sistema web para gerenciar Autorizações de Fornecimento (AFs), 
   É importante mencionar que nem sempre os períodos serão de meses fechados, os valores podem ser fracionados, devendo ser feito o cálculo para essas frações corretamente.
 
 - Registro de alterações de valor com vigência: o sistema manterá um histórico de valores integrais mensais com datas de vigência, nunca alterando valores retroativos.  
-   **Exemplo**: A AF 123 tem o período de vigência (Intervalo entre a Data Inicial e Final) de 01/07/2025 a 01/10/2025 e o Item A desta AF tem um Valor Integral Mensal de R$50,00. Porém, no dia 01/08/2025 o valor foi alterado para R$70,00. Dessa forma, o valor total do item no período deve ser de R$190,00. (R$50,00 \+ R$70,00 \+ R$70,00)  
+   **Exemplo**: A AF 123 tem o período de vigência (Intervalo entre a Data Inicial e Final) de 01/07/2025 a 01/10/2025 e o Item A desta AF tem um Valor Integral Mensal de R$50,00. Porém, no dia 01/08/2025 o valor foi alterado para R$70,00. Dessa forma, o valor total do item no período deve ser de R$190,00. (R$50,00 + R$70,00 + R$70,00)  
   É importante mencionar que nem sempre os períodos serão de meses fechados, os valores podem ser fracionados, devendo ser feito o cálculo para essas frações corretamente.
 
 ### **2.3. Gestão de Locais**
@@ -52,7 +52,7 @@ Desenvolver um sistema web para gerenciar Autorizações de Fornecimento (AFs), 
   - Alterações de valores mensais com data de início de vigência.
   - Mudanças de status da AF.
 
-## **3\. Modelo de Dados**
+## **3. Modelo de Dados**
 
 | Item            |         |
 | --------------- | ------- |
@@ -89,7 +89,7 @@ Desenvolver um sistema web para gerenciar Autorizações de Fornecimento (AFs), 
 | id    | UUID   |
 | nome  | String |
 
-## **4\. Estrutura de Telas e Funcionalidades do Sistema**
+## **4. Estrutura de Telas e Funcionalidades do Sistema**
 
 O sistema será composto por uma interface web com as seguintes páginas:
 
@@ -102,7 +102,7 @@ O sistema será composto por uma interface web com as seguintes páginas:
   - Fornecedor
   - Data Inicial
   - Data Final
-  - Status (Aberta, Fechada)
+  - Status (Ativa | Inativa)
 - **Botão para incluir Items:**
   - Abre um formulário com:
     - Descrição
@@ -222,7 +222,7 @@ O sistema será composto por uma interface web com as seguintes páginas:
   - Editar Nome do Local
   - Excluir Local (apenas se não houverem itens relacionados)
 
-## **5\. Regras de Negócio Reforçadas**
+## **5. Regras de Negócio Reforçadas**
 
 1. **Histórico de valores**:
    - Cada alteração no valor mensal de um item cria uma nova entrada com data de vigência.

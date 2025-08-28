@@ -9,6 +9,7 @@ async function bootstrap() {
   //app.enableCors({ origin: '*', methods: 'GET,POST,PATCH,DELETE' })
   app.useGlobalPipes(new ValidationPipe({
     transform: true,
+    whitelist: true,
   }))
   app.useGlobalFilters(new HttpExceptionFilter(), new PrismaExceptionFilter())
   await app.listen(process.env.PORT ?? 3001)

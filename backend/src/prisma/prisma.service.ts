@@ -1,6 +1,7 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common'
 import { PrismaClient } from '@prisma/client'
-import { normalizedSearch } from './prisma/extensions/normalized-search'
+import { normalizedSearch } from './extensions/normalized-search'
+import { getTotal } from './extensions/get-total'
 
 @Injectable()
 export class PrismaService

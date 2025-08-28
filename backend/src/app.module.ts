@@ -1,22 +1,12 @@
 import { Module } from '@nestjs/common'
-import { PrismaCrudModule } from 'nestjs-prisma-crud'
-import { PrismaService } from './prisma.service'
 import { AfModule } from './af/af.module'
-import { ValorModule } from './valor/valor.module'
-import { LocalModule } from './local/local.module'
 import { ItemModule } from './item/item.module'
+import { LocalModule } from './local/local.module'
+import { ValorModule } from './valor/valor.module'
+import { PrismaModule } from './prisma/prisma.module'
 
 @Module({
-  imports: [
-    PrismaCrudModule.register({
-      prismaService: PrismaService,
-    }),
-    AfModule,
-    ValorModule,
-    LocalModule,
-    ItemModule,
-  ],
-  controllers: [],
-  providers: [],
+  imports: [AfModule, ItemModule, LocalModule, ValorModule, PrismaModule],
 })
+
 export class AppModule {}

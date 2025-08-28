@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client'
 
 function normalize(str: string) {
   return str
-    .normalize('NFD') // split accents
+    .normalize('NFD')
     .replace(/\p{Diacritic}/gu, '')
     .replace(/\s\s+/g, ' ')
     .toLowerCase()
@@ -19,8 +19,7 @@ export const normalizedSearch = Prisma.defineExtension({
             ...args,
             where: {
               ...args.where,
-              // use contains for flexible search
-              nome: {
+              nome_normalized: {
                 contains: normalized,
                 mode: 'insensitive',
               },

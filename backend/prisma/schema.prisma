@@ -24,6 +24,7 @@ model AF {
 model Local {
   id   Int    @id @default(autoincrement())
   nome String @unique
+  nome_normalized String @unique
   
   items Item[]
   
@@ -46,6 +47,8 @@ model Item {
   valores          Valor[]
   
   @@map("Item")
+  @@index([AF_id])
+  @@index([Local_id])
 }
 
 model Valor {
@@ -58,4 +61,5 @@ model Valor {
   item        Item    @relation(fields: [Item_id], references: [id], onDelete: Cascade)
   
   @@map("Valor")
+  @@index([Item_id])
 }

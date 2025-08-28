@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common'
 import { ItemService } from './item.service'
 import { CreateItemDto } from './dto/create-item.dto'
 import { UpdateItemDto } from './dto/update-item.dto'
@@ -8,35 +8,27 @@ export class ItemController {
   constructor(private readonly itemService: ItemService) {}
 
   @Post()
-  async create(@Body() createItemDto: CreateItemDto, @Query('crudQuery') crudQuery: string) {
-    const created = await this.itemService.create(createItemDto, { crudQuery })
-    return created
+  create(@Body() createItemDto: CreateItemDto) {
+    return this.itemService.create(createItemDto)
   }
 
   @Get()
-  async findMany(@Query('crudQuery') crudQuery: string) {
-    const matches = await this.itemService.findMany({ crudQuery })
-    return matches
+  findMany() {
+    return this.itemService.findMany()
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number, @Query('crudQuery') crudQuery: string) {
-    const match = await this.itemService.findOne(id, { crudQuery })
-    return match
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.itemService.findOne(+id)
   }
 
   @Patch(':id')
-  async update(
-    @Param('id') id: number,
-    @Body() updateItemDto: UpdateItemDto,
-    @Query('crudQuery') crudQuery: string,
-  ) {
-    const updated = await this.itemService.update(id, updateItemDto, { crudQuery })
-    return updated
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateItemDto: UpdateItemDto) {
+    return this.itemService.update(+id, updateItemDto)
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number, @Query('crudQuery') crudQuery: string) {
-    return this.itemService.remove(id, { crudQuery })
+  delete(@Param('id', ParseIntPipe) id: number) {
+    return this.itemService.delete(+id)
   }
 }

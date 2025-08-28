@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common'
 import { LocalService } from './local.service'
 import { CreateLocalDto } from './dto/create-local.dto'
 import { UpdateLocalDto } from './dto/update-local.dto'
@@ -8,35 +8,27 @@ export class LocalController {
   constructor(private readonly localService: LocalService) {}
 
   @Post()
-  async create(@Body() createLocalDto: CreateLocalDto, @Query('crudQuery') crudQuery: string) {
-    const created = await this.localService.create(createLocalDto, { crudQuery })
-    return created
+  async create(@Body() createLocalDto: CreateLocalDto) {
+    return await this.localService.create(createLocalDto)
   }
 
   @Get()
-  async findMany(@Query('crudQuery') crudQuery: string) {
-    const matches = await this.localService.findMany({ crudQuery })
-    return matches
+  async findMany() {
+    return await this.localService.findMany()
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number, @Query('crudQuery') crudQuery: string) {
-    const match = await this.localService.findOne(id, { crudQuery })
-    return match
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.localService.findOne(+id)
   }
 
   @Patch(':id')
-  async update(
-    @Param('id') id: number,
-    @Body() updateLocalDto: UpdateLocalDto,
-    @Query('crudQuery') crudQuery: string,
-  ) {
-    const updated = await this.localService.update(id, updateLocalDto, { crudQuery })
-    return updated
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateLocalDto: UpdateLocalDto) {
+    return await this.localService.update(+id, updateLocalDto)
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number, @Query('crudQuery') crudQuery: string) {
-    return this.localService.remove(id, { crudQuery })
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return await this.localService.delete(+id)
   }
 }

@@ -1,42 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common'
 import { ValorService } from './valor.service'
 import { CreateValorDto } from './dto/create-valor.dto'
-import { UpdateValorDto } from './dto/update-valor.dto'
 
 @Controller('valor')
 export class ValorController {
   constructor(private readonly valorService: ValorService) {}
 
   @Post()
-  async create(@Body() createValorDto: CreateValorDto, @Query('crudQuery') crudQuery: string) {
-    const created = await this.valorService.create(createValorDto, { crudQuery })
-    return created
+  async create(@Body() createValorDto: CreateValorDto) {
+    return await this.valorService.create(createValorDto)
   }
 
   @Get()
-  async findMany(@Query('crudQuery') crudQuery: string) {
-    const matches = await this.valorService.findMany({ crudQuery })
-    return matches
+  async findMany() {
+    return await this.valorService.findMany()
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number, @Query('crudQuery') crudQuery: string) {
-    const match = await this.valorService.findOne(id, { crudQuery })
-    return match
-  }
-
-  @Patch(':id')
-  async update(
-    @Param('id') id: number,
-    @Body() updateValorDto: UpdateValorDto,
-    @Query('crudQuery') crudQuery: string,
-  ) {
-    const updated = await this.valorService.update(id, updateValorDto, { crudQuery })
-    return updated
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.valorService.findOne(+id)
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number, @Query('crudQuery') crudQuery: string) {
-    return this.valorService.remove(id, { crudQuery })
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return await this.valorService.delete(+id)
   }
 }
