@@ -10,7 +10,10 @@ export class PrismaService
 {
   constructor() {
     super()
-    this.$extends(normalizedSearch)
+    Object.assign(
+      this,
+      this.$extends(normalizedSearch).$extends(getTotal)
+    )
   }
   async onModuleInit() {
     await this.$connect()

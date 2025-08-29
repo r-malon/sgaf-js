@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service'
 import { CreateLocalDto } from './dto/create-local.dto'
 import { UpdateLocalDto } from './dto/update-local.dto'
 import { Local } from '@sgaf/shared'
+import { normalize } from '../utils/normalize'
 
 @Injectable()
 export class LocalService {
@@ -10,7 +11,10 @@ export class LocalService {
 
   async create(createLocalDto: CreateLocalDto): Promise<Local> {
     const local = await this.prisma.local.create({
-      data: createLocalDto,
+      data: {
+        ...createLocalDto,
+        nome_normalized: normalize(createLocalDto.nome as string),
+      },
     })
 
     return local
@@ -23,11 +27,9 @@ export class LocalService {
   }
 
   async findOne(id: number): Promise<Local | null> {
-    const local: Local | null = await this.prisma.local.findUnique({
+    const local = await this.prisma.local.findUniqueOrThrow({
       where: { id },
     })
-
-    if (!local) throw new NotFoundException(`Local with ID ${id} not found`)
 
     return local
   }
@@ -35,7 +37,10 @@ export class LocalService {
   async update(id: number, updateLocalDto: UpdateLocalDto): Promise<Local> {
     const local = await this.prisma.local.update({
       where: { id },
-      data: updateLocalDto,
+      data: {
+        ...updateLocalDto,
+        nome_normalized: normalize(updateLocalDto.nome as string),
+      },
     })
 
     return local

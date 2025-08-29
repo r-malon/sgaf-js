@@ -10,12 +10,11 @@ export class ItemService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createItemDto: CreateItemDto): Promise<Item> {
-    const { total, ...data } = createItemDto as any
     const item = await this.prisma.item.create({
-      data,
+      data: createItemDto,
     })
-
-    return item
+    const total = await this.prisma.item.total(item)
+    return { ...item, total }
   }
 
   async findOne(id: number): Promise<Item | null> {
@@ -39,13 +38,12 @@ export class ItemService {
   }
 
   async update(id: number, updateItemDto: UpdateItemDto): Promise<Item> {
-    const { total, ...data } = updateItemDto as any
     const item = await this.prisma.item.update({
       where: { id },
-      data,
+      data: updateItemDto,
     })
-
-    return item
+    const total = await this.prisma.item.total(item)
+    return { ...item, total }
   }
 
   async delete(id: number): Promise<void> {

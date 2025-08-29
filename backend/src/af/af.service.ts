@@ -3,19 +3,18 @@ import { PrismaService } from '../prisma/prisma.service'
 import { prorateTotal } from '../utils/prorate-total'
 import { CreateAfDto } from './dto/create-af.dto'
 import { UpdateAfDto } from './dto/update-af.dto'
-import { AF, Item } from '@sgaf/shared'
+import { AF } from '@sgaf/shared'
 
 @Injectable()
 export class AfService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createAfDto: CreateAfDto): Promise<AF> {
-    const { total, ...data } = createAfDto as any
     const af = await this.prisma.aF.create({
-      data,
+      data: createAfDto,
     })
-
-    return af
+    const total = await this.prisma.aF.total(af)
+    return { ...af, total }
   }
 
   async findOne(id: number): Promise<AF | null> {
@@ -39,13 +38,12 @@ export class AfService {
   }
 
   async update(id: number, updateAfDto: UpdateAfDto): Promise<AF> {
-    const { total, ...data } = updateAfDto as any
     const af = await this.prisma.aF.update({
       where: { id },
-      data,
+      data: updateAfDto,
     })
-
-    return af
+    const total = await this.prisma.aF.total(af)
+    return { ...af, total }
   }
 
   async delete(id: number): Promise<void> {

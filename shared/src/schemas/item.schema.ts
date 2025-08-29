@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
-export const itemSchema = z.object({
-  descricao: z.string().trim().optional(),
+const itemBaseSchema = z.object({
+  descricao: z.string().trim().nullish(),
   data_instalacao: z.coerce.date({
     error: (issue) =>
       issue.code === 'invalid_type'
@@ -20,7 +20,14 @@ export const itemSchema = z.object({
   status: z.boolean({
     error: () => 'Status inválido',
   }),
-  total: z.number().int().nonnegative().optional(),
 })
 
-export type Item = z.infer<typeof itemSchema>
+// For input DTOs
+export const itemSchema = itemBaseSchema
+
+// For responses
+export const itemWithTotalSchema = itemBaseSchema.extend({
+  total: z.number().int().nonnegative(),
+})
+
+export type Item = z.infer<typeof itemWithTotalSchema>

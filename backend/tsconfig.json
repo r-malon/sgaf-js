@@ -7,7 +7,5 @@
       "@sgaf/shared": ["../shared/dist"]
     },
     "composite": true
-  },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  }
 }

@@ -10,7 +10,7 @@ export class ValorService {
 
   async create(createValorDto: CreateValorDto): Promise<Valor> {
     const valor = await this.prisma.valor.create({
-      data: createValorDto, 
+      data: createValorDto,
     })
 
     return valor
@@ -23,11 +23,9 @@ export class ValorService {
   }
 
   async findOne(id: number): Promise<Valor | null> {
-    const valor: Valor | null = await this.prisma.valor.findUnique({
-      where: { id }, 
+    const valor = await this.prisma.valor.findUniqueOrThrow({
+      where: { id },
     })
-
-    if (!valor) throw new NotFoundException(`Valor with ID ${id} not found`)
 
     return valor
   }

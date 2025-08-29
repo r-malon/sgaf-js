@@ -2,6 +2,7 @@ import { Prisma } from '@prisma/client'
 import { prorateTotal } from '../../utils/prorate-total'
 
 export const getTotal = Prisma.defineExtension({
+  name: 'getTotal',
   model: {
     item: {
       async total(this: any, item: any, options: { afStart: Date; afEnd: Date }) {

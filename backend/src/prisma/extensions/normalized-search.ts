@@ -1,12 +1,5 @@
 import { Prisma } from '@prisma/client'
-
-function normalize(str: string) {
-  return str
-    .normalize('NFD')
-    .replace(/\p{Diacritic}/gu, '')
-    .replace(/\s\s+/g, ' ')
-    .toLowerCase()
-}
+import { normalize } from '../../utils/normalize'
 
 export const normalizedSearch = Prisma.defineExtension({
   name: 'normalizedSearch',
