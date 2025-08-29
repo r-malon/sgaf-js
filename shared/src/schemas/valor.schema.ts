@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 export const valorSchema = z.object({
+  Item_id: z.number().int().positive(),
   valor: z.number({
     error: (issue) =>
       issue.code === 'invalid_type'

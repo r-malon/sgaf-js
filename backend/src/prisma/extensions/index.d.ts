@@ -1,4 +1,4 @@
-import { AF, Item, Valor } from '@prisma/client'
+import type { AF, Item } from '@prisma/client'
 
 declare module '@prisma/client' {
   interface PrismaClient {
@@ -8,10 +8,11 @@ declare module '@prisma/client' {
         options?: { afStart?: Date; afEnd?: Date }
       ): Promise<number>
     } & PrismaClient['aF']
+
     item: {
       total(
         item: Item,
-        options: { afStart: Date; afEnd: Date }
+        options?: { afStart?: Date; afEnd?: Date }
       ): Promise<number>
     } & PrismaClient['item']
   }

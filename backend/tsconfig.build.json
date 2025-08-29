@@ -10,5 +10,5 @@
     "noEmit": false
   },
   "include": ["src"],
-  "exclude": ["node_modules", "test", "dist", "**/*.spec.ts", "src/prisma/extensions/normalize-local.ts"]
+  "exclude": ["node_modules", "test", "dist", "**/*.spec.ts"]
 }
