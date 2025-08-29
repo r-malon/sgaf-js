@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
-import { prorateTotal } from '../utils/prorate-total'
 import { CreateAfDto } from './dto/create-af.dto'
 import { UpdateAfDto } from './dto/update-af.dto'
 import { AF } from '@sgaf/shared'
@@ -20,7 +19,6 @@ export class AfService {
   async findOne(id: number): Promise<AF | null> {
     const af = await this.prisma.aF.findUniqueOrThrow({
       where: { id },
-      include: { items: true },
     })
 
     const total = await this.prisma.aF.total(af)
@@ -28,9 +26,7 @@ export class AfService {
   }
 
   async findMany(): Promise<AF[]> {
-    const afs = await this.prisma.aF.findMany({
-      include: { items: true },
-    })
+    const afs = await this.prisma.aF.findMany()
 
     return Promise.all(
       afs.map(async af => ({ ...af, total: await this.prisma.aF.total(af) }))

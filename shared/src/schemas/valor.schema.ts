@@ -1,7 +1,6 @@
 import { z } from 'zod'
 
-export const valorSchema = z.object({
-  Item_id: z.number().int().positive(),
+const valorBaseSchema = z.object({
   valor: z.number({
     error: (issue) =>
       issue.code === 'invalid_type'
@@ -11,8 +10,8 @@ export const valorSchema = z.object({
   data_inicio: z.coerce.date({
     error: (issue) =>
       issue.code === 'invalid_type'
-        ? 'Data de início inválida'
-        : 'Data de início é obrigatória',
+        ? 'Data inicial inválida'
+        : 'Data inicial é obrigatória',
   }),
   data_fim: z.coerce.date({
     error: () => 'Data final inválida',
@@ -21,9 +20,17 @@ export const valorSchema = z.object({
   (data) =>
     !data.data_fim || data.data_fim >= data.data_inicio,
   {
-    message: 'Data final não pode ser anterior à data de início',
+    message: 'Data final não pode ser anterior à data inicial',
     path: ['data_fim'],
   }
 )
 
-export type Valor = z.infer<typeof valorSchema>
+// For input DTOs
+export const valorSchema = valorBaseSchema.extend({
+  Item_id: z.number().int().positive(),
+})
+
+// For responses
+export const valorWithoutFKSchema = valorBaseSchema
+
+export type Valor = z.infer<typeof valorWithoutFKSchema>

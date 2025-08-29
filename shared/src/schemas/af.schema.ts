@@ -14,8 +14,8 @@ const afBaseSchema = z.object({
   data_inicio: z.coerce.date({
     error: (issue) =>
       issue.code === 'invalid_type'
-        ? 'Data de início inválida'
-        : 'Data de início é obrigatória',
+        ? 'Data inicial inválida'
+        : 'Data inicial é obrigatória',
   }),
   data_fim: z.coerce.date({
     error: (issue) =>
@@ -27,7 +27,7 @@ const afBaseSchema = z.object({
     error: () => 'Status inválido',
   }),
 }).refine((data) => data.data_fim >= data.data_inicio, {
-  message: 'Data final não pode ser anterior à data de início',
+  message: 'Data final não pode ser anterior à data inicial',
   path: ['data_fim'],
 })
 

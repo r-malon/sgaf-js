@@ -1,19 +1,19 @@
-import type { AF, Item } from '@prisma/client'
+import type { Prisma, AF, Item } from '@prisma/client'
 
 declare module '@prisma/client' {
-  interface PrismaClient {
-    aF: {
+  namespace Prisma {
+    interface AFDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
       total(
         af: AF,
         options?: { afStart?: Date; afEnd?: Date }
       ): Promise<number>
-    } & PrismaClient['aF']
+    }
 
-    item: {
+    interface ItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
       total(
         item: Item,
         options?: { afStart?: Date; afEnd?: Date }
       ): Promise<number>
-    } & PrismaClient['item']
+    }
   }
 }
