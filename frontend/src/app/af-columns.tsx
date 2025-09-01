@@ -45,6 +45,10 @@ export const afColumns: ColumnDef<AF>[] = [
     cell: ({ row }) => (row.original.status ? <Check strokeWidth={4} color="green" /> : <X strokeWidth={4} color="red" />),
   },
   {
+    accessorKey: "total",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Total" />,
+  },
+  {
     id: "actions",
     header: "Ações",
     cell: ({ row }) => <AFActionCell af={row.original} />,

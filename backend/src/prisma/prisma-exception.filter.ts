@@ -14,7 +14,7 @@ export class PrismaExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse()
 
     let status = HttpStatus.INTERNAL_SERVER_ERROR
-    let message = "Erro interno do servidor"
+    let message: string
 
     switch (exception.code) {
       case "P2002": // Unique constraint failed
@@ -30,7 +30,7 @@ export class PrismaExceptionFilter implements ExceptionFilter {
         status = HttpStatus.NOT_FOUND
         break
       default:
-        message = "Erro no banco de dados"
+        message = exception.message
         status = HttpStatus.BAD_REQUEST
     }
 

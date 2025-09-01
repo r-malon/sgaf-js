@@ -35,7 +35,7 @@ const afBaseSchema = z.object({
 export const afSchema = afBaseSchema
 
 // For responses
-export const afWithTotalSchema = afBaseSchema.extend({
+export const afWithTotalSchema = afBaseSchema.safeExtend({
   total: z.number().int().nonnegative(),
 })
 

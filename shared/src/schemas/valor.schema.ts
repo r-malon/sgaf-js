@@ -26,7 +26,7 @@ const valorBaseSchema = z.object({
 )
 
 // For input DTOs
-export const valorSchema = valorBaseSchema.extend({
+export const valorSchema = valorBaseSchema.safeExtend({
   Item_id: z.number().int().positive(),
 })
 

@@ -23,13 +23,13 @@ const itemBaseSchema = z.object({
 })
 
 // For input DTOs
-export const itemSchema = itemBaseSchema.extend({
+export const itemSchema = itemBaseSchema.safeExtend({
   AF_id: z.number().int().positive(),
   Local_id: z.number().int().positive(),
 })
 
 // For responses
-export const itemWithTotalSchema = itemBaseSchema.extend({
+export const itemWithTotalSchema = itemBaseSchema.safeExtend({
   total: z.number().int().nonnegative(),
 })
 

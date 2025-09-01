@@ -1,7 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
 import { CreateAfDto } from './dto/create-af.dto'
 import { UpdateAfDto } from './dto/update-af.dto'
+import { getAfTotal } from './af.total.service'
 import { AF } from '@sgaf/shared'
 
 @Injectable()
@@ -12,7 +13,7 @@ export class AfService {
     const af = await this.prisma.aF.create({
       data: createAfDto,
     })
-    const total = await this.prisma.aF.total(af)
+    const total = await getAfTotal(this.prisma, af.id)
     return { ...af, total }
   }
 
@@ -20,8 +21,7 @@ export class AfService {
     const af = await this.prisma.aF.findUniqueOrThrow({
       where: { id },
     })
-
-    const total = await this.prisma.aF.total(af)
+    const total = await getAfTotal(this.prisma, af.id)
     return { ...af, total }
   }
 
@@ -29,7 +29,10 @@ export class AfService {
     const afs = await this.prisma.aF.findMany()
 
     return Promise.all(
-      afs.map(async af => ({ ...af, total: await this.prisma.aF.total(af) }))
+      afs.map(async af => ({
+        ...af,
+        total: await getAfTotal(this.prisma, af.id),
+      }))
     )
   }
 
@@ -38,7 +41,7 @@ export class AfService {
       where: { id },
       data: updateAfDto,
     })
-    const total = await this.prisma.aF.total(af)
+    const total = await getAfTotal(this.prisma, af.id)
     return { ...af, total }
   }
 
