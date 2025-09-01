@@ -1,4 +1,4 @@
-import { differenceInCalendarDays, addMonths } from 'date-fns'
+import { differenceInCalendarDays, addMonths, addDays } from 'date-fns'
 import { Valor } from '@sgaf/shared'
 
 export function daysInMonth(d: Date): number {
@@ -8,14 +8,16 @@ export function daysInMonth(d: Date): number {
 export function prorateTotal(afStart: Date, afEnd: Date, valores: Valor[]): number {
   valores = [...valores].sort((a, b) => a.data_inicio.getTime() - b.data_inicio.getTime())
 
-  const changePoints = new Set<Date>([afStart, afEnd])
+  const effectiveAfEnd = addDays(afEnd, 1) // Treat as exclusive end
+
+  const changePoints = new Set<Date>([afStart, effectiveAfEnd])
   valores.forEach(v => {
     changePoints.add(v.data_inicio)
-    if (v.data_fim) changePoints.add(v.data_fim)
+    if (v.data_fim) changePoints.add(addDays(v.data_fim, 1)) // Exclusive
   })
 
   let current = new Date(afStart.getFullYear(), afStart.getMonth(), 1)
-  while (current < afEnd) {
+  while (current < effectiveAfEnd) {
     changePoints.add(current)
     current = addMonths(current, 1)
   }
@@ -29,12 +31,12 @@ export function prorateTotal(afStart: Date, afEnd: Date, valores: Valor[]): numb
     if (segStart >= segEnd) continue
 
     const segStartActual = new Date(Math.max(segStart.getTime(), afStart.getTime()))
-    const segEndActual = new Date(Math.min(segEnd.getTime(), afEnd.getTime()))
+    const segEndActual = new Date(Math.min(segEnd.getTime(), effectiveAfEnd.getTime()))
     if (segStartActual >= segEndActual) continue
 
     let activeValor: number | null = null
     for (const v of valores) {
-      const vEnd = v.data_fim ?? new Date(afEnd.getTime() + 86400000)
+      const vEnd = v.data_fim ? addDays(v.data_fim, 1) : effectiveAfEnd
       if (v.data_inicio <= segStartActual && segStartActual < vEnd) {
         activeValor = v.valor
         break
@@ -50,5 +52,5 @@ export function prorateTotal(afStart: Date, afEnd: Date, valores: Valor[]): numb
     total += prorated
   }
 
-  return total
+  return Math.round(total * 100) // Consider Math.round(total * 100) if total should be int cents
 }

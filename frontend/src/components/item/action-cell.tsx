@@ -1,6 +1,6 @@
 import { Pencil, Plus, Trash2, List } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { ItemDialog } from "@/components/item-dialog"
+import { ItemDialog } from "@/components/item/dialog"
 import { useEntityHandlers } from "@/app/handlers"
 import { ActionCell } from "@/components/action-cell"
 
@@ -42,18 +42,6 @@ export function ItemActionCell({ item }: { item: any }) {
               onClick={() => console.log(`Adicionar valor ao Item ${item.id}`)}
             >
               <Plus strokeWidth={4} /> Valor
-            </Button>
-          ),
-        },
-        {
-          key: "list-valors",
-          show: (item) => item.valors?.length > 0,
-          render: (item) => (
-            <Button
-              size="sm"
-              onClick={() => console.log(`Listar valores ao Item ${item.id}`)}
-            >
-              <List strokeWidth={4} /> Valores
             </Button>
           ),
         },

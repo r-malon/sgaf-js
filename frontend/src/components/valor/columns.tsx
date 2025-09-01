@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { DataTableColumnHeader } from "@/components/data-table-column-header"
-import { ValorActionCell } from "@/components/af-action-cell"
+import { ValorActionCell } from "@/components/af/action-cell"
 import { Valor } from "@sgaf/shared"
 
 export const valorColumns: ColumnDef<Valor>[] = [

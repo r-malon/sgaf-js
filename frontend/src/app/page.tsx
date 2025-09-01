@@ -3,12 +3,11 @@
 import { API_BASE_URL } from "@/lib/config"
 import { DataTable } from "@/components/data-table"
 import { DataTableFilter } from "@/components/data-table-filter"
-import { AFDialog } from "@/components/af-dialog"
-import { LocalDialog } from "@/components/local-dialog"
-import { LocalCombobox } from "@/components/local-combobox"
+import { AFDialog } from "@/components/af/dialog"
+import { LocalDialog } from "@/components/local/dialog"
+import { LocalCombobox } from "@/components/local/combobox"
 import { AF } from "@sgaf/shared"
-import { APIResponse } from "@/app/types"
-import { afColumns } from "@/app/af-columns"
+import { afColumns } from "@/components/af/columns"
 import { useReactTable, getCoreRowModel, getFilteredRowModel, getSortedRowModel, SortingState } from "@tanstack/react-table"
 import useSWR from "swr"
 import { useEffect, useState } from "react"
@@ -16,9 +15,9 @@ import { toast } from "sonner"
 import { handleFetch } from "@/app/handlers"
 
 export default function Home() {
-  const { data, error, isLoading } = useSWR<APIResponse<AF>>(
+  const { data, error, isLoading } = useSWR<AF[]>(
     `${API_BASE_URL}/af`,
-    (url) => handleFetch<APIResponse<AF>>(url),
+    (url) => handleFetch<AF[]>(url),
     {
       refreshInterval: 6000,
       revalidateOnFocus: true,
@@ -32,7 +31,7 @@ export default function Home() {
 
   const [sorting, setSorting] = useState<SortingState>([])
   const afTable = useReactTable({
-    data: data?.data ?? [],
+    data: data ?? [],
     columns: afColumns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),

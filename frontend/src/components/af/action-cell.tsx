@@ -1,9 +1,10 @@
-import { Pencil, Plus, Trash2, List } from "lucide-react"
+import { Pencil, Plus, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useEntityHandlers } from "@/app/handlers"
 import { ActionCell } from "@/components/action-cell"
-import { AFDialog } from "@/components/af-dialog"
-import { ItemDialog } from "@/components/item-dialog"
+import { AFDialog } from "@/components/af/dialog"
+import { ItemDialog } from "@/components/item/dialog"
+import { ItemDrawer } from "@/components/item/drawer"
 
 export function AFActionCell({ af }: { af: any }) {
   const { handleEdit, handleDelete } = useEntityHandlers("af")
@@ -38,6 +39,7 @@ export function AFActionCell({ af }: { af: any }) {
         },
         {
           key: "add-item",
+          show: (af) => af.status,
           render: (af) => (
             <ItemDialog
               triggerLabel={<><Plus strokeWidth={4} /> Item</>}
@@ -50,15 +52,8 @@ export function AFActionCell({ af }: { af: any }) {
         },
         {
           key: "list-items",
-          show: (af) => af.items?.length > 0,
-          render: (af) => (
-            <Button
-              size="sm"
-              onClick={() => console.log(`List items of AF ${af.id}`)}
-            >
-              <List strokeWidth={4} /> Itens
-            </Button>
-          ),
+          show: (af) => af.status,
+          render: (af) => <ItemDrawer afId={af.id} />,
         },
       ]}
     />

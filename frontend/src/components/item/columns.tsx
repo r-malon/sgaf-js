@@ -3,19 +3,11 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Minus, Check, X } from "lucide-react"
 import { DataTableColumnHeader } from "@/components/data-table-column-header"
-import { AFActionCell } from "@/components/af-action-cell"
+import { ItemActionCell } from "@/components/item/action-cell"
 import { DescriptionCell } from "@/components/description-cell"
-import { AF } from "@sgaf/shared"
+import { Item } from "@sgaf/shared"
 
-export const afColumns: ColumnDef<AF>[] = [
-  {
-    accessorKey: "numero",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Número" />,
-  },
-  {
-    accessorKey: "fornecedor",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Fornecedor" />,
-  },
+export const itemColumns: ColumnDef<Item>[] = [
   {
     accessorKey: "descricao",
     header: "Descrição",
@@ -30,18 +22,25 @@ export const afColumns: ColumnDef<AF>[] = [
     },
   },
   {
-    accessorKey: "data_inicio",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Início" />,
-    cell: ({ row }) => row.original.data_inicio.slice(0, 10),
+    accessorKey: "banda_maxima",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Banda Máxima" />,
   },
   {
-    accessorKey: "data_fim",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Fim" />,
-    cell: ({ row }) => row.original.data_fim.slice(0, 10),
+    accessorKey: "banda_instalada",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Banda Instalada" />,
+  },
+  {
+    accessorKey: "data_instalacao",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Instalação" />,
+    cell: ({ row }) => row.original.data_instalacao.slice(0, 10),
+  },
+  {
+    accessorKey: "quantidade",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Qtd." />,
   },
   {
     accessorKey: "status",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Ativa?" />,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Ativo?" />,
     cell: ({ row }) => (row.original.status ? <Check strokeWidth={4} color="green" /> : <X strokeWidth={4} color="red" />),
   },
   {
@@ -51,6 +50,6 @@ export const afColumns: ColumnDef<AF>[] = [
   {
     id: "actions",
     header: "Ações",
-    cell: ({ row }) => <AFActionCell af={row.original} />,
+    cell: ({ row }) => <ItemActionCell item={row.original} />,
   },
 ]

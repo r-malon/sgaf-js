@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
 import { CreateItemDto } from './dto/create-item.dto'
 import { UpdateItemDto } from './dto/update-item.dto'
@@ -9,58 +9,74 @@ import { Item } from '@sgaf/shared'
 export class ItemService {
   constructor(private readonly prisma: PrismaService) {}
 
-  private async getAfWindowForItem(itemLike: { id?: number; AF_id?: number; af?: any }) {
-    if (itemLike.af?.data_inicio && itemLike.af?.data_fim) {
-      return { afStart: itemLike.af.data_inicio, afEnd: itemLike.af.data_fim }
-    }
-
-    if (itemLike.AF_id) {
-      const af = await this.prisma.aF.findUniqueOrThrow({ where: { id: itemLike.AF_id } })
-      return { afStart: af.data_inicio, afEnd: af.data_fim }
-    }
-
-    if (itemLike.id) {
-      const itemWithAf = await this.prisma.item.findUniqueOrThrow({
-        where: { id: itemLike.id },
-        include: { af: true },
-      })
-      return { afStart: itemWithAf.af.data_inicio, afEnd: itemWithAf.af.data_fim }
-    }
-
-    throw new NotFoundException('Item or AF information is missing to compute total')
-  }
-
   async create(createItemDto: CreateItemDto): Promise<Item> {
-    const item = await this.prisma.item.create({
-      data: createItemDto as any,
+    const af = await this.prisma.aF.findUniqueOrThrow({
+      where: { id: createItemDto.AF_id },
+      select: { data_inicio: true, data_fim: true, status: true },
     })
 
-    const { afStart, afEnd } = await this.getAfWindowForItem({ id: item.id })
-    const total = await getItemTotal(this.prisma, item.id, { afStart, afEnd })
+    if (!af.status)
+      throw new Error('Itens não podem ser adicionados à AF inativa')
+
+    const item = await this.prisma.item.create({
+      data: createItemDto,
+    })
+
+    const total = await getItemTotal(this.prisma, item.id, {
+      afStart: af.data_inicio,
+      afEnd: af.data_fim,
+    })
+
     return { ...item, total }
   }
 
   async findOne(id: number): Promise<Item | null> {
     const item = await this.prisma.item.findUniqueOrThrow({
       where: { id },
-      include: { af: true },
+      include: { af: { select: { data_inicio: true, data_fim: true } } },
     })
 
-    const { afStart, afEnd } = await this.getAfWindowForItem(item)
-    const total = await getItemTotal(this.prisma, item.id, { afStart, afEnd })
-    return { ...item, total }
+    const total = await getItemTotal(this.prisma, item.id, {
+      afStart: item.af.data_inicio,
+      afEnd: item.af.data_fim,
+    })
+
+    const { af, ...itemWithoutRelations } = item
+    return { ...itemWithoutRelations, total }
   }
 
   async findMany(): Promise<Item[]> {
     const items = await this.prisma.item.findMany({
-      include: { af: true },
+      include: { af: { select: { data_inicio: true, data_fim: true } } },
     })
 
     return Promise.all(
-      items.map(async item => {
-        const { afStart, afEnd } = await this.getAfWindowForItem(item)
-        const total = await getItemTotal(this.prisma, item.id, { afStart, afEnd })
-        return { ...item, total }
+      items.map(async (item) => {
+        const total = await getItemTotal(this.prisma, item.id, {
+          afStart: item.af.data_inicio,
+          afEnd: item.af.data_fim,
+        })
+
+        const { af, ...itemWithoutRelations } = item
+        return { ...itemWithoutRelations, total }
+      })
+    )
+  }
+
+  async findManyByAf(afId: number): Promise<Item[]> {
+    const items = await this.prisma.item.findMany({
+      where: { AF_id: afId },
+      include: { af: { select: { data_inicio: true, data_fim: true } } },
+    })
+
+    return Promise.all(
+      items.map(async (item) => {
+        const total = await getItemTotal(this.prisma, item.id, {
+          afStart: item.af.data_inicio,
+          afEnd: item.af.data_fim,
+        })
+        const { af, ...itemWithoutRelations } = item
+        return { ...itemWithoutRelations, total }
       })
     )
   }
@@ -68,11 +84,19 @@ export class ItemService {
   async update(id: number, updateItemDto: UpdateItemDto): Promise<Item> {
     const item = await this.prisma.item.update({
       where: { id },
-      data: updateItemDto as any,
+      data: updateItemDto,
     })
 
-    const { afStart, afEnd } = await this.getAfWindowForItem({ id: item.id })
-    const total = await getItemTotal(this.prisma, item.id, { afStart, afEnd })
+    const af = await this.prisma.aF.findUniqueOrThrow({
+      where: { id: item.AF_id },
+      select: { data_inicio: true, data_fim: true },
+    })
+
+    const total = await getItemTotal(this.prisma, item.id, {
+      afStart: af.data_inicio,
+      afEnd: af.data_fim,
+    })
+
     return { ...item, total }
   }
 

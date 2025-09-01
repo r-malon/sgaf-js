@@ -7,7 +7,7 @@ import { GenericDialogForm } from "@/components/generic-dialog-form"
 import { useEntityHandlers } from "@/app/handlers"
 import { API_BASE_URL } from "@/lib/config"
 import { mutate } from "swr"
-import { LocalCombobox } from "@/components/local-combobox"
+import { LocalCombobox } from "@/components/local/combobox"
 
 interface ItemDialogProps {
   item?: z.infer<typeof itemSchema>

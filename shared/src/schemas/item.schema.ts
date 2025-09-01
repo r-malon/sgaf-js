@@ -24,8 +24,8 @@ const itemBaseSchema = z.object({
 
 // For input DTOs
 export const itemSchema = itemBaseSchema.safeExtend({
-  AF_id: z.number().int().positive(),
-  Local_id: z.number().int().positive(),
+  AF_id: z.number().int().positive().readonly(),
+  Local_id: z.number().int().positive().readonly(),
 })
 
 // For responses

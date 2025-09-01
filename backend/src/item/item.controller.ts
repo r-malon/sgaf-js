@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Query, Delete, ParseIntPipe } from '@nestjs/common'
 import { ItemService } from './item.service'
 import { CreateItemDto } from './dto/create-item.dto'
 import { UpdateItemDto } from './dto/update-item.dto'
@@ -13,7 +13,9 @@ export class ItemController {
   }
 
   @Get()
-  findMany() {
+  findMany(@Query('AF_id') afId?: string) {
+    if (afId)
+      return this.itemService.findManyByAf(+afId)
     return this.itemService.findMany()
   }
 

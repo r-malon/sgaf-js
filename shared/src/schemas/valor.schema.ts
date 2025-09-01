@@ -27,7 +27,7 @@ const valorBaseSchema = z.object({
 
 // For input DTOs
 export const valorSchema = valorBaseSchema.safeExtend({
-  Item_id: z.number().int().positive(),
+  Item_id: z.number().int().positive().readonly(),
 })
 
 // For responses

@@ -19,7 +19,7 @@ import {
 import { ChevronsUpDown, Trash2, Pencil } from "lucide-react"
 import { API_BASE_URL } from "@/lib/config"
 import { useEntityHandlers } from "@/app/handlers"
-import { LocalDialog } from "@/components/local-dialog"
+import { LocalDialog } from "@/components/local/dialog"
 import { Local } from "@sgaf/shared"
 
 const fetcher = async (url: string): Promise<Local[]> => {
