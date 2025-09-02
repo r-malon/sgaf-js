@@ -13,24 +13,21 @@ interface ItemDrawerProps {
 }
 
 export function ItemDrawer({ afId }: ItemDrawerProps) {
-  const { handleFetch, handleCreate } = useEntityHandlers("item")
+  const { baseUrl, handleCreate } = useEntityHandlers("item")
 
   return (
     <GenericDrawer
-      title="Itens"
       trigger={
         <Button size="sm">
           <List strokeWidth={4} /> Itens
         </Button>
       }
-      fetchEntities={() => handleFetch({ AF_id: afId })}
+      url={`${baseUrl}?AF_id=${afId}`}
       columns={itemColumns}
-      actionCell={(item) => <ItemActionCell item={item} />}
       createDialog={
         <ItemDialog
           title="Adicionar Item"
           triggerLabel={<Plus />}
-          onSubmit={async (values) => handleCreate({ ...values, AF_id: afId })}
         />
       }
     />

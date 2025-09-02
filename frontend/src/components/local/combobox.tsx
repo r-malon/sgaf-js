@@ -120,9 +120,9 @@ export function LocalCombobox({
             onSubmit={async (values) => {
               await handleEdit(selected.id, values)
               // Keep selection pointing to the same id; data will refresh via SWR
-              // If you prefer to clear after edit, uncomment the next two lines:
-              // onChange?.(null, null)
-              // if (value === undefined) setInternalId(null)
+              // For clear after edit, uncomment the next 2 lines:
+              onChange?.(null, null)
+              if (value === undefined) setInternalId(null)
             }}
           />
           <Button

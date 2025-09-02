@@ -13,7 +13,7 @@ export class ItemController {
   }
 
   @Get()
-  findMany(@Query('AF_id') afId?: string) {
+  findMany(@Query('AF_id') afId?: number) {
     if (afId)
       return this.itemService.findManyByAf(+afId)
     return this.itemService.findMany()

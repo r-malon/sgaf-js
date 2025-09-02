@@ -5,6 +5,7 @@ import { Minus, Check, X } from "lucide-react"
 import { DataTableColumnHeader } from "@/components/data-table-column-header"
 import { AFActionCell } from "@/components/af/action-cell"
 import { DescriptionCell } from "@/components/description-cell"
+import { moneyColumn } from "@/components/money-column"
 import { AF } from "@sgaf/shared"
 
 export const afColumns: ColumnDef<AF>[] = [
@@ -20,8 +21,8 @@ export const afColumns: ColumnDef<AF>[] = [
     accessorKey: "descricao",
     header: "Descrição",
     cell: ({ row }) => {
-      const descricao = row.original.descricao
-      if (descricao == null) return <Minus strokeWidth={4} color="lightgray" />
+      const descricao = row.original.descricao ?? ""
+      if (descricao == "") return <Minus strokeWidth={4} color="lightgray" />
       return descricao.length > 20 ? (
         <DescriptionCell trunc={20} text={descricao} />
       ) : (
@@ -44,10 +45,7 @@ export const afColumns: ColumnDef<AF>[] = [
     header: ({ column }) => <DataTableColumnHeader column={column} title="Ativa?" />,
     cell: ({ row }) => (row.original.status ? <Check strokeWidth={4} color="green" /> : <X strokeWidth={4} color="red" />),
   },
-  {
-    accessorKey: "total",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Total" />,
-  },
+  moneyColumn<AF>({ header: "Total", accessor: (row) => row.total }),
   {
     id: "actions",
     header: "Ações",

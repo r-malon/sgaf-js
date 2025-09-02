@@ -9,47 +9,74 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer"
 import { DataTable } from "@/components/data-table"
-import { ColumnDef } from "@tanstack/react-table"
+import { DataTableFilter } from "@/components/data-table-filter"
+import {
+  useReactTable,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  SortingState,
+  ColumnDef,
+} from "@tanstack/react-table"
+import useSWR from "swr"
+import { toast } from "sonner"
+import { handleFetch } from "@/app/handlers"
 
 interface GenericDrawerProps<T> {
   title: string
   trigger: React.ReactNode
-  fetchEntities: () => Promise<T[]>
+  url: string
   columns: ColumnDef<T, any>[]
-  actionCell: (entity: T) => React.ReactNode
-  createDialog: React.ReactNode
+  createDialog?: React.ReactNode
 }
 
 export function GenericDrawer<T>({
   title,
   trigger,
-  fetchEntities,
+  url,
   columns,
   actionCell,
   createDialog,
 }: GenericDrawerProps<T>) {
   const [open, setOpen] = React.useState(false)
 
+  // SWR for fetching + auto revalidate
+  const { data, error, isLoading } = useSWR<T[]>(
+    open ? url : null, // only fetch when drawer open
+    (u) => handleFetch<T[]>(u),
+    { refreshInterval: 6000, revalidateOnFocus: true, revalidateOnReconnect: true }
+  )
+
+  React.useEffect(() => {
+    if (error) toast.error(error.message)
+  }, [error])
+
+  const [sorting, setSorting] = React.useState<SortingState>([])
+
+  const table = useReactTable({
+    data: data ?? [],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    state: { sorting },
+    onSortingChange: setSorting,
+  })
+
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>{trigger}</DrawerTrigger>
-      <DrawerContent className="p-4">
+      <DrawerContent className="p-4 space-y-4">
         <DrawerHeader className="flex items-center justify-between">
           <DrawerTitle>{title}</DrawerTitle>
           {createDialog}
         </DrawerHeader>
-        <div className="py-4">
-          <DataTable
-            fetchData={fetchEntities}
-            columns={[
-              ...columns,
-              {
-                id: "actions",
-                cell: ({ row }) => actionCell(row.original),
-              },
-            ]}
-          />
-        </div>
+
+        {isLoading ? (
+          <h1>Carregando...</h1>
+        ) : (
+          <DataTable table={table} />
+        )}
       </DrawerContent>
     </Drawer>
   )

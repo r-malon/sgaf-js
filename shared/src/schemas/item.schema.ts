@@ -20,6 +20,9 @@ const itemBaseSchema = z.object({
   status: z.boolean({
     error: () => 'Status inválido',
   }),
+}).refine((data) => data.banda_maxima >= data.banda_instalada, {
+  message: 'Banda instalada não pode ser maior do que a banda máxima',
+  path: ['banda_instalada'],
 })
 
 // For input DTOs

@@ -22,6 +22,14 @@ export class ValorService {
     return valores
   }
 
+  async findManyByItem(itemId: number): Promise<Valor[]> {
+    const valores: Valor[] = await this.prisma.valor.findMany({
+      where: { Item_id: itemId },
+    })
+
+    return valores
+  }
+
   async findOne(id: number): Promise<Valor | null> {
     const valor = await this.prisma.valor.findUniqueOrThrow({
       where: { id },

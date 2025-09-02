@@ -42,17 +42,15 @@ export function AFActionCell({ af }: { af: any }) {
           show: (af) => af.status,
           render: (af) => (
             <ItemDialog
+              afId={af.id}
+              afNumero={af.numero}
               triggerLabel={<><Plus strokeWidth={4} /> Item</>}
-              title="Adicionar Item"
-              onSubmit={async (values) => {
-                await handleCreate({ ...values, AF_id: af.id })
-              }}
             />
           ),
         },
         {
           key: "list-items",
-          show: (af) => af.status,
+          // show: (af) => af.total > 0,
           render: (af) => <ItemDrawer afId={af.id} />,
         },
       ]}

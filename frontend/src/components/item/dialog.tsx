@@ -11,6 +11,8 @@ import { LocalCombobox } from "@/components/local/combobox"
 
 interface ItemDialogProps {
   item?: z.infer<typeof itemSchema>
+  afId: number
+  afNumero?: string
   triggerLabel?: React.ReactElement | string
   title?: React.ReactElement | string
   onSubmit?: (values: z.infer<typeof itemSchema>) => Promise<void>
@@ -18,6 +20,8 @@ interface ItemDialogProps {
 
 export function ItemDialog({
   item,
+  afId,
+  afNumero,
   triggerLabel = "Novo Item",
   title,
   onSubmit,
@@ -30,12 +34,13 @@ export function ItemDialog({
       schema={itemSchema}
       defaultValues={{
         descricao: item?.descricao ?? "",
-        banda_maxima: item?.banda_maxima ?? 0,
+        banda_maxima: item?.banda_maxima ?? 1,
         banda_instalada: item?.banda_instalada ?? 0,
         data_instalacao: item?.data_instalacao?.slice(0, 10) ?? "",
         quantidade: item?.quantidade ?? 1,
         status: item?.status ?? true,
         Local_id: item?.Local_id ?? undefined,
+        AF_id: item?.AF_id ?? afId,
       }}
       fields={[
         { name: "descricao", label: "Descrição", type: "textarea" },
@@ -56,7 +61,7 @@ export function ItemDialog({
           ),
         },
       ]}
-      title={title ?? (isEdit ? "Editar Item" : "Novo Item")}
+      title={title ?? (isEdit ? "Editar Item" : `Adicionar Item à AF ${afNumero}`)}
       triggerLabel={triggerLabel}
       onSubmit={
         onSubmit ??
@@ -64,9 +69,9 @@ export function ItemDialog({
           if (isEdit) {
             await handleEdit(item.id, values)
           } else {
-            await handleCreate(values)
+            await handleCreate({ ...values, AF_id: afId })
           }
-          await mutate(`${API_BASE_URL}/item`)
+          await mutate(`${API_BASE_URL}/item?AF_id=${afId}`)
         })
       }
     />

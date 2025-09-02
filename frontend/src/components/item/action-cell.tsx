@@ -16,9 +16,8 @@ export function ItemActionCell({ item }: { item: any }) {
           render: (item) => (
             <ItemDialog
               item={item}
+              afId={item.AF_id}
               triggerLabel={<Pencil />}
-              title="Editar Item"
-              onSubmit={(values) => handleEdit(item.id, values)}
             />
           ),
         },
@@ -36,6 +35,7 @@ export function ItemActionCell({ item }: { item: any }) {
         },
         {
           key: "add-valor",
+          show: (item) => item.status,
           render: (item) => (
             <Button
               size="sm"
