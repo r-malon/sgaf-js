@@ -41,6 +41,9 @@ export function ItemDialog({
         status: item?.status ?? true,
         Local_id: item?.Local_id ?? undefined,
         AF_id: item?.AF_id ?? afId,
+        valor: item?.valor ?? 0,
+        data_inicio: item?.data_inicio?.slice(0, 10) ?? "",
+        data_fim: item?.data_fim?.slice(0, 10) ?? "",
       }}
       fields={[
         { name: "descricao", label: "Descrição", type: "textarea" },
@@ -60,6 +63,9 @@ export function ItemDialog({
             />
           ),
         },
+        { name: "valor", type: "money" },
+        { name: "data_inicio", label: "Início", type: "date" },
+        { name: "data_fim", label: "Fim", type: "date" },
       ]}
       title={title ?? (isEdit ? "Editar Item" : `Adicionar Item à AF ${afNumero}`)}
       triggerLabel={triggerLabel}

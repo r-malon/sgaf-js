@@ -1,0 +1,38 @@
+%%{init: {'theme': 'base'}}%%
+erDiagram
+	direction LR
+	AF {
+		int id PK
+		string numero UK
+		string fornecedor
+		string descricao
+		datetime data_inicio
+		datetime data_fim
+		boolean status
+	}
+	LOCAL {
+		int id PK
+		string nome UK
+		string nome_normalized UK
+	}
+	ITEM {
+		int id PK
+		int AF_id FK
+		int Local_id FK
+		string descricao
+		int banda_maxima
+		int banda_instalada
+		datetime data_instalacao
+		int quantidade
+		boolean status
+	}
+	VALOR {
+		int id PK
+		int Item_id FK
+		int valor
+		datetime data_inicio
+		datetime data_fim
+	}
+	AF ||--o{ ITEM : "has"
+	LOCAL ||--o{ ITEM : "has"
+	ITEM ||--o{ VALOR : "has"

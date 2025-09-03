@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { valorBaseSchema } from './valor.schema'
 
 const itemBaseSchema = z.object({
   descricao: z.string().trim().nullish(),
@@ -29,6 +30,7 @@ const itemBaseSchema = z.object({
 export const itemSchema = itemBaseSchema.safeExtend({
   AF_id: z.number().int().positive().readonly(),
   Local_id: z.number().int().positive().readonly(),
+  valorBaseSchema,
 })
 
 // For responses

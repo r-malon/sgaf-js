@@ -1,12 +1,12 @@
 # Sistema de Gestão de Autorizações de Fornecimento (SGAF)
 
-## **1. Objetivo**
+## 1. Objetivo
 
 Desenvolver um sistema web para gerenciar Autorizações de Fornecimento (AFs), seus respectivos itens e locais de instalação, permitindo controle completo de períodos, valores e histórico de alterações.
 
-## **2. Funcionalidades Principais**
+## 2. Funcionalidades Principais
 
-### **2.1. Gestão de Autorizações de Fornecimento**
+### 2.1. Gestão de Autorizações de Fornecimento
 
 - Cadastro de novas AFs com os campos:
   - Número (único)
@@ -18,7 +18,7 @@ Desenvolver um sistema web para gerenciar Autorizações de Fornecimento (AFs), 
 
 - Relacionamento com múltiplos itens. (Uma AF pode ter vários itens)
 
-### **2.2. Gestão de Itens**
+### 2.2. Gestão de Itens
 
 - Cadastro de itens contendo:
   - Descrição
@@ -31,42 +31,42 @@ Desenvolver um sistema web para gerenciar Autorizações de Fornecimento (AFs), 
   - Relacionamento com uma AF (Um item terá somente uma AF)
   - Relacionamento com um Local (Um item terá somente um Local)
 
-- Cálculo automático do **valor total do item no período da AF** com base no valor mensal e intervalo entre as datas (Data Inicial e Final da AF).  
-  **Exemplo**: A AF 123 tem o período de vigência (Intervalo entre a Data Inicial e Final) de 01/07/2025 à 01/10/2025 e o Item A desta AF tem um Valor Integral Mensal de R$50,00. Dessa forma, o valor total do item no período deve ser de R$150,00.  
-  É importante mencionar que nem sempre os períodos serão de meses fechados, os valores podem ser fracionados, devendo ser feito o cálculo para essas frações corretamente.
+- Cálculo automático do **valor total do item no período da AF** com base no valor mensal e intervalo entre as datas (Data Inicial e Final da AF).\
+  **Exemplo**: A AF 123 tem o período de vigência (Intervalo entre a Data Inicial e Final) de 01/07/2025 à 01/10/2025 e o Item A desta AF tem um Valor Integral Mensal de R$50,00. Dessa forma, o valor total do item no período deve ser de R$150,00.
 
-- Registro de alterações de valor com vigência: o sistema manterá um histórico de valores integrais mensais com datas de vigência, nunca alterando valores retroativos.  
-   **Exemplo**: A AF 123 tem o período de vigência (Intervalo entre a Data Inicial e Final) de 01/07/2025 a 01/10/2025 e o Item A desta AF tem um Valor Integral Mensal de R$50,00. Porém, no dia 01/08/2025 o valor foi alterado para R$70,00. Dessa forma, o valor total do item no período deve ser de R$190,00. (R$50,00 + R$70,00 + R$70,00)  
-  É importante mencionar que nem sempre os períodos serão de meses fechados, os valores podem ser fracionados, devendo ser feito o cálculo para essas frações corretamente.
+- Registro de alterações de valor com vigência: o sistema manterá um histórico de valores integrais mensais com datas de vigência, nunca alterando valores retroativos.\
+  **Exemplo**: A AF 123 tem o período de vigência (Intervalo entre a Data Inicial e Final) de 01/07/2025 a 01/10/2025 e o Item A desta AF tem um Valor Integral Mensal de R$50,00. Porém, no dia 01/08/2025 o valor foi alterado para R$70,00. Dessa forma, o valor total do item no período deve ser de R$190,00 => (R$50,00 + R$70,00 + R$70,00)\
 
-### **2.3. Gestão de Locais**
+- É importante mencionar que nem sempre os períodos serão de meses fechados, os valores podem ser fracionados, devendo ser feito o cálculo para essas frações corretamente.
+
+### 2.3. Gestão de Locais
 
 - Cadastro de Locais contendo:
   - Nome do Local
 
-- Relacionamento com um ou mais itens (Um determinado local pode estar em um ou mais itens)
+- Relacionamento com um ou mais itens (Um local pode estar em um ou mais itens)
 
-### **2.4. Histórico de Alterações**
+### 2.4. Histórico de Alterações
 
 - Log de todas as mudanças relevantes:
   - Alterações de valores mensais com data de início de vigência.
   - Mudanças de status da AF.
 
-## **3. Modelo de Dados**
+## 3. Modelo de Dados
 
-| Item            |         |
+| Item                      |
 | --------------- | ------- |
 | id              | UUID    |
+| AF_id (FK)      | UUID    |
+| Local_id (FK)   | UUID    |
 | descricao       | String  |
 | banda_maxima    | Integer |
 | banda_instalada | Integer |
 | data_instalacao | Date    |
 | quantidade      | Integer |
 | status          | Boolean |
-| af_id (FK)      | UUID    |
-| local_id (FK)   | UUID    |
 
-| AF          |               |
+| AF                          |
 | ----------- | ------------- |
 | id          | UUID          |
 | numero      | String UNIQUE |
@@ -76,26 +76,24 @@ Desenvolver um sistema web para gerenciar Autorizações de Fornecimento (AFs), 
 | data_fim    | Date          |
 | status      | Boolean       |
 
-| Valor        |           |
+| Valor                    |
 | ------------ | --------- |
 | id           | UUID      |
-| item_id (FK) | UUID      |
+| Item_id (FK) | UUID      |
 | valor        | Integer   |
 | data_inicio  | Date      |
 | data_fim     | Date NULL |
 
-| Local |        |
+| Local          |
 | ----- | ------ |
 | id    | UUID   |
 | nome  | String |
 
-## **4. Estrutura de Telas e Funcionalidades do Sistema**
+## 4. Estrutura de Telas e Funcionalidades do Sistema
 
 O sistema será composto por uma interface web com as seguintes páginas:
 
-### **4.1. Página: Cadastro de AF**
-
-#### **Funcionalidades:**
+### 4.1. Cadastro de AF
 
 - **Formulário com os seguintes campos:**
   - Número (único)
@@ -103,7 +101,7 @@ O sistema será composto por uma interface web com as seguintes páginas:
   - Data Inicial
   - Data Final
   - Status (Ativa | Inativa)
-- **Botão para incluir Items:**
+- **Botão para incluir Item:**
   - Abre um formulário com:
     - Descrição
     - Banda Máxima
@@ -114,14 +112,14 @@ O sistema será composto por uma interface web com as seguintes páginas:
       - Abre um formulário com:
         - Valor (R$)
         - Data de início da vigência
-        - Botão para salvar Valor Integral Mensal
-    - Botão para salvar Item.
-- **Botão para salvar/criar a AF**
+        - Botão para criar Valor Integral Mensal
+    - Botão para criar Item.
+- **Botão para criar a AF**
 - **Durante a inclusão:**
-  - Ao salvar o valor integral:
+  - Ao criar o valor integral:
     - Um novo valor é adicionado na tabela de Valor e relacionado com a tabela de Item
     - É realizado um registro na tabela de logs da criação desse valor.
-  - Ao salvar item:
+  - Ao criar item:
     - Um novo item é adicionado na tabela Item e relacionado com a AF atual.
     - Esse item não pode ser relacionado com nenhuma outra AF.
     - É realizado um registro na tabela de logs da criação deste Item
@@ -135,17 +133,13 @@ O sistema será composto por uma interface web com as seguintes páginas:
   - Um item já relacionado a uma AF não poderá ser reatribuído a outra. Caso necessário, um novo item deve ser criado
   - Após criação da AF o usuário será redirecionado para sua página de visualização
 
-### **4.2. Página: Cadastro de Local**
-
-#### **Funcionalidades:**
+### 4.2. Cadastro de Local
 
 - **Formulário simples:**
   - Nome do Local
-- **Botão de salvar/criar local**
+- **Botão para criar Local**
 
-### **4.3. Página: Listagem de AFs (Página Inicial)**
-
-#### **Funcionalidades:**
+### 4.3. Listagem de AFs (Página Inicial)
 
 - Filtro por:
   - Status (Ativa, Inativa, Todas)
@@ -166,9 +160,7 @@ O sistema será composto por uma interface web com as seguintes páginas:
   - Editar
   - Excluir (com confirmação)
 
-### **4.4. Página: Visualização de uma AF**
-
-#### **Informações exibidas:**
+### 4.4. Visualização de uma AF
 
 - Cabeçalho:
   - Número
@@ -190,11 +182,9 @@ O sistema será composto por uma interface web com as seguintes páginas:
   - Adicionar Item (só para AFs ativas)
   - Excluir AF (se não tiver itens relacionados)
 
-  **Obs:** Ao Editar AF, o usuário será redirecionado para uma página igual a de criação de AF, porém com os dados preenchidos.
+  **Obs.:** Ao Editar AF, o usuário será redirecionado para uma página igual a de criação de AF, porém com os dados preenchidos.
 
-### **4.5. Página: Visualização de um Item**
-
-#### **Informações exibidas:**
+### 4.5. Visualização de um Item
 
 - Descrição
 - AF relacionada (link)
@@ -206,23 +196,21 @@ O sistema será composto por uma interface web com as seguintes páginas:
 - Valor total para o período da AF
 - Ações:
   - Editar dados do item (exceto AF)
-  - **Botão: “Visualizar histórico de valores”**
+  - **Botão: "Visualizar histórico de valores"**
   - **Botão: "Alterar Valor Mensal"**
     - Ao clicar, permite adicionar novo valor e data de vigência
     - Regra: a nova vigência não pode ser retroativa
     - Ao ser alterado o valor, o campo de data_fim do valor antigo deverá preenchido com a data_inicio do novo valor
     - As datas devem ser validadas, um novo valor não poderá ser incluído com a data_inicio inferior a data_inicio do valor anterior.
 
-### **4.6. Página: Visualização de um Local**
-
-#### **Informações exibidas:**
+### 4.6. Visualização de um Local
 
 - Nome do Local
 - Ações:
   - Editar Nome do Local
   - Excluir Local (apenas se não houverem itens relacionados)
 
-## **5. Regras de Negócio Reforçadas**
+## 5. Regras de Negócio Reforçadas
 
 1. **Histórico de valores**:
    - Cada alteração no valor mensal de um item cria uma nova entrada com data de vigência.

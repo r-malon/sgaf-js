@@ -52,5 +52,5 @@ export function prorateTotal(afStart: Date, afEnd: Date, valores: Valor[]): numb
     total += prorated
   }
 
-  return Math.round(total * 100) // Consider Math.round(total * 100) if total should be int cents
+  return Math.round(total * 100)
 }

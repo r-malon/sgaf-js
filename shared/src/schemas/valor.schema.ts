@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-const valorBaseSchema = z.object({
+export const valorBaseSchema = z.object({
   valor: z.number({
     error: (issue) =>
       issue.code === 'invalid_type'

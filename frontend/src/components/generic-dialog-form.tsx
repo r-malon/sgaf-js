@@ -153,9 +153,7 @@ export function GenericDialogForm<TSchema extends ZodType<any, any>>({
                             </FormControl>
                           )
                         default:
-                          /*throw new Error(
-                            `Unsupported field type "${field.type}" in GenericDialogForm`
-                          )*/
+                          //throw new Error(`Unsupported field type "${field.type}" in GenericDialogForm`)
                           return null
                       }
                     })()}
