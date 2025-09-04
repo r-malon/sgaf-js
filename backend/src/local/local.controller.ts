@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+} from '@nestjs/common'
 import { LocalService } from './local.service'
 import { CreateLocalDto } from './dto/create-local.dto'
 import { UpdateLocalDto } from './dto/update-local.dto'
@@ -23,7 +32,10 @@ export class LocalController {
   }
 
   @Patch(':id')
-  async update(@Param('id', ParseIntPipe) id: number, @Body() updateLocalDto: UpdateLocalDto) {
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateLocalDto: UpdateLocalDto,
+  ) {
     return await this.localService.update(+id, updateLocalDto)
   }
 

@@ -112,6 +112,13 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+.lucide {
+  display: inline;}
+
+.lucide-x,.lucide-check,.lucide-plus,.lucide-minus,.lucide-list {
+  stroke-width: 4;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

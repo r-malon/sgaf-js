@@ -1,15 +1,15 @@
-"use client"
+'use client'
 
-import * as React from "react"
+import * as React from 'react'
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer"
-import { DataTable } from "@/components/data-table"
-import { DataTableFilter } from "@/components/data-table-filter"
+} from '@/components/ui/drawer'
+import { DataTable } from '@/components/data-table'
+import { DataTableFilter } from '@/components/data-table-filter'
 import {
   useReactTable,
   getCoreRowModel,
@@ -17,10 +17,10 @@ import {
   getSortedRowModel,
   SortingState,
   ColumnDef,
-} from "@tanstack/react-table"
-import useSWR from "swr"
-import { toast } from "sonner"
-import { handleFetch } from "@/app/handlers"
+} from '@tanstack/react-table'
+import useSWR from 'swr'
+import { toast } from 'sonner'
+import { handleFetch } from '@/app/handlers'
 
 interface GenericDrawerProps<T> {
   title: string
@@ -44,7 +44,11 @@ export function GenericDrawer<T>({
   const { data, error, isLoading } = useSWR<T[]>(
     open ? url : null, // only fetch when drawer open
     (u) => handleFetch<T[]>(u),
-    { refreshInterval: 6000, revalidateOnFocus: true, revalidateOnReconnect: true }
+    {
+      refreshInterval: 6000,
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+    },
   )
 
   React.useEffect(() => {
@@ -72,11 +76,7 @@ export function GenericDrawer<T>({
           {createDialog}
         </DrawerHeader>
 
-        {isLoading ? (
-          <h1>Carregando...</h1>
-        ) : (
-          <DataTable table={table} />
-        )}
+        {isLoading ? <h1>Carregando...</h1> : <DataTable table={table} />}
       </DrawerContent>
     </Drawer>
   )

@@ -4,8 +4,8 @@ import {
   ArgumentsHost,
   HttpStatus,
   HttpException,
-} from "@nestjs/common"
-import { Prisma } from "@prisma/client"
+} from '@nestjs/common'
+import { Prisma } from '@prisma/client'
 
 @Catch(Prisma.PrismaClientKnownRequestError)
 export class PrismaExceptionFilter implements ExceptionFilter {
@@ -17,16 +17,17 @@ export class PrismaExceptionFilter implements ExceptionFilter {
     let message: string
 
     switch (exception.code) {
-      case "P2002": // Unique constraint failed
-        message = "Já existe um registro com esses dados únicos"
+      case 'P2002': // Unique constraint failed
+        message = 'Já existe um registro com esses dados únicos'
         status = HttpStatus.CONFLICT
         break
-      case "P2003": // Foreign key constraint failed
-        message = "Não é possível remover ou atualizar pois há registros relacionados"
+      case 'P2003': // Foreign key constraint failed
+        message =
+          'Não é possível remover ou atualizar pois há registros relacionados'
         status = HttpStatus.BAD_REQUEST
         break
-      case "P2025": // Record not found
-        message = "Registro não encontrado"
+      case 'P2025': // Record not found
+        message = 'Registro não encontrado'
         status = HttpStatus.NOT_FOUND
         break
       default:

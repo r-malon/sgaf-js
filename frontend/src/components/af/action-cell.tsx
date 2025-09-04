@@ -1,21 +1,21 @@
-import { Pencil, Plus, Trash2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { useEntityHandlers } from "@/app/handlers"
-import { ActionCell } from "@/components/action-cell"
-import { AFDialog } from "@/components/af/dialog"
-import { ItemDialog } from "@/components/item/dialog"
-import { ItemDrawer } from "@/components/item/drawer"
+import { Pencil, Plus, Trash2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { useEntityHandlers } from '@/app/handlers'
+import { ActionCell } from '@/components/action-cell'
+import { AFDialog } from '@/components/af/dialog'
+import { ItemDialog } from '@/components/item/dialog'
+import { ItemDrawer } from '@/components/item/drawer'
 
 export function AFActionCell({ af }: { af: any }) {
-  const { handleEdit, handleDelete } = useEntityHandlers("af")
-  const { handleCreate } = useEntityHandlers("item")
+  const { handleEdit, handleDelete } = useEntityHandlers('af')
+  const { handleCreate } = useEntityHandlers('item')
 
   return (
     <ActionCell
       entity={af}
       actions={[
         {
-          key: "edit",
+          key: 'edit',
           render: (af) => (
             <AFDialog
               af={af}
@@ -26,7 +26,7 @@ export function AFActionCell({ af }: { af: any }) {
           ),
         },
         {
-          key: "delete",
+          key: 'delete',
           render: (af) => (
             <Button
               variant="destructive"
@@ -38,19 +38,23 @@ export function AFActionCell({ af }: { af: any }) {
           ),
         },
         {
-          key: "add-item",
+          key: 'add-item',
           show: (af) => af.status,
           render: (af) => (
             <ItemDialog
               afId={af.id}
               afNumero={af.numero}
-              triggerLabel={<><Plus strokeWidth={4} /> Item</>}
+              triggerLabel={
+                <>
+                  <Plus /> Item
+                </>
+              }
             />
           ),
         },
         {
-          key: "list-items",
-          // show: (af) => af.total > 0,
+          key: 'list-items',
+          // show: (af) => af.item_count > 0,
           render: (af) => <ItemDrawer afId={af.id} />,
         },
       ]}

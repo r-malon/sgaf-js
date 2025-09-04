@@ -8,5 +8,4 @@ import { PrismaModule } from './prisma/prisma.module'
 @Module({
   imports: [AfModule, ItemModule, LocalModule, ValorModule, PrismaModule],
 })
-
 export class AppModule {}

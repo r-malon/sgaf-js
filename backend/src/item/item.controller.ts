@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Query, Delete, ParseIntPipe } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Query,
+  Delete,
+  ParseIntPipe,
+} from '@nestjs/common'
 import { ItemService } from './item.service'
 import { CreateItemDto } from './dto/create-item.dto'
 import { UpdateItemDto } from './dto/update-item.dto'
@@ -14,8 +24,7 @@ export class ItemController {
 
   @Get()
   findMany(@Query('AF_id') afId?: number) {
-    if (afId)
-      return this.itemService.findManyByAf(+afId)
+    if (afId) return this.itemService.findManyByAf(+afId)
     return this.itemService.findMany()
   }
 
@@ -25,7 +34,10 @@ export class ItemController {
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateItemDto: UpdateItemDto) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateItemDto: UpdateItemDto,
+  ) {
     return this.itemService.update(+id, updateItemDto)
   }
 

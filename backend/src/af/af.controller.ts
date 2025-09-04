@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+} from '@nestjs/common'
 import { AfService } from './af.service'
 import { CreateAfDto } from './dto/create-af.dto'
 import { UpdateAfDto } from './dto/update-af.dto'
@@ -23,7 +32,10 @@ export class AfController {
   }
 
   @Patch(':id')
-  async update(@Param('id', ParseIntPipe) id: number, @Body() updateAfDto: UpdateAfDto) {
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateAfDto: UpdateAfDto,
+  ) {
     return await this.afService.update(+id, updateAfDto)
   }
 

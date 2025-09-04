@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import { ZodValidationPipe } from 'nestjs-zod'
-import { HttpExceptionFilter } from "./http-exception.filter"
+import { HttpExceptionFilter } from './http-exception.filter'
 import { PrismaExceptionFilter } from './prisma/prisma-exception.filter'
 
 async function bootstrap() {

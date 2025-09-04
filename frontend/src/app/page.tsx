@@ -1,18 +1,24 @@
-"use client"
+'use client'
 
-import { API_BASE_URL } from "@/lib/config"
-import { DataTable } from "@/components/data-table"
-import { DataTableFilter } from "@/components/data-table-filter"
-import { AFDialog } from "@/components/af/dialog"
-import { LocalDialog } from "@/components/local/dialog"
-import { LocalCombobox } from "@/components/local/combobox"
-import { AF } from "@sgaf/shared"
-import { afColumns } from "@/components/af/columns"
-import { useReactTable, getCoreRowModel, getFilteredRowModel, getSortedRowModel, SortingState } from "@tanstack/react-table"
-import useSWR from "swr"
-import { useEffect, useState } from "react"
-import { toast } from "sonner"
-import { handleFetch } from "@/app/handlers"
+import { API_BASE_URL } from '@/lib/config'
+import { DataTable } from '@/components/data-table'
+import { DataTableFilter } from '@/components/data-table-filter'
+import { AFDialog } from '@/components/af/dialog'
+import { LocalDialog } from '@/components/local/dialog'
+import { LocalCombobox } from '@/components/local/combobox'
+import { AF } from '@sgaf/shared'
+import { afColumns } from '@/components/af/columns'
+import {
+  useReactTable,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  SortingState,
+} from '@tanstack/react-table'
+import useSWR from 'swr'
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
+import { handleFetch } from '@/app/handlers'
 
 export default function Home() {
   const { data, error, isLoading } = useSWR<AF[]>(
@@ -22,7 +28,7 @@ export default function Home() {
       refreshInterval: 6000,
       revalidateOnFocus: true,
       revalidateOnReconnect: true,
-    }
+    },
   )
 
   useEffect(() => {
@@ -50,8 +56,16 @@ export default function Home() {
       </div>
 
       <div className="flex gap-4 items-center">
-        <DataTableFilter table={afTable} columnId="fornecedor" placeholder="Buscar fornecedor" />
-        <DataTableFilter table={afTable} columnId="numero" placeholder="Buscar número" />
+        <DataTableFilter
+          table={afTable}
+          columnId="fornecedor"
+          placeholder="Buscar fornecedor"
+        />
+        <DataTableFilter
+          table={afTable}
+          columnId="numero"
+          placeholder="Buscar número"
+        />
         <AFDialog />
       </div>
 

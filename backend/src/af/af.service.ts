@@ -29,10 +29,10 @@ export class AfService {
     const afs = await this.prisma.aF.findMany()
 
     return Promise.all(
-      afs.map(async af => ({
+      afs.map(async (af) => ({
         ...af,
         total: await getAfTotal(this.prisma, af.id),
-      }))
+      })),
     )
   }
 

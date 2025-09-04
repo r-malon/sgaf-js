@@ -5,13 +5,19 @@ export function daysInMonth(d: Date): number {
   return new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate()
 }
 
-export function prorateTotal(afStart: Date, afEnd: Date, valores: Valor[]): number {
-  valores = [...valores].sort((a, b) => a.data_inicio.getTime() - b.data_inicio.getTime())
+export function prorateTotal(
+  afStart: Date,
+  afEnd: Date,
+  valores: Valor[],
+): number {
+  valores = [...valores].sort(
+    (a, b) => a.data_inicio.getTime() - b.data_inicio.getTime(),
+  )
 
   const effectiveAfEnd = addDays(afEnd, 1) // Treat as exclusive end
 
   const changePoints = new Set<Date>([afStart, effectiveAfEnd])
-  valores.forEach(v => {
+  valores.forEach((v) => {
     changePoints.add(v.data_inicio)
     if (v.data_fim) changePoints.add(addDays(v.data_fim, 1)) // Exclusive
   })
@@ -22,7 +28,9 @@ export function prorateTotal(afStart: Date, afEnd: Date, valores: Valor[]): numb
     current = addMonths(current, 1)
   }
 
-  const timeline = Array.from(changePoints).sort((a, b) => a.getTime() - b.getTime())
+  const timeline = Array.from(changePoints).sort(
+    (a, b) => a.getTime() - b.getTime(),
+  )
 
   let total = 0
   for (let i = 0; i < timeline.length - 1; i++) {
@@ -30,8 +38,12 @@ export function prorateTotal(afStart: Date, afEnd: Date, valores: Valor[]): numb
     const segEnd = timeline[i + 1]
     if (segStart >= segEnd) continue
 
-    const segStartActual = new Date(Math.max(segStart.getTime(), afStart.getTime()))
-    const segEndActual = new Date(Math.min(segEnd.getTime(), effectiveAfEnd.getTime()))
+    const segStartActual = new Date(
+      Math.max(segStart.getTime(), afStart.getTime()),
+    )
+    const segEndActual = new Date(
+      Math.min(segEnd.getTime(), effectiveAfEnd.getTime()),
+    )
     if (segStartActual >= segEndActual) continue
 
     let activeValor: number | null = null
@@ -47,7 +59,7 @@ export function prorateTotal(afStart: Date, afEnd: Date, valores: Valor[]): numb
 
     const days = differenceInCalendarDays(segEndActual, segStartActual)
     const monthDays = daysInMonth(segStartActual)
-    const dailyRate = (activeValor / 100) / monthDays
+    const dailyRate = activeValor / 100 / monthDays
     const prorated = days * dailyRate
     total += prorated
   }

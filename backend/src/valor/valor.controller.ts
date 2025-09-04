@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Query, Delete, ParseIntPipe } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Query,
+  Delete,
+  ParseIntPipe,
+} from '@nestjs/common'
 import { ValorService } from './valor.service'
 import { CreateValorDto } from './dto/create-valor.dto'
 
@@ -13,8 +23,7 @@ export class ValorController {
 
   @Get()
   async findMany(@Query('Item_id') itemId?: number) {
-    if (itemId)
-      return this.valorService.findManyByItem(+itemId)
+    if (itemId) return this.valorService.findManyByItem(+itemId)
     return await this.valorService.findMany()
   }
 

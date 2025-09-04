@@ -1,18 +1,19 @@
-import { Pencil, Plus, Trash2, List } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { ItemDialog } from "@/components/item/dialog"
-import { useEntityHandlers } from "@/app/handlers"
-import { ActionCell } from "@/components/action-cell"
+import { Pencil, Plus, Trash2, List } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { ItemDialog } from '@/components/item/dialog'
+import { useEntityHandlers } from '@/app/handlers'
+import { ActionCell } from '@/components/action-cell'
+import { ValorTableDialog } from '@/components/valor/table-dialog'
 
 export function ItemActionCell({ item }: { item: any }) {
-  const { handleEdit, handleDelete } = useEntityHandlers("item")
+  const { handleEdit, handleDelete } = useEntityHandlers('item')
 
   return (
     <ActionCell
       entity={item}
       actions={[
         {
-          key: "edit",
+          key: 'edit',
           render: (item) => (
             <ItemDialog
               item={item}
@@ -22,7 +23,7 @@ export function ItemActionCell({ item }: { item: any }) {
           ),
         },
         {
-          key: "delete",
+          key: 'delete',
           render: (item) => (
             <Button
               variant="destructive"
@@ -34,15 +35,17 @@ export function ItemActionCell({ item }: { item: any }) {
           ),
         },
         {
-          key: "add-valor",
-          show: (item) => item.status,
+          key: 'list-valores',
+          // show: (item) => item.valor_count > 0,
           render: (item) => (
-            <Button
-              size="sm"
-              onClick={() => console.log(`Adicionar valor ao Item ${item.id}`)}
-            >
-              <Plus strokeWidth={4} /> Valor
-            </Button>
+            <ValorTableDialog
+              itemId={item.id}
+              triggerLabel={
+                <>
+                  <List /> Valores
+                </>
+              }
+            />
           ),
         },
       ]}

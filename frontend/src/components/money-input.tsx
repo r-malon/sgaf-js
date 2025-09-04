@@ -1,10 +1,9 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { Input } from "@/components/ui/input"
+import * as React from 'react'
+import { Input } from '@/components/ui/input'
 
-interface MoneyInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+interface MoneyInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   value?: number // in cents
   onChange?: (value: number) => void
 }
@@ -13,15 +12,15 @@ export const MoneyInput = React.forwardRef<HTMLInputElement, MoneyInputProps>(
   ({ value, onChange, className, ...props }, ref) => {
     const displayValue =
       value !== undefined
-        ? (value / 100).toLocaleString("pt-BR", {
+        ? (value / 100).toLocaleString('pt-BR', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })
-        : ""
+        : ''
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const raw = e.target.value.replace(/\D/g, "")
-      const cents = parseInt(raw || "0", 10)
+      const raw = e.target.value.replace(/\D/g, '')
+      const cents = parseInt(raw || '0', 10)
       onChange?.(cents)
     }
 
@@ -35,11 +34,11 @@ export const MoneyInput = React.forwardRef<HTMLInputElement, MoneyInputProps>(
           {...props}
           value={displayValue}
           onChange={handleChange}
-          className={`flex-1 border-0 focus-visible:ring-0 focus-visible:ring-offset-0 ${className ?? ""}`}
+          className={`flex-1 border-0 focus-visible:ring-0 focus-visible:ring-offset-0 ${className ?? ''}`}
         />
       </div>
     )
-  }
+  },
 )
 
-MoneyInput.displayName = "MoneyInput"
+MoneyInput.displayName = 'MoneyInput'

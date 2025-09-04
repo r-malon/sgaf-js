@@ -8,5 +8,4 @@ import { PrismaModule } from '../prisma/prisma.module'
   providers: [AfService],
   imports: [PrismaModule],
 })
-
 export class AfModule {}

@@ -4,7 +4,7 @@ import { prorateTotal } from '../utils/prorate-total'
 export async function getItemTotal(
   prisma: PrismaClient,
   itemId: number,
-  options?: { afStart?: Date; afEnd?: Date }
+  options?: { afStart?: Date; afEnd?: Date },
 ): Promise<number> {
   let { afStart: start, afEnd: end } = options || {}
 

@@ -1,20 +1,20 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { z, ZodType } from "zod"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import * as React from 'react'
+import { z, ZodType } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Switch } from "@/components/ui/switch"
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Switch } from '@/components/ui/switch'
 import {
   Form,
   FormField,
@@ -23,27 +23,27 @@ import {
   FormControl,
   FormDescription,
   FormMessage,
-} from "@/components/ui/form"
-import { MoneyInput } from "@/components/money-input"
+} from '@/components/ui/form'
+import { MoneyInput } from '@/components/money-input'
 
 export type FieldConfig =
-  | { name: string; label?: string; type: "text"; description?: string }
-  | { name: string; label?: string; type: "textarea"; description?: string }
-  | { name: string; label?: string; type: "number"; description?: string }
-  | { name: string; label?: string; type: "money"; description?: string }
-  | { name: string; label?: string; type: "date"; description?: string }
-  | { name: string; label?: string; type: "switch"; description?: string }
+  | { name: string; label?: string; type: 'text'; description?: string }
+  | { name: string; label?: string; type: 'textarea'; description?: string }
+  | { name: string; label?: string; type: 'number'; description?: string }
+  | { name: string; label?: string; type: 'money'; description?: string }
+  | { name: string; label?: string; type: 'date'; description?: string }
+  | { name: string; label?: string; type: 'switch'; description?: string }
   | {
-    name: string
-    label?: string
-    type: "custom"
-    description?: string
-    render: (field: {
-      value: any
-      onChange: (val: any) => void
       name: string
-    }) => React.ReactNode
-  }
+      label?: string
+      type: 'custom'
+      description?: string
+      render: (field: {
+        value: any
+        onChange: (val: any) => void
+        name: string
+      }) => React.ReactNode
+    }
 
 interface GenericDialogFormProps<TSchema extends ZodType<any, any>> {
   schema: TSchema
@@ -67,7 +67,7 @@ export function GenericDialogForm<TSchema extends ZodType<any, any>>({
   const form = useForm<z.infer<TSchema>>({
     resolver: zodResolver(schema),
     defaultValues,
-    mode: "onBlur",
+    mode: 'onBlur',
   })
 
   const handleSubmit = async (values: z.infer<TSchema>) => {
@@ -90,7 +90,10 @@ export function GenericDialogForm<TSchema extends ZodType<any, any>>({
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
             {fields.map((field) => (
               <FormField
                 key={field.name}
@@ -101,49 +104,61 @@ export function GenericDialogForm<TSchema extends ZodType<any, any>>({
                     {field.label && <FormLabel>{field.label}</FormLabel>}
                     {(() => {
                       switch (field.type) {
-                        case "custom":
+                        case 'custom':
                           return (
                             <FormControl>
                               {field.render(controlledField)}
                             </FormControl>
                           )
-                        case "text":
+                        case 'text':
                           return (
                             <FormControl>
                               <Input {...controlledField} />
                             </FormControl>
                           )
-                        case "textarea":
+                        case 'textarea':
                           return (
                             <FormControl>
                               <Textarea {...controlledField} />
                             </FormControl>
                           )
-                        case "number":
+                        case 'number':
                           // Input type="text" bypasses Firefox’s buggy type="number"
                           return (
                             <FormControl>
-                              <Input type="text" inputMode="numeric" pattern="\d*" min="0" {...controlledField}
+                              <Input
+                                type="text"
+                                inputMode="numeric"
+                                pattern="\d*"
+                                min="0"
+                                {...controlledField}
                                 onChange={(e) => {
-                                  const onlyDigits = e.target.value.replace(/\D/g, "")
-                                  controlledField.onChange(onlyDigits ? parseInt(onlyDigits, 10) : undefined)
+                                  const onlyDigits = e.target.value.replace(
+                                    /\D/g,
+                                    '',
+                                  )
+                                  controlledField.onChange(
+                                    onlyDigits
+                                      ? parseInt(onlyDigits, 10)
+                                      : undefined,
+                                  )
                                 }}
                               />
                             </FormControl>
                           )
-                        case "money":
+                        case 'money':
                           return (
                             <FormControl>
                               <MoneyInput {...controlledField} />
                             </FormControl>
                           )
-                        case "date":
+                        case 'date':
                           return (
                             <FormControl>
                               <Input type="date" {...controlledField} />
                             </FormControl>
                           )
-                        case "switch":
+                        case 'switch':
                           return (
                             <FormControl>
                               <Switch

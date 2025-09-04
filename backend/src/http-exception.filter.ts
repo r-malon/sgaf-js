@@ -4,8 +4,8 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
-} from "@nestjs/common"
-import { Response } from "express"
+} from '@nestjs/common'
+import { Response } from 'express'
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -14,19 +14,19 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>()
 
     let status = HttpStatus.INTERNAL_SERVER_ERROR
-    let message = "Erro interno do servidor"
+    let message = 'Erro interno do servidor'
 
     if (exception instanceof HttpException) {
       status = exception.getStatus()
 
       const res = exception.getResponse()
-      if (typeof res === "string") {
+      if (typeof res === 'string') {
         message = res
-      } else if (typeof res === "object" && res !== null) {
+      } else if (typeof res === 'object' && res !== null) {
         const { message: msg } = res as any
         if (Array.isArray(msg)) {
           // Nest validation pipes often return an array
-          message = msg.join(", ")
+          message = msg.join(', ')
         } else if (msg) {
           message = msg
         }

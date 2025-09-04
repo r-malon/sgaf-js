@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import useSWR from "swr"
-import { Button } from "@/components/ui/button"
+import * as React from 'react'
+import useSWR from 'swr'
+import { Button } from '@/components/ui/button'
 import {
   Command,
   CommandEmpty,
@@ -10,17 +10,17 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from '@/components/ui/command'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { ChevronsUpDown, Trash2, Pencil } from "lucide-react"
-import { API_BASE_URL } from "@/lib/config"
-import { useEntityHandlers } from "@/app/handlers"
-import { LocalDialog } from "@/components/local/dialog"
-import { Local } from "@sgaf/shared"
+} from '@/components/ui/popover'
+import { ChevronsUpDown, Trash2, Pencil } from 'lucide-react'
+import { API_BASE_URL } from '@/lib/config'
+import { useEntityHandlers } from '@/app/handlers'
+import { LocalDialog } from '@/components/local/dialog'
+import { Local } from '@sgaf/shared'
 
 const fetcher = async (url: string): Promise<Local[]> => {
   const res = await fetch(url)
@@ -45,15 +45,20 @@ export function LocalCombobox({
 }: LocalComboboxProps) {
   const [open, setOpen] = React.useState(false)
   // Uncontrolled fallback when `value` is not provided
-  const [internalId, setInternalId] = React.useState<number | null>(value ?? null)
+  const [internalId, setInternalId] = React.useState<number | null>(
+    value ?? null,
+  )
 
   // Keep internal state in sync if parent controls the value
   React.useEffect(() => {
     if (value !== undefined) setInternalId(value)
   }, [value])
 
-  const { data: locals = [] } = useSWR<Local[]>(`${API_BASE_URL}/local`, fetcher)
-  const { handleEdit, handleDelete } = useEntityHandlers("local")
+  const { data: locals = [] } = useSWR<Local[]>(
+    `${API_BASE_URL}/local`,
+    fetcher,
+  )
+  const { handleEdit, handleDelete } = useEntityHandlers('local')
 
   const selectedId = value ?? internalId
   const selected =
@@ -75,7 +80,7 @@ export function LocalCombobox({
   }
 
   return (
-    <div className={`flex items-start gap-2 ${className ?? ""}`}>
+    <div className={`flex items-start gap-2 ${className ?? ''}`}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -85,7 +90,7 @@ export function LocalCombobox({
             size="sm"
             className="w-[220px] justify-between"
           >
-            {selected ? selected.nome : "Selecionar local..."}
+            {selected ? selected.nome : 'Selecionar local...'}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>

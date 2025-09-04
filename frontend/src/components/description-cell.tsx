@@ -1,7 +1,12 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import * as React from 'react'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 
 interface DescriptionCellProps {
   text: string
@@ -9,7 +14,11 @@ interface DescriptionCellProps {
   title?: string
 }
 
-export function DescriptionCell({ text, trunc, title = "Descrição completa" }: DescriptionCellProps) {
+export function DescriptionCell({
+  text,
+  trunc,
+  title = 'Descrição completa',
+}: DescriptionCellProps) {
   const [open, setOpen] = React.useState(false)
 
   return (
@@ -18,7 +27,7 @@ export function DescriptionCell({ text, trunc, title = "Descrição completa" }:
         className="cursor-pointer hover:underline"
         onClick={() => setOpen(true)}
       >
-        {text.slice(0, trunc).trimEnd() + "…"}
+        {text.slice(0, trunc).trimEnd() + '…'}
       </span>
 
       <Dialog open={open} onOpenChange={setOpen}>

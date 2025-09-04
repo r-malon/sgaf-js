@@ -59,7 +59,7 @@ export class ItemService {
 
         const { af, ...itemWithoutRelations } = item
         return { ...itemWithoutRelations, total }
-      })
+      }),
     )
   }
 
@@ -77,7 +77,7 @@ export class ItemService {
         })
         const { af, ...itemWithoutRelations } = item
         return { ...itemWithoutRelations, total }
-      })
+      }),
     )
   }
 

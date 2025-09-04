@@ -8,5 +8,4 @@ import { PrismaModule } from '../prisma/prisma.module'
   providers: [LocalService],
   imports: [PrismaModule],
 })
-
 export class LocalModule {}

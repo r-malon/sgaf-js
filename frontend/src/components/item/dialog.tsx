@@ -1,13 +1,13 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { z } from "zod"
-import { itemSchema } from "@sgaf/shared"
-import { GenericDialogForm } from "@/components/generic-dialog-form"
-import { useEntityHandlers } from "@/app/handlers"
-import { API_BASE_URL } from "@/lib/config"
-import { mutate } from "swr"
-import { LocalCombobox } from "@/components/local/combobox"
+import * as React from 'react'
+import { z } from 'zod'
+import { itemSchema } from '@sgaf/shared'
+import { GenericDialogForm } from '@/components/generic-dialog-form'
+import { useEntityHandlers } from '@/app/handlers'
+import { API_BASE_URL } from '@/lib/config'
+import { mutate } from 'swr'
+import { LocalCombobox } from '@/components/local/combobox'
 
 interface ItemDialogProps {
   item?: z.infer<typeof itemSchema>
@@ -22,39 +22,39 @@ export function ItemDialog({
   item,
   afId,
   afNumero,
-  triggerLabel = "Novo Item",
+  triggerLabel = 'Novo Item',
   title,
   onSubmit,
 }: ItemDialogProps) {
   const isEdit = !!item
-  const { handleCreate, handleEdit } = useEntityHandlers("item")
+  const { handleCreate, handleEdit } = useEntityHandlers('item')
 
   return (
     <GenericDialogForm
       schema={itemSchema}
       defaultValues={{
-        descricao: item?.descricao ?? "",
+        descricao: item?.descricao ?? '',
         banda_maxima: item?.banda_maxima ?? 1,
         banda_instalada: item?.banda_instalada ?? 0,
-        data_instalacao: item?.data_instalacao?.slice(0, 10) ?? "",
+        data_instalacao: item?.data_instalacao?.slice(0, 10) ?? '',
         quantidade: item?.quantidade ?? 1,
         status: item?.status ?? true,
         Local_id: item?.Local_id ?? undefined,
         AF_id: item?.AF_id ?? afId,
         valor: item?.valor ?? 0,
-        data_inicio: item?.data_inicio?.slice(0, 10) ?? "",
-        data_fim: item?.data_fim?.slice(0, 10) ?? "",
+        data_inicio: item?.data_inicio?.slice(0, 10) ?? '',
+        data_fim: item?.data_fim?.slice(0, 10) ?? '',
       }}
       fields={[
-        { name: "descricao", label: "Descrição", type: "textarea" },
-        { name: "banda_maxima", label: "Banda Máxima", type: "number" },
-        { name: "banda_instalada", label: "Banda Instalada", type: "number" },
-        { name: "data_instalacao", label: "Data de Instalação", type: "date" },
-        { name: "quantidade", label: "Quantidade", type: "number" },
-        { name: "status", label: "Ativo?", type: "switch" },
+        { name: 'descricao', label: 'Descrição', type: 'textarea' },
+        { name: 'banda_maxima', label: 'Banda Máxima', type: 'number' },
+        { name: 'banda_instalada', label: 'Banda Instalada', type: 'number' },
+        { name: 'data_instalacao', label: 'Data de Instalação', type: 'date' },
+        { name: 'quantidade', label: 'Quantidade', type: 'number' },
+        { name: 'status', label: 'Ativo?', type: 'switch' },
         {
-          name: "Local_id",
-          type: "custom",
+          name: 'Local_id',
+          type: 'custom',
           render: (field) => (
             <LocalCombobox
               value={field.value}
@@ -63,11 +63,13 @@ export function ItemDialog({
             />
           ),
         },
-        { name: "valor", type: "money" },
-        { name: "data_inicio", label: "Início", type: "date" },
-        { name: "data_fim", label: "Fim", type: "date" },
+        { name: 'valor', type: 'money' },
+        { name: 'data_inicio', label: 'Início', type: 'date' },
+        { name: 'data_fim', label: 'Fim', type: 'date' },
       ]}
-      title={title ?? (isEdit ? "Editar Item" : `Adicionar Item à AF ${afNumero}`)}
+      title={
+        title ?? (isEdit ? 'Editar Item' : `Adicionar Item à AF ${afNumero}`)
+      }
       triggerLabel={triggerLabel}
       onSubmit={
         onSubmit ??

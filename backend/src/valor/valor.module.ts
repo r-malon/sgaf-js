@@ -8,5 +8,4 @@ import { PrismaModule } from '../prisma/prisma.module'
   providers: [ValorService],
   imports: [PrismaModule],
 })
-
 export class ValorModule {}

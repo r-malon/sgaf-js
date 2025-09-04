@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react'
 
 interface Action<T> {
   render: (entity: T) => React.ReactNode
@@ -15,14 +15,18 @@ interface ActionCellProps<T> {
 export function ActionCell<T>({
   entity,
   actions,
-  wrapperClassName = "flex gap-2",
+  wrapperClassName = 'flex gap-2',
 }: ActionCellProps<T>) {
   return (
     <div className={wrapperClassName}>
       <>
         {actions.map((action, idx) => {
           if (action.show && !action.show(entity)) return null
-          return <React.Fragment key={action.key ?? idx}>{action.render(entity)}</React.Fragment>
+          return (
+            <React.Fragment key={action.key ?? idx}>
+              {action.render(entity)}
+            </React.Fragment>
+          )
         })}
       </>
     </div>
