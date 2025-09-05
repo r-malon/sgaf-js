@@ -36,7 +36,7 @@ export function ItemActionCell({ item }: { item: any }) {
         },
         {
           key: 'list-valores',
-          // show: (item) => item.valor_count > 0,
+          show: (item) => item.valor_count > 0,
           render: (item) => (
             <ValorTableDialog
               itemId={item.id}

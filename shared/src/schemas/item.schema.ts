@@ -46,6 +46,7 @@ export const itemSchema = itemBaseSchema.safeExtend({
 
 // For responses
 export const itemWithTotalSchema = itemBaseSchema.safeExtend({
+  valor_count: z.number().int().nonnegative(),
   total: z.number().int().nonnegative(),
 })
 

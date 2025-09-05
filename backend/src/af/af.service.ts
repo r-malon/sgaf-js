@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service'
 import { CreateAfDto } from './dto/create-af.dto'
 import { UpdateAfDto } from './dto/update-af.dto'
 import { getAfTotal } from './af.total.service'
+import { countItemsForAF } from './af.item-count.service'
 import { AF } from '@sgaf/shared'
 
 @Injectable()
@@ -13,8 +14,7 @@ export class AfService {
     const af = await this.prisma.aF.create({
       data: createAfDto,
     })
-    const total = await getAfTotal(this.prisma, af.id)
-    return { ...af, total }
+    return { ...af, total: 0, item_count: 0 }
   }
 
   async findOne(id: number): Promise<AF | null> {
@@ -22,7 +22,8 @@ export class AfService {
       where: { id },
     })
     const total = await getAfTotal(this.prisma, af.id)
-    return { ...af, total }
+    const item_count = await countItemsForAF(this.prisma, af.id)
+    return { ...af, total, item_count }
   }
 
   async findMany(): Promise<AF[]> {
@@ -32,6 +33,7 @@ export class AfService {
       afs.map(async (af) => ({
         ...af,
         total: await getAfTotal(this.prisma, af.id),
+        item_count: await countItemsForAF(this.prisma, af.id),
       })),
     )
   }
@@ -42,7 +44,8 @@ export class AfService {
       data: updateAfDto,
     })
     const total = await getAfTotal(this.prisma, af.id)
-    return { ...af, total }
+    const item_count = await countItemsForAF(this.prisma, af.id)
+    return { ...af, total, item_count }
   }
 
   async delete(id: number): Promise<void> {
