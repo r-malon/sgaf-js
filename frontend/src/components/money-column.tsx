@@ -3,17 +3,17 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { DataTableColumnHeader } from '@/components/data-table-column-header'
 
-interface MoneyColumnOptions<T> {
+interface MoneyColumnProps<T> {
   header?: string
   accessor: (row: T) => number | null | undefined
   id?: string
 }
 
-export function moneyColumn<T>({
+export function MoneyColumn<T>({
   header = 'Valor',
   accessor,
   id,
-}: MoneyColumnOptions<T>): ColumnDef<T> {
+}: MoneyColumnProps<T>): ColumnDef<T> {
   return {
     id: id ?? header,
     header: ({ column }) => (
@@ -28,6 +28,7 @@ export function moneyColumn<T>({
             style: 'currency',
             currency: 'BRL',
             minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
           }).format(cents / 100)}
         </span>
       )

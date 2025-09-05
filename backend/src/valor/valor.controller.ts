@@ -16,14 +16,9 @@ import { CreateValorDto } from './dto/create-valor.dto'
 export class ValorController {
   constructor(private readonly valorService: ValorService) {}
 
-  @Post()
-  async create(@Body() createValorDto: CreateValorDto) {
-    return await this.valorService.create(createValorDto)
-  }
-
   @Get()
   async findMany(@Query('Item_id') itemId?: number) {
-    if (itemId) return this.valorService.findManyByItem(+itemId)
+    if (itemId) return await this.valorService.findManyByItem(+itemId)
     return await this.valorService.findMany()
   }
 

@@ -18,31 +18,31 @@ export class ItemController {
   constructor(private readonly itemService: ItemService) {}
 
   @Post()
-  create(@Body() createItemDto: CreateItemDto) {
-    return this.itemService.create(createItemDto)
+  async create(@Body() createItemDto: CreateItemDto) {
+    return await this.itemService.create(createItemDto)
   }
 
   @Get()
-  findMany(@Query('AF_id') afId?: number) {
-    if (afId) return this.itemService.findManyByAf(+afId)
-    return this.itemService.findMany()
+  async findMany(@Query('AF_id') afId?: number) {
+    if (afId) return await this.itemService.findManyByAf(+afId)
+    return await this.itemService.findMany()
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.itemService.findOne(+id)
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.itemService.findOne(+id)
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateItemDto: UpdateItemDto,
   ) {
-    return this.itemService.update(+id, updateItemDto)
+    return await this.itemService.update(+id, updateItemDto)
   }
 
   @Delete(':id')
-  delete(@Param('id', ParseIntPipe) id: number) {
-    return this.itemService.delete(+id)
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return await this.itemService.delete(+id)
   }
 }

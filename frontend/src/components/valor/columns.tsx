@@ -2,11 +2,11 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 import { DataTableColumnHeader } from '@/components/data-table-column-header'
-import { moneyColumn } from '@/components/money-column'
+import { MoneyColumn } from '@/components/money-column'
 import { Valor } from '@sgaf/shared'
 
 export const valorColumns: ColumnDef<Valor>[] = [
-  moneyColumn<Valor>({
+  MoneyColumn<Valor>({
     header: 'Valor',
     accessor: (row) => row.original.valor,
   }),

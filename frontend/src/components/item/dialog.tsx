@@ -38,15 +38,14 @@ export function ItemDialog({
         banda_instalada: item?.banda_instalada ?? 0,
         data_instalacao: item?.data_instalacao?.slice(0, 10) ?? '',
         quantidade: item?.quantidade ?? 1,
-        status: item?.status ?? true,
-        Local_id: item?.Local_id ?? undefined,
-        AF_id: item?.AF_id ?? afId,
         valor: item?.valor ?? 0,
-        data_inicio: item?.data_inicio?.slice(0, 10) ?? '',
-        data_fim: item?.data_fim?.slice(0, 10) ?? '',
+        status: item?.status ?? true,
+        Local_id: item?.Local_id,
+        AF_id: item?.AF_id ?? afId,
       }}
       fields={[
         { name: 'descricao', label: 'Descrição', type: 'textarea' },
+        { name: 'valor', type: 'money' },
         { name: 'banda_maxima', label: 'Banda Máxima', type: 'number' },
         { name: 'banda_instalada', label: 'Banda Instalada', type: 'number' },
         { name: 'data_instalacao', label: 'Data de Instalação', type: 'date' },
@@ -63,9 +62,6 @@ export function ItemDialog({
             />
           ),
         },
-        { name: 'valor', type: 'money' },
-        { name: 'data_inicio', label: 'Início', type: 'date' },
-        { name: 'data_fim', label: 'Fim', type: 'date' },
       ]}
       title={
         title ?? (isEdit ? 'Editar Item' : `Adicionar Item à AF ${afNumero}`)

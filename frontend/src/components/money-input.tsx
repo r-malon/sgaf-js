@@ -20,7 +20,7 @@ export const MoneyInput = React.forwardRef<HTMLInputElement, MoneyInputProps>(
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const raw = e.target.value.replace(/\D/g, '')
-      const cents = parseInt(raw || '0', 10)
+      const cents = Number(raw || 0)
       onChange?.(cents)
     }
 

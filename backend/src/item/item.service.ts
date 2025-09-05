@@ -10,20 +10,23 @@ import { Item } from '@sgaf/shared'
 export class ItemService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createItemDto: CreateItemDto): Promise<Item> {
-    const af = await this.prisma.aF.findUniqueOrThrow({
-      where: { id: createItemDto.AF_id },
-      select: { data_inicio: true, data_fim: true, status: true },
+  async create(createItemDto: CreateItemDto) {
+    return await this.prisma.$transaction(async (tx) => {
+      const item = await tx.item.create({
+        data: createItemDto,
+      })
+
+      await tx.valor.create({
+        data: {
+          valor: createItemDto.valor,
+          data_inicio: createItemDto.data_instalacao,
+          data_fim: null,
+          Item_id: item.id,
+        },
+      })
+
+      return { ...item, total: 0, valor_count: 1 }
     })
-
-    if (!af.status)
-      throw new Error('Itens não podem ser adicionados à AF inativa')
-
-    const item = await this.prisma.item.create({
-      data: createItemDto,
-    })
-
-    return { ...item, total: 0, valor_count: 0 }
   }
 
   async findOne(id: number): Promise<Item | null> {
@@ -82,9 +85,30 @@ export class ItemService {
   }
 
   async update(id: number, updateItemDto: UpdateItemDto): Promise<Item> {
-    const item = await this.prisma.item.update({
-      where: { id },
-      data: updateItemDto,
+    const item = await this.prisma.$transaction(async (tx) => {
+      const now = new Date(new Date(Date.now()).setUTCHours(0, 0, 0, 0))
+      const item = await tx.item.update({
+        where: { id },
+        data: updateItemDto,
+      })
+
+      await tx.valor.updateMany({
+        where: { data_fim: null },
+        data: {
+          data_fim: now,
+        },
+      })
+
+      await tx.valor.create({
+        data: {
+          valor: updateItemDto.valor!,
+          data_inicio: now,
+          data_fim: null,
+          Item_id: item.id,
+        },
+      })
+
+      return item
     })
 
     const af = await this.prisma.aF.findUniqueOrThrow({

@@ -73,7 +73,7 @@ export function GenericDialogForm<TSchema extends ZodType<any, any>>({
   const handleSubmit = async (values: z.infer<TSchema>) => {
     await onSubmit(values)
     setOpen(false)
-    form.reset(defaultValues)
+    form.reset(values)
   }
 
   return (
@@ -131,7 +131,6 @@ export function GenericDialogForm<TSchema extends ZodType<any, any>>({
                                 inputMode="numeric"
                                 pattern="\d*"
                                 min="0"
-                                {...controlledField}
                                 onChange={(e) => {
                                   const onlyDigits = e.target.value.replace(
                                     /\D/g,
@@ -143,13 +142,26 @@ export function GenericDialogForm<TSchema extends ZodType<any, any>>({
                                       : undefined,
                                   )
                                 }}
+                                {...controlledField}
                               />
                             </FormControl>
                           )
                         case 'money':
                           return (
                             <FormControl>
-                              <MoneyInput {...controlledField} />
+                              <div>
+                                <MoneyInput
+                                  value={Number(controlledField.value) || 0}
+                                  onChange={(val) => controlledField.onChange(val)}
+                                  ref={controlledField.ref}
+                                />
+                                <input
+                                  type="hidden"
+                                  name={controlledField.name}
+                                  value={controlledField.value ?? 0}
+                                  {...form.register(controlledField.name, { valueAsNumber: true })}
+                                />
+                            </div>
                             </FormControl>
                           )
                         case 'date':

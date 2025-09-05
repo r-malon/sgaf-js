@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { valorBaseSchema } from './valor.schema'
 
 const itemBaseSchema = z
   .object({
@@ -11,19 +10,19 @@ const itemBaseSchema = z
           : 'Data de instalação é obrigatória',
     }),
     banda_maxima: z
-      .number({
+      .coerce.number({
         error: () => 'Banda máxima é obrigatória',
       })
       .int()
       .positive('Banda máxima deve ser >= 1'),
     banda_instalada: z
-      .number({
+      .coerce.number({
         error: () => 'Banda instalada é obrigatória',
       })
       .int()
       .nonnegative('Banda instalada deve ser >= 0'),
     quantidade: z
-      .number({
+      .coerce.number({
         error: () => 'Quantidade é obrigatória',
       })
       .int()
@@ -41,13 +40,13 @@ const itemBaseSchema = z
 export const itemSchema = itemBaseSchema.safeExtend({
   AF_id: z.number().int().positive().readonly(),
   Local_id: z.number().int().positive().readonly(),
-  valorBaseSchema,
+  valor: z.coerce.number({ error: (issue) => issue.code === 'invalid_type' ? 'Valor inválido' : 'Valor é obrigatório',}).int().nonnegative(),
 })
 
 // For responses
-export const itemWithTotalSchema = itemBaseSchema.safeExtend({
+export const itemOutputSchema = itemBaseSchema.safeExtend({
   valor_count: z.number().int().nonnegative(),
   total: z.number().int().nonnegative(),
 })
 
-export type Item = z.infer<typeof itemWithTotalSchema>
+export type Item = z.infer<typeof itemOutputSchema>

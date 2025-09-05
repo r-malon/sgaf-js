@@ -3,7 +3,7 @@ import { z } from 'zod'
 export const valorBaseSchema = z
   .object({
     valor: z
-      .number({
+      .coerce.number({
         error: (issue) =>
           issue.code === 'invalid_type'
             ? 'Valor inválido'
@@ -33,7 +33,4 @@ export const valorSchema = valorBaseSchema.safeExtend({
   Item_id: z.number().int().positive().readonly(),
 })
 
-// For responses
-export const valorWithoutFKSchema = valorBaseSchema
-
-export type Valor = z.infer<typeof valorWithoutFKSchema>
+export type Valor = z.infer<typeof valorBaseSchema>

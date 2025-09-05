@@ -8,14 +8,6 @@ import { Valor } from '@sgaf/shared'
 export class ValorService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createValorDto: CreateValorDto): Promise<Valor> {
-    const valor = await this.prisma.valor.create({
-      data: createValorDto,
-    })
-
-    return valor
-  }
-
   async findMany(): Promise<Valor[]> {
     const valores: Valor[] = await this.prisma.valor.findMany()
 

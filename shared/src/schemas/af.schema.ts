@@ -41,9 +41,9 @@ const afBaseSchema = z
 export const afSchema = afBaseSchema
 
 // For responses
-export const afWithTotalSchema = afBaseSchema.safeExtend({
+export const afOutputSchema = afBaseSchema.safeExtend({
   item_count: z.number().int().nonnegative(),
   total: z.number().int().nonnegative(),
 })
 
-export type AF = z.infer<typeof afWithTotalSchema>
+export type AF = z.infer<typeof afOutputSchema>

@@ -5,7 +5,7 @@ import { Minus, Check, X } from 'lucide-react'
 import { DataTableColumnHeader } from '@/components/data-table-column-header'
 import { ItemActionCell } from '@/components/item/action-cell'
 import { DescriptionCell } from '@/components/description-cell'
-import { moneyColumn } from '@/components/money-column'
+import { MoneyColumn } from '@/components/money-column'
 import { Item } from '@sgaf/shared'
 
 export const itemColumns: ColumnDef<Item>[] = [
@@ -55,7 +55,7 @@ export const itemColumns: ColumnDef<Item>[] = [
     cell: ({ row }) =>
       row.original.status ? <Check color="green" /> : <X color="red" />,
   },
-  moneyColumn<Item>({ header: 'Total', accessor: (row) => row.total }),
+  MoneyColumn<Item>({ header: 'Total', accessor: (row) => row.total }),
   {
     id: 'actions',
     header: 'Ações',
