@@ -5,6 +5,7 @@ import { UpdateItemDto } from './dto/update-item.dto'
 import { getItemTotal } from './item.total.service'
 import { countValoresForItem } from './item.valor-count.service'
 import { Item } from '@sgaf/shared'
+import { omit } from '../utils/omit'
 
 @Injectable()
 export class ItemService {
@@ -13,7 +14,7 @@ export class ItemService {
   async create(createItemDto: CreateItemDto) {
     return await this.prisma.$transaction(async (tx) => {
       const item = await tx.item.create({
-        data: createItemDto,
+        data: omit(createItemDto, ['valor']),
       })
 
       await tx.valor.create({
@@ -87,13 +88,14 @@ export class ItemService {
   async update(id: number, updateItemDto: UpdateItemDto): Promise<Item> {
     const item = await this.prisma.$transaction(async (tx) => {
       const now = new Date(new Date(Date.now()).setUTCHours(0, 0, 0, 0))
+
       const item = await tx.item.update({
         where: { id },
-        data: updateItemDto,
+        data: omit(updateItemDto, ['valor']),
       })
 
       await tx.valor.updateMany({
-        where: { data_fim: null },
+        where: { Item_id: item.id, data_fim: null },
         data: {
           data_fim: now,
         },

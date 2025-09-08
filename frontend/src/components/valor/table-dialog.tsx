@@ -7,7 +7,7 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table'
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { DataTable } from '@/components/data-table'
 import { valorColumns } from '@/components/valor/columns'
@@ -29,15 +29,18 @@ export function ValorTableDialog({
   const { baseURL, handleFetch } = useEntityHandlers('valor')
 
   // SWR for fetching + auto revalidate
-  const { data, error, isLoading } = useSWR<T[]>(
+  const { data, error, isLoading } = useSWR<Valor[]>(
     open ? `${baseURL}?Item_id=${itemId}` : null, // only fetch when drawer open
-    (u) => handleFetch<T[]>(u),
+    (u) => handleFetch<Valor[]>(u),
     {
       refreshInterval: 6000,
       revalidateOnFocus: true,
       revalidateOnReconnect: true,
     },
   )
+  console.log(data)
+  console.log(error)
+  console.log(isLoading)
 
   React.useEffect(() => {
     if (error) toast.error(error.message)
@@ -58,6 +61,10 @@ export function ValorTableDialog({
         <Button variant="outline">{triggerLabel}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[625px]">
+        <DialogHeader>
+          <DialogTitle>Histórico</DialogTitle>
+        </DialogHeader>
+
         <DataTable
           table={table}
           rowClassName={(row) =>

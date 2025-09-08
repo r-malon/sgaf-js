@@ -71,7 +71,6 @@ export function GenericDialogForm<TSchema extends ZodType<any, any>>({
   })
 
   const handleSubmit = async (values: z.infer<TSchema>) => {
-    console.log(values)
     await onSubmit(values)
     setOpen(false)
     form.reset(values)
