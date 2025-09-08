@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from 'react'
-import useSWR from 'swr'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -17,18 +16,10 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { ChevronsUpDown, Trash2, Pencil } from 'lucide-react'
-import { API_BASE_URL } from '@/lib/config'
-import { useEntityHandlers } from '@/app/handlers'
 import { LocalDialog } from '@/components/local/dialog'
 import { Local } from '@sgaf/shared'
-
-const fetcher = async (url: string): Promise<Local[]> => {
-  const res = await fetch(url)
-  const json = await res.json()
-  if (Array.isArray(json)) return json
-  if (json?.data && Array.isArray(json.data)) return json.data
-  return []
-}
+import { useEntityHandlers } from '@/app/handlers'
+import { useAPISWR } from '@/lib/hooks'
 
 type LocalComboboxProps = {
   value?: number | null
@@ -44,36 +35,30 @@ export function LocalCombobox({
   className,
 }: LocalComboboxProps) {
   const [open, setOpen] = React.useState(false)
-  // Uncontrolled fallback when `value` is not provided
   const [internalId, setInternalId] = React.useState<number | null>(
     value ?? null,
   )
 
-  // Keep internal state in sync if parent controls the value
+  // Controlled vs uncontrolled sync
   React.useEffect(() => {
     if (value !== undefined) setInternalId(value)
   }, [value])
 
-  const { data: locals = [] } = useSWR<Local[]>(
-    `${API_BASE_URL}/local`,
-    fetcher,
-  )
-  const { handleEdit, handleDelete } = useEntityHandlers('local')
+  const { key, handleEdit, handleDelete } = useEntityHandlers('local')
+  const { data: locals = [] } = useAPISWR<Local>(key())
 
   const selectedId = value ?? internalId
-  const selected =
-    (locals.find((l) => l.id === selectedId) as Local | undefined) ?? null
+  const selected = locals.find((l) => l.id === selectedId) ?? null
 
   const setSelected = (next: Local | null) => {
     onChange?.(next?.id ?? null, next)
-    if (value === undefined) setInternalId(next?.id ?? null) // uncontrolled mode
+    if (value === undefined) setInternalId(next?.id ?? null)
     setOpen(false)
   }
 
   async function handleRemove(id: number) {
     await handleDelete(id)
     if ((value ?? internalId) === id) {
-      // clear selection in both modes
       onChange?.(null, null)
       if (value === undefined) setInternalId(null)
     }
@@ -124,10 +109,8 @@ export function LocalCombobox({
             title="Editar local"
             onSubmit={async (values) => {
               await handleEdit(selected.id, values)
-              // Keep selection pointing to the same id; data will refresh via SWR
-              // For clear after edit, uncomment the next 2 lines:
-              onChange?.(null, null)
-              if (value === undefined) setInternalId(null)
+              // keep selection (id doesn’t change), no need to clear
+              onChange?.(selected.id, { ...selected, ...values })
             }}
           />
           <Button

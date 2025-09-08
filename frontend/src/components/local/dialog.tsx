@@ -1,17 +1,16 @@
 'use client'
 
 import * as React from 'react'
-import { localSchema } from '@sgaf/shared'
+import { z } from 'zod'
+import { localSchema, type Local } from '@sgaf/shared'
 import { GenericDialogForm } from '@/components/generic-dialog-form'
 import { useEntityHandlers } from '@/app/handlers'
-import { API_BASE_URL } from '@/lib/config'
-import { mutate } from 'swr'
 
 interface LocalDialogProps {
-  local?: any
+  local?: Local
   triggerLabel?: React.ReactElement | string
   title?: React.ReactElement | string
-  onSubmit?: (values: any) => Promise<void>
+  onSubmit?: (values: z.infer<typeof localSchema>) => Promise<void>
 }
 
 export function LocalDialog({
@@ -40,7 +39,6 @@ export function LocalDialog({
           } else {
             await handleCreate(values)
           }
-          await mutate(`${API_BASE_URL}/local`)
         })
       }
     />

@@ -5,8 +5,6 @@ import { z } from 'zod'
 import { itemSchema } from '@sgaf/shared'
 import { GenericDialogForm } from '@/components/generic-dialog-form'
 import { useEntityHandlers } from '@/app/handlers'
-import { API_BASE_URL } from '@/lib/config'
-import { mutate } from 'swr'
 import { LocalCombobox } from '@/components/local/combobox'
 
 interface ItemDialogProps {
@@ -75,7 +73,6 @@ export function ItemDialog({
           } else {
             await handleCreate({ ...values, AF_id: afId })
           }
-          await mutate(`${API_BASE_URL}/item?AF_id=${afId}`)
         })
       }
     />

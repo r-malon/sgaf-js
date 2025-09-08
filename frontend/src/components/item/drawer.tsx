@@ -3,9 +3,7 @@
 import { Plus, List } from 'lucide-react'
 import { GenericDrawer } from '@/components/generic-drawer'
 import { itemColumns } from '@/components/item/columns'
-import { ItemActionCell } from '@/components/item/action-cell'
 import { ItemDialog } from '@/components/item/dialog'
-import { useEntityHandlers } from '@/app/handlers'
 import { Button } from '@/components/ui/button'
 
 interface ItemDrawerProps {
@@ -13,8 +11,6 @@ interface ItemDrawerProps {
 }
 
 export function ItemDrawer({ afId }: ItemDrawerProps) {
-  const { baseURL, handleCreate } = useEntityHandlers('item')
-
   return (
     <GenericDrawer
       trigger={
@@ -22,7 +18,8 @@ export function ItemDrawer({ afId }: ItemDrawerProps) {
           <List /> Itens
         </Button>
       }
-      url={`${baseURL}?AF_id=${afId}`}
+      entityName="item"
+      query={{ AF_id: afId }}
       columns={itemColumns}
       createDialog={
         <ItemDialog

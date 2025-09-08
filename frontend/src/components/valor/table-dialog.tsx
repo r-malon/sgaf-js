@@ -13,7 +13,7 @@ import { DataTable } from '@/components/data-table'
 import { valorColumns } from '@/components/valor/columns'
 import { Valor } from '@sgaf/shared'
 import { useEntityHandlers } from '@/app/handlers'
-import useSWR from 'swr'
+import { useAPISWR } from '@/lib/hooks'
 
 interface ValorTableDialogProps {
   itemId: number
@@ -26,25 +26,11 @@ export function ValorTableDialog({
 }: ValorTableDialogProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [open, setOpen] = React.useState(false)
-  const { baseURL, handleFetch } = useEntityHandlers('valor')
 
-  // SWR for fetching + auto revalidate
-  const { data, error, isLoading } = useSWR<Valor[]>(
-    open ? `${baseURL}?Item_id=${itemId}` : null, // only fetch when drawer open
-    (u) => handleFetch<Valor[]>(u),
-    {
-      refreshInterval: 6000,
-      revalidateOnFocus: true,
-      revalidateOnReconnect: true,
-    },
+  const { key } = useEntityHandlers('valor')
+  const { data, error, isLoading } = useAPISWR<Valor>(
+    open ? key({ Item_id: itemId }) : null,
   )
-  console.log(data)
-  console.log(error)
-  console.log(isLoading)
-
-  React.useEffect(() => {
-    if (error) toast.error(error.message)
-  }, [error])
 
   const table = useReactTable({
     data: data ?? [],
@@ -56,7 +42,7 @@ export function ValorTableDialog({
   })
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">{triggerLabel}</Button>
       </DialogTrigger>

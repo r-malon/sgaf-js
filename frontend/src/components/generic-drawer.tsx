@@ -18,14 +18,14 @@ import {
   SortingState,
   ColumnDef,
 } from '@tanstack/react-table'
-import useSWR from 'swr'
-import { toast } from 'sonner'
-import { handleFetch } from '@/app/handlers'
+import { useEntityHandlers } from '@/app/handlers'
+import { useAPISWR } from '@/lib/hooks'
 
 interface GenericDrawerProps<T> {
   title: string
   trigger: React.ReactNode
-  url: string
+  entityName: string
+  query?: Record<string, any>
   columns: ColumnDef<T, any>[]
   createDialog?: React.ReactNode
 }
@@ -33,28 +33,17 @@ interface GenericDrawerProps<T> {
 export function GenericDrawer<T>({
   title,
   trigger,
-  url,
+  entityName,
+  query,
   columns,
-  actionCell,
   createDialog,
 }: GenericDrawerProps<T>) {
   const [open, setOpen] = React.useState(false)
 
-  // SWR for fetching + auto revalidate
-  const { data, error, isLoading } = useSWR<T[]>(
-    open ? url : null, // only fetch when drawer open
-    (u) => handleFetch<T[]>(u),
-    {
-      refreshInterval: 6000,
-      revalidateOnFocus: true,
-      revalidateOnReconnect: true,
-    },
+  const { key } = useEntityHandlers(entityName)
+  const { data, error, isLoading } = useAPISWR<T>(
+    open ? key(query) : null,
   )
-
-  React.useEffect(() => {
-    if (error) toast.error(error.message)
-  }, [error])
-
   const [sorting, setSorting] = React.useState<SortingState>([])
 
   const table = useReactTable({

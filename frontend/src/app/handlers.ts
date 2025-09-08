@@ -4,29 +4,41 @@ import { API_BASE_URL } from '@/lib/config'
 import { useSWRConfig } from 'swr'
 import { toast } from 'sonner'
 
-function getCachedData(
+function getCachedData<T>(
   cache: ReturnType<typeof useSWRConfig>['cache'],
   key: string,
-) {
-  return cache.get(key)?.data
+): T | undefined {
+  return cache.get(key)?.data as T | undefined
 }
 
 export async function handleFetch<T>(
   url: string,
   options?: RequestInit,
 ): Promise<T> {
-  const res = await fetch(url, options)
-  let data: T | null = null
+  let res: Response
+  try {
+    res = await fetch(url, options)
+  } catch (err: any) {
+    toast.error('Network error', {
+      description: err?.message ?? 'Failed to connect to server',
+    })
+    throw err
+  }
 
-  const text = await res.text()
-  if (text) data = JSON.parse(text)
+  let data: any = null
+  try {
+    const text = await res.text()
+    if (text) data = JSON.parse(text)
+  } catch {
+    // ignore non-JSON bodies
+  }
 
   if (!res.ok) {
     toast.error(`HTTP ${res.status} ${res.statusText}`, {
-      description: (data as any)?.message,
+      description: data?.message ?? 'Erro inesperado',
     })
     throw new Error(
-      `HTTP ${(data as any)?.statusCode}: ${(data as any)?.message}`,
+      `HTTP ${data?.statusCode ?? res.status}: ${data?.message ?? res.statusText}`,
     )
   }
 
@@ -35,33 +47,35 @@ export async function handleFetch<T>(
 
 export function useEntityHandlers(entityName: string) {
   const { mutate, cache } = useSWRConfig()
-  const baseURL = `${API_BASE_URL}/${entityName.toLowerCase()}`
+  const baseURL = `${API_BASE_URL}/${entityName}`
+
+  const key = (query?: Record<string, any>) => {
+    if (!query) return baseURL
+    const params = new URLSearchParams(
+      Object.entries(query).map(([k, v]) => [k, String(v)]),
+    )
+    return `${baseURL}?${params.toString()}`
+  }
 
   async function doRequest<T>(
     path: string,
     options: RequestInit,
     successMsg: string,
   ) {
-    const previous = getCachedData(cache, baseURL)
+    const previous = getCachedData<T[]>(cache, path)
     try {
       await handleFetch(path, options)
-      await mutate(baseURL)
+      await mutate(path) // revalidate exact path
       toast.success(successMsg)
     } catch {
-      if (previous) mutate(baseURL, previous, false)
+      if (previous) mutate(path, previous, false)
     }
   }
 
   async function handleFetchEntities<T>(
     query?: Record<string, any>,
   ): Promise<T[]> {
-    const params = query
-      ? '?' +
-        new URLSearchParams(
-          Object.entries(query).map(([k, v]) => [k, String(v)]),
-        ).toString()
-      : ''
-    return handleFetch<T[]>(`${baseURL}${params}`)
+    return handleFetch<T[]>(key(query))
   }
 
   async function handleCreate<T>(data: T) {
@@ -91,15 +105,14 @@ export function useEntityHandlers(entityName: string) {
   async function handleDelete(id: number) {
     return doRequest(
       `${baseURL}/${id}`,
-      {
-        method: 'DELETE',
-      },
+      { method: 'DELETE' },
       `${entityName} removido(a) com sucesso.`,
     )
   }
 
   return {
     baseURL,
+    key,
     handleFetch: handleFetchEntities,
     handleCreate,
     handleEdit,

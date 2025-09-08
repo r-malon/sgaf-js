@@ -1,13 +1,5 @@
 'use client'
 
-import { API_BASE_URL } from '@/lib/config'
-import { DataTable } from '@/components/data-table'
-import { DataTableFilter } from '@/components/data-table-filter'
-import { AFDialog } from '@/components/af/dialog'
-import { LocalDialog } from '@/components/local/dialog'
-import { LocalCombobox } from '@/components/local/combobox'
-import { AF } from '@sgaf/shared'
-import { afColumns } from '@/components/af/columns'
 import {
   useReactTable,
   getCoreRowModel,
@@ -15,25 +7,20 @@ import {
   getSortedRowModel,
   SortingState,
 } from '@tanstack/react-table'
-import useSWR from 'swr'
-import { useEffect, useState } from 'react'
-import { toast } from 'sonner'
-import { handleFetch } from '@/app/handlers'
+import { useState } from 'react'
+import { DataTable } from '@/components/data-table'
+import { DataTableFilter } from '@/components/data-table-filter'
+import { AFDialog } from '@/components/af/dialog'
+import { LocalDialog } from '@/components/local/dialog'
+import { LocalCombobox } from '@/components/local/combobox'
+import { AF } from '@sgaf/shared'
+import { afColumns } from '@/components/af/columns'
+import { useAPISWR } from '@/lib/hooks'
+import { useEntityHandlers } from '@/app/handlers'
 
 export default function Home() {
-  const { data, error, isLoading } = useSWR<AF[]>(
-    `${API_BASE_URL}/af`,
-    (url) => handleFetch<AF[]>(url),
-    {
-      refreshInterval: 6000,
-      revalidateOnFocus: true,
-      revalidateOnReconnect: true,
-    },
-  )
-
-  useEffect(() => {
-    if (error) toast.error(error.message)
-  }, [error])
+  const { key } = useEntityHandlers('af')
+  const { data, error, isLoading } = useAPISWR<AF>(key())
 
   const [sorting, setSorting] = useState<SortingState>([])
   const afTable = useReactTable({

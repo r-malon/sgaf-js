@@ -4,8 +4,6 @@ import * as React from 'react'
 import { afSchema } from '@sgaf/shared'
 import { GenericDialogForm } from '@/components/generic-dialog-form'
 import { useEntityHandlers } from '@/app/handlers'
-import { API_BASE_URL } from '@/lib/config'
-import { mutate } from 'swr'
 
 interface AFDialogProps {
   af?: z.infer<typeof afSchema>
@@ -57,7 +55,6 @@ export function AFDialog({
           } else {
             await handleCreate(values)
           }
-          await mutate(`${API_BASE_URL}/af`)
         })
       }
     />

@@ -5,8 +5,6 @@ import { z } from 'zod'
 import { valorSchema } from '@sgaf/shared'
 import { GenericDialogForm } from '@/components/generic-dialog-form'
 import { useEntityHandlers } from '@/app/handlers'
-import { API_BASE_URL } from '@/lib/config'
-import { mutate } from 'swr'
 
 interface ValorDialogProps {
   valor?: z.infer<typeof valorSchema>
@@ -48,7 +46,6 @@ export function ValorDialog({
           } else {
             await handleCreate(values)
           }
-          await mutate(`${API_BASE_URL}/valor`)
         })
       }
     />
