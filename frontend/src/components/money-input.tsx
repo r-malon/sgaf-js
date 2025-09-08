@@ -30,7 +30,7 @@ export const MoneyInput = React.forwardRef<HTMLInputElement, MoneyInputProps>(
         <Input
           ref={ref}
           inputMode="numeric"
-          pattern="\d*"
+          pattern="[0-9.,]*"
           {...props}
           value={displayValue}
           onChange={handleChange}

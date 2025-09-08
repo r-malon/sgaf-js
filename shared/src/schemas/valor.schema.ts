@@ -3,7 +3,7 @@ import { z } from 'zod'
 export const valorBaseSchema = z
   .object({
     valor: z
-      .coerce.number({
+      .number({
         error: (issue) =>
           issue.code === 'invalid_type'
             ? 'Valor inválido'

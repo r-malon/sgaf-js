@@ -10,19 +10,19 @@ const itemBaseSchema = z
           : 'Data de instalação é obrigatória',
     }),
     banda_maxima: z
-      .coerce.number({
+      .number({
         error: () => 'Banda máxima é obrigatória',
       })
       .int()
       .positive('Banda máxima deve ser >= 1'),
     banda_instalada: z
-      .coerce.number({
+      .number({
         error: () => 'Banda instalada é obrigatória',
       })
       .int()
       .nonnegative('Banda instalada deve ser >= 0'),
     quantidade: z
-      .coerce.number({
+      .number({
         error: () => 'Quantidade é obrigatória',
       })
       .int()
@@ -40,7 +40,7 @@ const itemBaseSchema = z
 export const itemSchema = itemBaseSchema.safeExtend({
   AF_id: z.number().int().positive().readonly(),
   Local_id: z.number().int().positive().readonly(),
-  valor: z.coerce.number({ error: (issue) => issue.code === 'invalid_type' ? 'Valor inválido' : 'Valor é obrigatório',}).int().nonnegative(),
+  valor: z.number({ error: (issue) => issue.code === 'invalid_type' ? 'Valor inválido' : 'Valor é obrigatório',}).int().nonnegative(),
 })
 
 // For responses
