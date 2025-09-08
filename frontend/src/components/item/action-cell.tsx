@@ -1,7 +1,7 @@
 import { Pencil, Plus, Trash2, List } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ItemDialog } from '@/components/item/dialog'
-import { useEntityHandlers } from '@/app/handlers'
+import { useEntityHandlers } from '@/lib/handlers'
 import { ActionCell } from '@/components/action-cell'
 import { ValorTableDialog } from '@/components/valor/table-dialog'
 
@@ -24,6 +24,7 @@ export function ItemActionCell({ item }: { item: any }) {
         },
         {
           key: 'delete',
+          show: (item) => item.valor_count == 0,
           render: (item) => (
             <Button
               variant="destructive"

@@ -18,7 +18,7 @@ import {
   SortingState,
   ColumnDef,
 } from '@tanstack/react-table'
-import { useEntityHandlers } from '@/app/handlers'
+import { useEntityHandlers } from '@/lib/handlers'
 import { useAPISWR } from '@/lib/hooks'
 
 interface GenericDrawerProps<T> {
@@ -41,9 +41,7 @@ export function GenericDrawer<T>({
   const [open, setOpen] = React.useState(false)
 
   const { key } = useEntityHandlers(entityName)
-  const { data, error, isLoading } = useAPISWR<T>(
-    open ? key(query) : null,
-  )
+  const { data, error, isLoading } = useAPISWR<T>(open ? key(query) : null)
   const [sorting, setSorting] = React.useState<SortingState>([])
 
   const table = useReactTable({

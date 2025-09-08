@@ -16,7 +16,7 @@ import { LocalCombobox } from '@/components/local/combobox'
 import { AF } from '@sgaf/shared'
 import { afColumns } from '@/components/af/columns'
 import { useAPISWR } from '@/lib/hooks'
-import { useEntityHandlers } from '@/app/handlers'
+import { useEntityHandlers } from '@/lib/handlers'
 
 export default function Home() {
   const { key } = useEntityHandlers('af')

@@ -40,7 +40,15 @@ const itemBaseSchema = z
 export const itemSchema = itemBaseSchema.safeExtend({
   AF_id: z.number().int().positive().readonly(),
   Local_id: z.number().int().positive().readonly(),
-  valor: z.number({ error: (issue) => issue.code === 'invalid_type' ? 'Valor inválido' : 'Valor é obrigatório',}).int().nonnegative(),
+  valor: z
+    .number({
+      error: (issue) =>
+        issue.code === 'invalid_type'
+          ? 'Valor inválido'
+          : 'Valor é obrigatório',
+    })
+    .int()
+    .nonnegative(),
 })
 
 // For responses

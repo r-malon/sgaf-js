@@ -23,6 +23,7 @@ export const valorColumns: ColumnDef<Valor>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Fim" />
     ),
-    cell: ({ row }) => row.original.data_fim?.slice(0, 10) ?? <Minus color="lightgray" />,
+    cell: ({ row }) =>
+      row.original.data_fim?.slice(0, 10) ?? <Minus color="lightgray" />,
   },
 ]

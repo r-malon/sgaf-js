@@ -4,7 +4,7 @@ import * as React from 'react'
 import { z } from 'zod'
 import { itemSchema } from '@sgaf/shared'
 import { GenericDialogForm } from '@/components/generic-dialog-form'
-import { useEntityHandlers } from '@/app/handlers'
+import { useEntityHandlers } from '@/lib/handlers'
 import { LocalCombobox } from '@/components/local/combobox'
 
 interface ItemDialogProps {

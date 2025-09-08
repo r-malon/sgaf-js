@@ -18,7 +18,7 @@ import {
 import { ChevronsUpDown, Trash2, Pencil } from 'lucide-react'
 import { LocalDialog } from '@/components/local/dialog'
 import { Local } from '@sgaf/shared'
-import { useEntityHandlers } from '@/app/handlers'
+import { useEntityHandlers } from '@/lib/handlers'
 import { useAPISWR } from '@/lib/hooks'
 
 type LocalComboboxProps = {

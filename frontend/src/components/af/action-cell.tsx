@@ -1,6 +1,6 @@
 import { Pencil, Plus, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { useEntityHandlers } from '@/app/handlers'
+import { useEntityHandlers } from '@/lib/handlers'
 import { ActionCell } from '@/components/action-cell'
 import { AFDialog } from '@/components/af/dialog'
 import { ItemDialog } from '@/components/item/dialog'
@@ -27,6 +27,7 @@ export function AFActionCell({ af }: { af: any }) {
         },
         {
           key: 'delete',
+          show: (af) => af.item_count == 0,
           render: (af) => (
             <Button
               variant="destructive"

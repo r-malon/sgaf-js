@@ -1,15 +1,18 @@
 import { PrismaClient } from '@prisma/client'
 
-export async function countItemsForAF(prisma: PrismaClient, afId: number): Promise<number> {
+export async function countItemsForAF(
+  prisma: PrismaClient,
+  afId: number,
+): Promise<number> {
   const af = await prisma.aF.findUnique({
     where: {
-      id: afId
+      id: afId,
     },
     select: {
       _count: {
-        select: { items: true }
-      }
-    }
+        select: { items: true },
+      },
+    },
   })
   return af?._count.items ?? 0
 }

@@ -7,12 +7,18 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { DataTable } from '@/components/data-table'
 import { valorColumns } from '@/components/valor/columns'
 import { Valor } from '@sgaf/shared'
-import { useEntityHandlers } from '@/app/handlers'
+import { useEntityHandlers } from '@/lib/handlers'
 import { useAPISWR } from '@/lib/hooks'
 
 interface ValorTableDialogProps {

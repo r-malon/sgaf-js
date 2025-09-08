@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { afSchema } from '@sgaf/shared'
 import { GenericDialogForm } from '@/components/generic-dialog-form'
-import { useEntityHandlers } from '@/app/handlers'
+import { useEntityHandlers } from '@/lib/handlers'
 
 interface AFDialogProps {
   af?: z.infer<typeof afSchema>
