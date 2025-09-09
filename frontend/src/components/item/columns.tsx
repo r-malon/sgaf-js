@@ -55,7 +55,11 @@ export const itemColumns: ColumnDef<Item>[] = [
     cell: ({ row }) =>
       row.original.status ? <Check color="green" /> : <X color="red" />,
   },
-  MoneyColumn<Item>({ header: 'Total', accessor: (row) => row.total }),
+  MoneyColumn<Item>({
+    header: 'Total',
+    accessor: (row) => row.total,
+    includeSumFooter: true,
+  }),
   {
     id: 'actions',
     header: 'Ações',

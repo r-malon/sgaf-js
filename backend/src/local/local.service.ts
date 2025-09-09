@@ -4,6 +4,7 @@ import { CreateLocalDto } from './dto/create-local.dto'
 import { UpdateLocalDto } from './dto/update-local.dto'
 import { Local } from '@sgaf/shared'
 import { normalize } from '../utils/normalize'
+import { omit } from '../utils/omit'
 
 @Injectable()
 export class LocalService {
@@ -17,11 +18,13 @@ export class LocalService {
       },
     })
 
-    return local
+    return omit(local, ['nome_normalized'])
   }
 
   async findMany(): Promise<Local[]> {
-    const locals: Local[] = await this.prisma.local.findMany()
+    const locals: Local[] = await this.prisma.local.findMany({
+      omit: { nome_normalized: true },
+    })
 
     return locals
   }
@@ -29,6 +32,7 @@ export class LocalService {
   async findOne(id: number): Promise<Local | null> {
     const local = await this.prisma.local.findUniqueOrThrow({
       where: { id },
+      omit: { nome_normalized: true },
     })
 
     return local

@@ -1,6 +1,5 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common'
 import { PrismaClient } from '@prisma/client'
-import { normalizedSearch } from './extensions/normalized-search'
 
 @Injectable()
 export class PrismaService

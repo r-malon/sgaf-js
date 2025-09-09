@@ -10,7 +10,6 @@ import {
   ParseIntPipe,
 } from '@nestjs/common'
 import { ValorService } from './valor.service'
-import { CreateValorDto } from './dto/create-valor.dto'
 
 @Controller('valor')
 export class ValorController {

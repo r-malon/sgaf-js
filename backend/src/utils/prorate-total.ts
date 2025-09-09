@@ -36,6 +36,7 @@ export function prorateTotal(
   for (let i = 0; i < timeline.length - 1; i++) {
     const segStart = timeline[i]
     const segEnd = timeline[i + 1]
+
     if (segStart >= segEnd) continue
 
     const segStartActual = new Date(
@@ -44,6 +45,7 @@ export function prorateTotal(
     const segEndActual = new Date(
       Math.min(segEnd.getTime(), effectiveAfEnd.getTime()),
     )
+
     if (segStartActual >= segEndActual) continue
 
     let activeValor: number | null = null
@@ -59,10 +61,10 @@ export function prorateTotal(
 
     const days = differenceInCalendarDays(segEndActual, segStartActual)
     const monthDays = daysInMonth(segStartActual)
-    const dailyRate = activeValor / 100 / monthDays
+    const dailyRate = activeValor / monthDays
     const prorated = days * dailyRate
     total += prorated
   }
 
-  return Math.round(total * 100)
+  return Math.round(total)
 }

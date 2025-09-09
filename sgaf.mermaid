@@ -1,4 +1,4 @@
-%%{init: {'theme': 'base'}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'fontFamily': 'monospace', 'primaryColor': '#ffffff', 'primaryTextColor': '#000000', 'primaryBorderColor': '#000000', 'lineColor': '#000000', 'secondaryColor': '#ffffff', 'tertiaryColor': '#ffffff', 'background': '#ffffff'}}}%%
 erDiagram
 	direction LR
 	AF {
@@ -33,6 +33,6 @@ erDiagram
 		datetime data_inicio
 		datetime data_fim
 	}
-	AF ||--o{ ITEM : "has"
-	LOCAL ||--o{ ITEM : "has"
-	ITEM ||--o{ VALOR : "has"
+	AF ||--o{ ITEM : has
+	LOCAL ||--o{ ITEM : has
+	ITEM ||--|{ VALOR : has

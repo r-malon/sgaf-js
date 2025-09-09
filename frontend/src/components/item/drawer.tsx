@@ -8,9 +8,10 @@ import { Button } from '@/components/ui/button'
 
 interface ItemDrawerProps {
   afId: number
+  afNumero?: string
 }
 
-export function ItemDrawer({ afId }: ItemDrawerProps) {
+export function ItemDrawer({ afId, afNumero }: ItemDrawerProps) {
   return (
     <GenericDrawer
       trigger={
@@ -24,7 +25,7 @@ export function ItemDrawer({ afId }: ItemDrawerProps) {
       createDialog={
         <ItemDialog
           afId={afId}
-          title="Adicionar Item"
+          afNumero={afNumero}
           triggerLabel={
             <>
               <Plus /> Item

@@ -4,7 +4,7 @@ export async function countValoresForItem(
   prisma: PrismaClient,
   itemId: number,
 ): Promise<number> {
-  const item = await prisma.item.findUnique({
+  const item = await prisma.item.findUniqueOrThrow({
     where: {
       id: itemId,
     },

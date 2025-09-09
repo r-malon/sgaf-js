@@ -13,6 +13,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
+  TableFooter,
   TableRow,
 } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
@@ -27,6 +28,7 @@ export function DataTable<TData, TValue>({
   rowClassName,
 }: DataTableProps<TData, TValue>) {
   const columns = table.getAllLeafColumns()
+  const hasFooter = columns.some((column) => !!column.columnDef.footer)
 
   return (
     <div className="overflow-hidden rounded-md border">
@@ -70,6 +72,28 @@ export function DataTable<TData, TValue>({
             </TableRow>
           )}
         </TableBody>
+        {hasFooter && (
+          <TableFooter>
+            {table.getFooterGroups().map((footerGroup) => (
+              <TableRow key={footerGroup.id}>
+                {footerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    colSpan={header.colSpan}
+                    className="text-center"
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.footer,
+                          header.getContext(),
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableFooter>
+        )}
       </Table>
     </div>
   )

@@ -1,7 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
-import { CreateValorDto } from './dto/create-valor.dto'
-import { UpdateValorDto } from './dto/update-valor.dto'
 import { Valor } from '@sgaf/shared'
 
 @Injectable()
