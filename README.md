@@ -1,4 +1,43 @@
 # Sistema de Gestão de Autorizações de Fornecimento
 
 ## ER model
-![SGAF ER model](sgaf.mermaid)
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontFamily': 'monospace', 'primaryColor': '#ffffff', 'primaryTextColor': '#000000', 'primaryBorderColor': '#000000', 'lineColor': '#000000', 'secondaryColor': '#ffffff', 'tertiaryColor': '#ffffff', 'background': '#ffffff'}}}%%
+erDiagram
+	direction LR
+	AF {
+		int id PK
+		string numero UK
+		string fornecedor
+		string descricao
+		date data_inicio
+		date data_fim
+		boolean status
+	}
+	LOCAL {
+		int id PK
+		string nome UK
+		string nome_normalized UK
+	}
+	ITEM {
+		int id PK
+		int AF_id FK
+		int Local_id FK
+		string descricao
+		int banda_maxima
+		int banda_instalada
+		date data_instalacao
+		int quantidade
+		boolean status
+	}
+	VALOR {
+		int id PK
+		int Item_id FK
+		int valor
+		date data_inicio
+		date data_fim
+	}
+	AF ||--o{ ITEM : has
+	LOCAL ||--o{ ITEM : has
+	ITEM ||--|{ VALOR : has
+```
