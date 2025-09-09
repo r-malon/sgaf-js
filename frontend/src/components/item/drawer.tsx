@@ -18,11 +18,12 @@ export function ItemDrawer({ afId }: ItemDrawerProps) {
           <List /> Itens
         </Button>
       }
-      entityName="item"
+      entity="item"
       query={{ AF_id: afId }}
       columns={itemColumns}
       createDialog={
         <ItemDialog
+          afId={afId}
           title="Adicionar Item"
           triggerLabel={
             <>

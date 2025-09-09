@@ -24,7 +24,7 @@ import { useAPISWR } from '@/lib/hooks'
 interface GenericDrawerProps<T> {
   title: string
   trigger: React.ReactNode
-  entityName: string
+  entity: string
   query?: Record<string, any>
   columns: ColumnDef<T, any>[]
   createDialog?: React.ReactNode
@@ -33,14 +33,14 @@ interface GenericDrawerProps<T> {
 export function GenericDrawer<T>({
   title,
   trigger,
-  entityName,
+  entity,
   query,
   columns,
   createDialog,
 }: GenericDrawerProps<T>) {
   const [open, setOpen] = React.useState(false)
 
-  const { key } = useEntityHandlers(entityName)
+  const { key } = useEntityHandlers(entity)
   const { data, error, isLoading } = useAPISWR<T>(open ? key(query) : null)
   const [sorting, setSorting] = React.useState<SortingState>([])
 

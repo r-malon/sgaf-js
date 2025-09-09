@@ -38,7 +38,9 @@ export async function handleFetch<T>(
       description: data?.message ?? 'Erro inesperado',
     })
     throw new Error(
-      `HTTP ${data?.statusCode ?? res.status}: ${data?.message ?? res.statusText}`,
+      `HTTP ${data?.statusCode ?? res.status}: ${
+        data?.message ?? res.statusText
+      }`,
     )
   }
 
@@ -57,6 +59,14 @@ export function useEntityHandlers(entityName: string) {
     return `${baseURL}?${params.toString()}`
   }
 
+  async function revalidateAllEntityKeys() {
+    for (const k of cache.keys()) {
+      if (typeof k === 'string' && k.startsWith(baseURL)) {
+        await mutate(k)
+      }
+    }
+  }
+
   async function doRequest<T>(
     path: string,
     options: RequestInit,
@@ -65,7 +75,7 @@ export function useEntityHandlers(entityName: string) {
     const previous = getCachedData<T[]>(cache, path)
     try {
       await handleFetch(path, options)
-      await mutate(path) // revalidate exact path
+      await revalidateAllEntityKeys() // refresh all related queries
       toast.success(successMsg)
     } catch {
       if (previous) mutate(path, previous, false)
