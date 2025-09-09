@@ -1,0 +1,48 @@
+@startuml
+skinparam linetype ortho
+
+entity AF {
+  *id : Int <<PK>>
+  --
+  numero : String <<UNIQUE>>
+  fornecedor : String
+  descricao : String?
+  data_inicio : Date
+  data_fim : Date
+  status : Boolean
+}
+
+entity Local {
+  *id : Int <<PK>>
+  --
+  nome : String <<UNIQUE>>
+  nome_normalized : String <<UNIQUE>>
+}
+
+entity Item {
+  *id : Int <<PK>>
+  --
+  AF_id : Int <<FK>>
+  Local_id : Int <<FK>>
+  descricao : String?
+  banda_maxima : Int
+  banda_instalada : Int
+  data_instalacao : Date
+  quantidade : Int
+  status : Boolean
+}
+
+entity Valor {
+  *id : Int <<PK>>
+  --
+  Item_id : Int <<FK>>
+  valor : Int
+  data_inicio : Date
+  data_fim : Date?
+}
+
+AF ||--o{ Item : "items"
+Local ||--o{ Item : "items"
+Item ||--|{ Valor : "valores"
+
+@enduml
