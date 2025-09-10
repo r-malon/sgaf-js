@@ -6,21 +6,16 @@ import { DataTableColumnHeader } from '@/components/data-table-column-header'
 import { ItemActionCell } from '@/components/item/action-cell'
 import { DescriptionCell } from '@/components/description-cell'
 import { MoneyColumn } from '@/components/money-column'
+import { DescricaoColumnCell } from '@/components/descricao-column-cell'
 import { Item } from '@sgaf/shared'
 
 export const itemColumns: ColumnDef<Item>[] = [
   {
     accessorKey: 'descricao',
     header: 'Descrição',
-    cell: ({ row }) => {
-      const descricao = row.original.descricao ?? ''
-      if (descricao == '') return <Minus color="lightgray" />
-      return descricao.length > 20 ? (
-        <DescriptionCell trunc={20} text={descricao} />
-      ) : (
-        <span>{descricao}</span>
-      )
-    },
+    cell: ({ row }) => (
+      <DescricaoColumnCell descricao={row.original.descricao ?? ''} />
+    ),
   },
   {
     accessorKey: 'banda_maxima',

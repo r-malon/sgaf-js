@@ -27,7 +27,7 @@ export function AFActionCell({ af }: { af: any }) {
         },
         {
           key: 'delete',
-          show: (af) => af.item_count == 0,
+          show: (af) => af.item_count === 0,
           render: (af) => (
             <Button
               variant="destructive"

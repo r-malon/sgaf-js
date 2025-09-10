@@ -6,6 +6,7 @@ import { DataTableColumnHeader } from '@/components/data-table-column-header'
 import { AFActionCell } from '@/components/af/action-cell'
 import { DescriptionCell } from '@/components/description-cell'
 import { MoneyColumn } from '@/components/money-column'
+import { DescricaoColumnCell } from '@/components/descricao-column-cell'
 import { AF } from '@sgaf/shared'
 
 export const afColumns: ColumnDef<AF>[] = [
@@ -24,15 +25,9 @@ export const afColumns: ColumnDef<AF>[] = [
   {
     accessorKey: 'descricao',
     header: 'Descrição',
-    cell: ({ row }) => {
-      const descricao = row.original.descricao ?? ''
-      if (descricao == '') return <Minus color="lightgray" />
-      return descricao.length > 20 ? (
-        <DescriptionCell trunc={20} text={descricao} />
-      ) : (
-        <span>{descricao}</span>
-      )
-    },
+    cell: ({ row }) => (
+      <DescricaoColumnCell descricao={row.original.descricao ?? ''} />
+    ),
   },
   {
     accessorKey: 'data_inicio',

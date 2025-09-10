@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react'
 import { ColumnDef } from '@tanstack/react-table'
 import { DataTableColumnHeader } from '@/components/data-table-column-header'
 
@@ -9,6 +10,20 @@ interface MoneyColumnProps<T> {
   id?: string
   includeSumFooter?: boolean
 }
+
+const MoneyCell = memo(function MoneyCell({ value }: { value: number }) {
+  const cents = value ?? 0
+  return (
+    <span className="font-medium tabular-nums">
+      {new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(cents / 100)}
+    </span>
+  )
+})
 
 export function MoneyColumn<T>({
   header = 'Valor',
@@ -22,34 +37,13 @@ export function MoneyColumn<T>({
       <DataTableColumnHeader column={column} title={header} />
     ),
     accessorFn: accessor,
-    cell: ({ getValue }) => {
-      const cents = getValue<number>() ?? 0
-      return (
-        <span className="font-medium tabular-nums">
-          {new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL',
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          }).format(cents / 100)}
-        </span>
-      )
-    },
+    cell: ({ getValue }) => <MoneyCell value={getValue<number>() ?? 0} />,
     footer: includeSumFooter
       ? (props) => {
           const sumCents = props.table
             .getFilteredRowModel()
             .rows.reduce((acc, row) => acc + (accessor(row.original) ?? 0), 0)
-          return (
-            <span className="font-medium tabular-nums">
-              {new Intl.NumberFormat('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              }).format(sumCents / 100)}
-            </span>
-          )
+          return <MoneyCell value={sumCents} />
         }
       : undefined,
   }

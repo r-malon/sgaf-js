@@ -24,7 +24,7 @@ export function ItemActionCell({ item }: { item: any }) {
         },
         {
           key: 'delete',
-          show: (item) => item.valor_count == 0,
+          show: (item) => item.valor_count === 0,
           render: (item) => (
             <Button
               variant="destructive"

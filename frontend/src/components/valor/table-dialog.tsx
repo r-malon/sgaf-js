@@ -46,6 +46,10 @@ export function ValorTableDialog({
     state: { sorting },
     onSortingChange: setSorting,
   })
+  const rowClassName = React.useCallback(
+    (row) => (row.original.data_fim === null ? 'bg-green-100' : undefined),
+    [],
+  )
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -57,12 +61,7 @@ export function ValorTableDialog({
           <DialogTitle>Histórico</DialogTitle>
         </DialogHeader>
 
-        <DataTable
-          table={table}
-          rowClassName={(row) =>
-            row.original.data_fim === null ? 'bg-green-100' : undefined
-          }
-        />
+        <DataTable table={table} rowClassName={rowClassName} />
       </DialogContent>
     </Dialog>
   )

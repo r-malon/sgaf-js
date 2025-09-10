@@ -11,6 +11,7 @@ export function useAPISWR<T>(
 ) {
   const swr = useSWR<T[]>(key, key ? (url) => handleFetch<T[]>(url) : null, {
     refreshInterval: 6000,
+    dedupingInterval: 6000,
     revalidateOnFocus: true,
     revalidateOnReconnect: true,
     ...options,

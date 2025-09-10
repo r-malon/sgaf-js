@@ -1,6 +1,6 @@
 'use client'
 
-import * as React from 'react'
+import { memo, useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -14,12 +14,12 @@ interface DescriptionCellProps {
   title?: string
 }
 
-export function DescriptionCell({
+export const DescriptionCell = memo(function DescriptionCell({
   text,
   trunc,
   title = 'Descrição completa',
 }: DescriptionCellProps) {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = useState(false)
 
   return (
     <>
@@ -30,16 +30,18 @@ export function DescriptionCell({
         {text.slice(0, trunc).trimEnd() + '…'}
       </span>
 
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>{title}</DialogTitle>
-          </DialogHeader>
-          <div className="whitespace-pre-wrap max-h-[70vh] overflow-y-auto">
-            {text}
-          </div>
-        </DialogContent>
-      </Dialog>
+      {open && (
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>{title}</DialogTitle>
+            </DialogHeader>
+            <div className="whitespace-pre-wrap max-h-[70vh] overflow-y-auto">
+              {text}
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   )
-}
+})

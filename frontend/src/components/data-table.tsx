@@ -23,6 +23,27 @@ interface DataTableProps<TData, TValue> {
   rowClassName?: (row: Row<TData>) => string | undefined
 }
 
+const MemoizedTableRow = React.memo(function MemoizedTableRow<TData>({
+  row,
+  className,
+}: {
+  row: Row<TData>
+  className?: string
+}) {
+  return (
+    <TableRow
+      data-state={row.getIsSelected() && 'selected'}
+      className={cn(className)}
+    >
+      {row.getVisibleCells().map((cell) => (
+        <TableCell key={cell.id} className="text-center">
+          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        </TableCell>
+      ))}
+    </TableRow>
+  )
+})
+
 export function DataTable<TData, TValue>({
   table,
   rowClassName,
@@ -51,19 +72,15 @@ export function DataTable<TData, TValue>({
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
-                className={cn(rowClassName?.(row))}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="text-center">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
+            table
+              .getRowModel()
+              .rows.map((row) => (
+                <MemoizedTableRow
+                  key={row.id}
+                  row={row}
+                  className={rowClassName?.(row)}
+                />
+              ))
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">

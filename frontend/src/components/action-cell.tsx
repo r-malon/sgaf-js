@@ -12,14 +12,14 @@ interface ActionCellProps<T> {
   wrapperClassName?: string
 }
 
-export function ActionCell<T>({
-  entity,
-  actions,
-  wrapperClassName = 'flex gap-2',
-}: ActionCellProps<T>) {
-  return (
-    <div className={wrapperClassName}>
-      <>
+export const ActionCell = React.memo(
+  <T,>({
+    entity,
+    actions,
+    wrapperClassName = 'flex gap-2',
+  }: ActionCellProps<T>) => {
+    return (
+      <div className={wrapperClassName}>
         {actions.map((action, idx) => {
           if (action.show && !action.show(entity)) return null
           return (
@@ -28,7 +28,7 @@ export function ActionCell<T>({
             </React.Fragment>
           )
         })}
-      </>
-    </div>
-  )
-}
+      </div>
+    )
+  },
+)
