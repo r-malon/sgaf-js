@@ -10,6 +10,8 @@ export function useAPISWR<T>(
   options?: SWRConfiguration<T[], any>,
 ) {
   const swr = useSWR<T[]>(key, key ? (url) => handleFetch<T[]>(url) : null, {
+    refreshWhenHidden: false,
+    refreshWhenOffline: false,
     refreshInterval: 6000,
     dedupingInterval: 6000,
     revalidateOnFocus: true,

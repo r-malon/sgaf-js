@@ -22,7 +22,7 @@ import { useEntityHandlers } from '@/lib/handlers'
 import { useAPISWR } from '@/lib/hooks'
 
 interface GenericDrawerProps<T> {
-  title: string
+  title?: React.ReactElement | string
   trigger: React.ReactNode
   entity: string
   query?: Record<string, any>
@@ -59,7 +59,7 @@ export function GenericDrawer<T>({
       <DrawerTrigger asChild>{trigger}</DrawerTrigger>
       <DrawerContent className="p-4 space-y-4">
         <DrawerHeader className="flex items-center justify-between">
-          <DrawerTitle>{title}</DrawerTitle>
+          <DrawerTitle>{title ?? ''}</DrawerTitle>
           {createDialog}
         </DrawerHeader>
 

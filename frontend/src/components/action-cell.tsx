@@ -32,3 +32,5 @@ export const ActionCell = React.memo(
     )
   },
 )
+
+ActionCell.displayName = 'ActionCell'

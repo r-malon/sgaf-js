@@ -3,7 +3,7 @@
 | AF-1    | AF       | `numero` já existe em outra AF                           | ❌ Rejeitar criação (`numero` é único)                   |
 | AF-2    | AF       | `data_fim < data_inicio`                                 | ❌ Rejeitar criação/atualização                          |
 | AF-3    | AF       | Exclusão solicitada e existem `items` relacionados       | ❌ Não permitir exclusão                                 |
-| AF-4    | AF       | Status = `Ativa` e hoje > `data_fim`                     | 🔄 Transição automática para **Inativa**               |
+| AF-4    | AF       | Status = `Ativa` e hoje > `data_fim`                     | 🔄 Transição automática para **Inativa**                 |
 | AF-5    | AF       | Status = `Inativa` e usuário solicita reativação         | 🔄 Transição para **Ativa** (se dentro da vigência)      |
 | ITEM-1  | Item     | Relacionar item a mais de uma AF                         | ❌ Inválido (`AF_id` é obrigatório e único por item)     |
 | ITEM-2  | Item     | AF associada está `Inativa`                              | ❌ Não permitir criar ou atualizar item                  |

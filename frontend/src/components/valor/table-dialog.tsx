@@ -23,7 +23,7 @@ import { useAPISWR } from '@/lib/hooks'
 
 interface ValorTableDialogProps {
   itemId: number
-  triggerLabel?: string
+  triggerLabel?: React.ReactElement | string
 }
 
 export function ValorTableDialog({
@@ -45,6 +45,7 @@ export function ValorTableDialog({
     getSortedRowModel: getSortedRowModel(),
     state: { sorting },
     onSortingChange: setSorting,
+    debugAll: true,
   })
   const rowClassName = React.useCallback(
     (row) => (row.original.data_fim === null ? 'bg-green-100' : undefined),
