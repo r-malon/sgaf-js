@@ -7,8 +7,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Contrato {
+  id          Int      @id @default(autoincrement())
+  numero      String   @unique
+  nome  String
+  endereco  String
+  cpf  String
+  
+  afs       AF[]
+  
+  @@map("Contrato")
+}
+
 model AF {
   id          Int      @id @default(autoincrement())
+  Contrato_id Int
   numero      String   @unique
   fornecedor  String
   descricao   String?
@@ -16,9 +29,11 @@ model AF {
   data_fim    DateTime
   status      Boolean
   
+  contrato Contrato @relation(fields: [Contrato_id], references: [id], onDelete: Restrict)
   items       Item[]
   
   @@map("AF")
+  @@index([Contrato_id])
 }
 
 model Local {
