@@ -12,25 +12,25 @@ interface ActionCellProps<T> {
   wrapperClassName?: string
 }
 
-export const ActionCell = React.memo(
-  <T,>({
-    entity,
-    actions,
-    wrapperClassName = 'flex gap-2',
-  }: ActionCellProps<T>) => {
-    return (
-      <div className={wrapperClassName}>
-        {actions.map((action, idx) => {
-          if (action.show && !action.show(entity)) return null
-          return (
-            <React.Fragment key={action.key ?? idx}>
-              {action.render(entity)}
-            </React.Fragment>
-          )
-        })}
-      </div>
-    )
-  },
-)
+const ActionCellComponent = <T,>({
+  entity,
+  actions,
+  wrapperClassName = 'flex gap-2',
+}: ActionCellProps<T>) => {
+  return (
+    <div className={wrapperClassName}>
+      {actions.map((action, idx) => {
+        if (action.show && !action.show(entity)) return null
+        return (
+          <React.Fragment key={action.key ?? idx}>
+            {action.render(entity)}
+          </React.Fragment>
+        )
+      })}
+    </div>
+  )
+}
 
-ActionCell.displayName = 'ActionCell'
+ActionCellComponent.displayName = 'ActionCell'
+
+export const ActionCell = React.memo(ActionCellComponent) as typeof ActionCellComponent
