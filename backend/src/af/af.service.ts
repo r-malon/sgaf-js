@@ -4,7 +4,7 @@ import { CreateAfDto } from './dto/create-af.dto'
 import { UpdateAfDto } from './dto/update-af.dto'
 import { getAfTotal } from './af.total.service'
 import { countItemsForAF } from './af.item-count.service'
-import { AF } from '@sgaf/shared'
+import { type AF } from '@sgaf/shared'
 
 @Injectable()
 export class AfService {
@@ -14,7 +14,13 @@ export class AfService {
     const af = await this.prisma.aF.create({
       data: createAfDto,
     })
-    return { ...af, total: 0, item_count: 0 }
+    return {
+      ...af,
+      data_inicio: af.data_inicio.toISOString().slice(0, 10),
+      data_fim: af.data_fim.toISOString().slice(0, 10),
+      total: 0,
+      item_count: 0,
+    }
   }
 
   async findOne(id: number): Promise<AF | null> {
@@ -23,7 +29,13 @@ export class AfService {
     })
     const total = await getAfTotal(this.prisma, af.id)
     const item_count = await countItemsForAF(this.prisma, af.id)
-    return { ...af, total, item_count }
+    return {
+      ...af,
+      data_inicio: af.data_inicio.toISOString().slice(0, 10),
+      data_fim: af.data_fim.toISOString().slice(0, 10),
+      total,
+      item_count,
+    }
   }
 
   async findMany(): Promise<AF[]> {
@@ -32,6 +44,8 @@ export class AfService {
     return Promise.all(
       afs.map(async (af) => ({
         ...af,
+        data_inicio: af.data_inicio.toISOString().slice(0, 10),
+        data_fim: af.data_fim.toISOString().slice(0, 10),
         total: await getAfTotal(this.prisma, af.id),
         item_count: await countItemsForAF(this.prisma, af.id),
       })),
@@ -45,7 +59,13 @@ export class AfService {
     })
     const total = await getAfTotal(this.prisma, af.id)
     const item_count = await countItemsForAF(this.prisma, af.id)
-    return { ...af, total, item_count }
+    return {
+      ...af,
+      data_inicio: af.data_inicio.toISOString().slice(0, 10),
+      data_fim: af.data_fim.toISOString().slice(0, 10),
+      total,
+      item_count,
+    }
   }
 
   async delete(id: number): Promise<void> {

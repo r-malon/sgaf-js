@@ -4,12 +4,13 @@ import { ItemDialog } from '@/components/item/dialog'
 import { useEntityHandlers } from '@/lib/handlers'
 import { ActionCell } from '@/components/action-cell'
 import { ValorTableDialog } from '@/components/valor/table-dialog'
+import { type Item } from '@sgaf/shared'
 
-export function ItemActionCell({ item }: { item: any }) {
+export function ItemActionCell({ item }: { item: Item }) {
   const { handleEdit, handleDelete } = useEntityHandlers('item')
 
   return (
-    <ActionCell
+    <ActionCell<Item>
       entity={item}
       actions={[
         {

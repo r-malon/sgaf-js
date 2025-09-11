@@ -13,10 +13,10 @@ import { DataTableFilter } from '@/components/data-table-filter'
 import { AFDialog } from '@/components/af/dialog'
 import { LocalDialog } from '@/components/local/dialog'
 import { LocalCombobox } from '@/components/local/combobox'
-import { AF } from '@sgaf/shared'
 import { afColumns } from '@/components/af/columns'
 import { useAPISWR } from '@/lib/hooks'
 import { useEntityHandlers } from '@/lib/handlers'
+import { type AF } from '@sgaf/shared'
 
 export default function Home() {
   const { key } = useEntityHandlers('af')

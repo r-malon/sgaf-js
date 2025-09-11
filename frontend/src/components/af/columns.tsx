@@ -7,7 +7,7 @@ import { AFActionCell } from '@/components/af/action-cell'
 import { DescriptionCell } from '@/components/description-cell'
 import { MoneyColumn } from '@/components/money-column'
 import { DescricaoColumnCell } from '@/components/descricao-column-cell'
-import { AF } from '@sgaf/shared'
+import { type AF } from '@sgaf/shared'
 
 export const afColumns: ColumnDef<AF>[] = [
   {
@@ -34,14 +34,14 @@ export const afColumns: ColumnDef<AF>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Início" />
     ),
-    cell: ({ row }) => row.original.data_inicio.slice(0, 10),
+    cell: ({ row }) => row.original.data_inicio,
   },
   {
     accessorKey: 'data_fim',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Fim" />
     ),
-    cell: ({ row }) => row.original.data_fim.slice(0, 10),
+    cell: ({ row }) => row.original.data_fim,
   },
   {
     accessorKey: 'status',

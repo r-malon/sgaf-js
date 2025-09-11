@@ -1,12 +1,13 @@
 'use client'
 
 import * as React from 'react'
-import { afSchema } from '@sgaf/shared'
+import { z } from 'zod'
+import { type AF, afSchema } from '@sgaf/shared'
 import { GenericDialogForm } from '@/components/generic-dialog-form'
 import { useEntityHandlers } from '@/lib/handlers'
 
 interface AFDialogProps {
-  af?: z.infer<typeof afSchema>
+  af?: AF
   triggerLabel?: React.ReactElement | string
   title?: React.ReactElement | string
   onSubmit?: (values: z.infer<typeof afSchema>) => Promise<void>
@@ -28,8 +29,8 @@ export function AFDialog({
         numero: af?.numero ?? '',
         fornecedor: af?.fornecedor ?? '',
         descricao: af?.descricao ?? '',
-        data_inicio: af?.data_inicio?.slice(0, 10) ?? '',
-        data_fim: af?.data_fim?.slice(0, 10) ?? '',
+        data_inicio: af?.data_inicio ?? '',
+        data_fim: af?.data_fim ?? '',
         status: af?.status ?? true,
       }}
       fields={[

@@ -7,7 +7,8 @@ import { ItemActionCell } from '@/components/item/action-cell'
 import { DescriptionCell } from '@/components/description-cell'
 import { MoneyColumn } from '@/components/money-column'
 import { DescricaoColumnCell } from '@/components/descricao-column-cell'
-import { Item } from '@sgaf/shared'
+import { type Row } from '@tanstack/react-table'
+import { type Item } from '@sgaf/shared'
 
 export const itemColumns: ColumnDef<Item>[] = [
   {
@@ -34,13 +35,20 @@ export const itemColumns: ColumnDef<Item>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Instalação" />
     ),
-    cell: ({ row }) => row.original.data_instalacao.slice(0, 10),
+    cell: ({ row }) => row.original.data_instalacao,
   },
   {
     accessorKey: 'quantidade',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Qtd." />
     ),
+    footer: ({ table }) =>
+      table
+        .getFilteredRowModel()
+        .rows.reduce(
+          (total: number, row: Row<Item>) => total + row.getValue('quantidade'),
+          0,
+        ),
   },
   {
     accessorKey: 'status',

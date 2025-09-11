@@ -10,4 +10,9 @@ export const localSchema = z.object({
     .transform((v) => v.replace(/\s\s+/g, ' ')),
 })
 
-export type Local = z.infer<typeof localSchema>
+// For responses
+export const localOutputSchema = localSchema.safeExtend({
+  id: z.number().int().positive().readonly(),
+})
+
+export type Local = z.infer<typeof localOutputSchema>

@@ -5,13 +5,14 @@ import { ActionCell } from '@/components/action-cell'
 import { AFDialog } from '@/components/af/dialog'
 import { ItemDialog } from '@/components/item/dialog'
 import { ItemDrawer } from '@/components/item/drawer'
+import { type AF } from '@sgaf/shared'
 
-export function AFActionCell({ af }: { af: any }) {
+export function AFActionCell({ af }: { af: AF }) {
   const { handleEdit, handleDelete } = useEntityHandlers('af')
   const { handleCreate } = useEntityHandlers('item')
 
   return (
-    <ActionCell
+    <ActionCell<AF>
       entity={af}
       actions={[
         {

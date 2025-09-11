@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/popover'
 import { ChevronsUpDown, Trash2, Pencil } from 'lucide-react'
 import { LocalDialog } from '@/components/local/dialog'
-import { Local } from '@sgaf/shared'
+import { type Local } from '@sgaf/shared'
 import { useEntityHandlers } from '@/lib/handlers'
 import { useAPISWR } from '@/lib/hooks'
 

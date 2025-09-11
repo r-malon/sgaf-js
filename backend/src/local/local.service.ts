@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
 import { CreateLocalDto } from './dto/create-local.dto'
 import { UpdateLocalDto } from './dto/update-local.dto'
-import { Local } from '@sgaf/shared'
+import { type Local } from '@sgaf/shared'
 import { normalize } from '../utils/normalize'
 import { omit } from '../utils/omit'
 

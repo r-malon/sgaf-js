@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
-import { Valor } from '@sgaf/shared'
+import { type Valor } from '@sgaf/shared'
 
 @Injectable()
 export class ValorService {

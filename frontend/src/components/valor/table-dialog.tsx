@@ -17,7 +17,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { DataTable } from '@/components/data-table'
 import { valorColumns } from '@/components/valor/columns'
-import { Valor } from '@sgaf/shared'
+import { type Valor } from '@sgaf/shared'
 import { useEntityHandlers } from '@/lib/handlers'
 import { useAPISWR } from '@/lib/hooks'
 

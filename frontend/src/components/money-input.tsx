@@ -3,7 +3,8 @@
 import * as React from 'react'
 import { Input } from '@/components/ui/input'
 
-interface MoneyInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface MoneyInputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   value?: number // in cents
   onChange?: (value: number) => void
 }

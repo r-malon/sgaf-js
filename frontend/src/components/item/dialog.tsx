@@ -2,13 +2,13 @@
 
 import * as React from 'react'
 import { z } from 'zod'
-import { itemSchema } from '@sgaf/shared'
+import { type Item, itemSchema } from '@sgaf/shared'
 import { GenericDialogForm } from '@/components/generic-dialog-form'
 import { useEntityHandlers } from '@/lib/handlers'
 import { LocalCombobox } from '@/components/local/combobox'
 
 interface ItemDialogProps {
-  item?: z.infer<typeof itemSchema>
+  item?: Item
   afId: number
   afNumero?: string
   triggerLabel?: React.ReactElement | string
@@ -34,11 +34,11 @@ export function ItemDialog({
         descricao: item?.descricao ?? '',
         banda_maxima: item?.banda_maxima ?? 1,
         banda_instalada: item?.banda_instalada ?? 0,
-        data_instalacao: item?.data_instalacao?.slice(0, 10) ?? '',
+        data_instalacao: item?.data_instalacao ?? '',
         quantidade: item?.quantidade ?? 1,
         valor: item?.valor ?? 0,
         status: item?.status ?? true,
-        Local_id: item?.Local_id,
+        Local_id: item?.Local_id ?? null,
         AF_id: item?.AF_id ?? afId,
       }}
       fields={[

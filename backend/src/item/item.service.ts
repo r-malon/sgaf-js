@@ -4,7 +4,7 @@ import { CreateItemDto } from './dto/create-item.dto'
 import { UpdateItemDto } from './dto/update-item.dto'
 import { getItemTotal } from './item.total.service'
 import { countValoresForItem } from './item.valor-count.service'
-import { Item } from '@sgaf/shared'
+import { type Item } from '@sgaf/shared'
 import { omit } from '../utils/omit'
 
 @Injectable()
@@ -26,7 +26,12 @@ export class ItemService {
         },
       })
 
-      return { ...item, total: 0, valor_count: 1 }
+      return {
+        ...item,
+        data_instalacao: item.data_instalacao.toISOString().slice(0, 10),
+        total: 0,
+        valor_count: 1,
+      }
     })
   }
 
@@ -43,7 +48,12 @@ export class ItemService {
     const valor_count = await countValoresForItem(this.prisma, item.id)
 
     const { af, ...itemWithoutRelations } = item
-    return { ...itemWithoutRelations, total, valor_count }
+    return {
+      ...itemWithoutRelations,
+      data_instalacao: item.data_instalacao.toISOString().slice(0, 10),
+      total,
+      valor_count,
+    }
   }
 
   async findMany(): Promise<Item[]> {
@@ -60,7 +70,12 @@ export class ItemService {
         const valor_count = await countValoresForItem(this.prisma, item.id)
 
         const { af, ...itemWithoutRelations } = item
-        return { ...itemWithoutRelations, total, valor_count }
+        return {
+          ...itemWithoutRelations,
+          data_instalacao: item.data_instalacao.toISOString().slice(0, 10),
+          total,
+          valor_count,
+        }
       }),
     )
   }
@@ -80,7 +95,12 @@ export class ItemService {
         const valor_count = await countValoresForItem(this.prisma, item.id)
 
         const { af, ...itemWithoutRelations } = item
-        return { ...itemWithoutRelations, total, valor_count }
+        return {
+          ...itemWithoutRelations,
+          data_instalacao: item.data_instalacao.toISOString().slice(0, 10),
+          total,
+          valor_count,
+        }
       }),
     )
   }
@@ -124,7 +144,12 @@ export class ItemService {
     })
     const valor_count = await countValoresForItem(this.prisma, item.id)
 
-    return { ...item, total, valor_count }
+    return {
+      ...item,
+      data_instalacao: item.data_instalacao.toISOString().slice(0, 10),
+      total,
+      valor_count,
+    }
   }
 
   async delete(id: number): Promise<void> {
