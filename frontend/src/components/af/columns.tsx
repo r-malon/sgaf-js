@@ -34,14 +34,12 @@ export const afColumns: ColumnDef<AF>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Início" />
     ),
-    cell: ({ row }) => row.original.data_inicio,
   },
   {
     accessorKey: 'data_fim',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Fim" />
     ),
-    cell: ({ row }) => row.original.data_fim,
   },
   {
     accessorKey: 'status',

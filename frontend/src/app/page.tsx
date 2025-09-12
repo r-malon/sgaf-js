@@ -11,12 +11,13 @@ import { useState } from 'react'
 import { DataTable } from '@/components/data-table'
 import { DataTableFilter } from '@/components/data-table-filter'
 import { AFDialog } from '@/components/af/dialog'
+import { ContratoDialog } from '@/components/contrato/dialog'
 import { LocalDialog } from '@/components/local/dialog'
 import { LocalCombobox } from '@/components/local/combobox'
 import { afColumns } from '@/components/af/columns'
 import { useAPISWR } from '@/lib/hooks'
 import { useEntityHandlers } from '@/lib/handlers'
-import { type AF } from '@sgaf/shared'
+import { type AF, type Contrato } from '@sgaf/shared'
 
 export default function Home() {
   const { key } = useEntityHandlers('af')
@@ -40,6 +41,15 @@ export default function Home() {
       <div className="flex gap-4 items-center">
         <LocalDialog />
         <LocalCombobox />
+      </div>
+
+      <div className="flex gap-4 items-center">
+        <DataTableFilter
+          table={contratoTable}
+          columnId="numero"
+          placeholder="Buscar número"
+        />
+        <ContratoDialog />
       </div>
 
       <div className="flex gap-4 items-center">
