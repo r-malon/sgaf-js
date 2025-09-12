@@ -1,6 +1,10 @@
 import { z } from 'zod'
 
 const afBaseSchema = z.object({
+  Contrato_id: z.number().int().positive().readonly(),
+  principal: z.boolean({
+    error: () => 'Status inválido',
+  }),
   numero: z
     .string({
       error: (issue) =>
