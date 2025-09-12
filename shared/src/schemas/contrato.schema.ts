@@ -25,11 +25,14 @@ const contratoBaseSchema = z.object({
     .transform((v) => v.replace(/\s\s+/g, ' ')),
   cpf: z
     .string({
-      error: () => 'CPF é obrigatório',
+      error: () => 'CPF/CNPJ é obrigatório',
     })
     .trim()
     .min(1)
-    .transform((v) => v.replace(/\s\s+/g, ' ')),
+    .regex(
+      /^([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})$/g,
+      'CPF/CNPJ inválido',
+    ),
 })
 
 // For input DTOs

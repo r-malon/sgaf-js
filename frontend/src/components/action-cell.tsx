@@ -33,4 +33,6 @@ const ActionCellComponent = <T,>({
 
 ActionCellComponent.displayName = 'ActionCell'
 
-export const ActionCell = React.memo(ActionCellComponent) as typeof ActionCellComponent
+export const ActionCell = React.memo(
+  ActionCellComponent,
+) as typeof ActionCellComponent

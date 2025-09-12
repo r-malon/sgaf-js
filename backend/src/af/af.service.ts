@@ -12,7 +12,7 @@ export class AfService {
 
   async create(createAfDto: CreateAfDto): Promise<AF> {
     const af = await this.prisma.aF.create({
-      data: createAfDto,
+      data: { ...createAfDto, principal: false },
     })
     return {
       ...af,
@@ -49,6 +49,27 @@ export class AfService {
         total: await getAfTotal(this.prisma, af.id),
         item_count: await countItemsForAF(this.prisma, af.id),
       })),
+    )
+  }
+
+  async findManyByContrato(contratoId: number): Promise<AF[]> {
+    const afs = await this.prisma.aF.findMany({
+      where: { Contrato_id: contratoId },
+    })
+
+    return Promise.all(
+      afs.map(async (af) => {
+        const total = await getAfTotal(this.prisma, af.id)
+        const item_count = await countItemsForAF(this.prisma, af.id)
+
+        return {
+          ...af,
+          data_inicio: af.data_inicio.toISOString().slice(0, 10),
+          data_fim: af.data_fim.toISOString().slice(0, 10),
+          total,
+          item_count,
+        }
+      }),
     )
   }
 

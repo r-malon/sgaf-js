@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client'
-import { prorateTotal } from '../utils/prorate-total'
 import { getItemTotal } from '../item/item.total.service'
 
 export async function getAfTotal(

@@ -5,6 +5,7 @@ import {
   Body,
   Patch,
   Param,
+  Query,
   Delete,
   ParseIntPipe,
 } from '@nestjs/common'
@@ -22,7 +23,8 @@ export class AfController {
   }
 
   @Get()
-  async findMany() {
+  async findMany(@Query('Contrato_id') contratoId?: number) {
+    if (contratoId) return await this.afService.findManyByContrato(+contratoId)
     return await this.afService.findMany()
   }
 

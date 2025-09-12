@@ -4,8 +4,16 @@ import { ItemModule } from './item/item.module'
 import { LocalModule } from './local/local.module'
 import { ValorModule } from './valor/valor.module'
 import { PrismaModule } from './prisma/prisma.module'
+import { ContratoModule } from './contrato/contrato.module'
 
 @Module({
-  imports: [AfModule, ItemModule, LocalModule, ValorModule, PrismaModule],
+  imports: [
+    ContratoModule,
+    AfModule,
+    ItemModule,
+    LocalModule,
+    ValorModule,
+    PrismaModule,
+  ],
 })
 export class AppModule {}

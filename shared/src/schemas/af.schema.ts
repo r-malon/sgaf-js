@@ -2,9 +2,6 @@ import { z } from 'zod'
 
 const afBaseSchema = z.object({
   Contrato_id: z.number().int().positive().readonly(),
-  principal: z.boolean({
-    error: () => 'Status inválido',
-  }),
   numero: z
     .string({
       error: (issue) =>
@@ -48,6 +45,7 @@ export const afSchema = afBaseSchema
 // For responses
 export const afOutputSchema = afBaseSchema.safeExtend({
   id: z.number().int().positive().readonly(),
+  principal: z.boolean().readonly(),
   data_inicio: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato de data inválido'),

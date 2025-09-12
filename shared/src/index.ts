@@ -1,3 +1,4 @@
+export * from './schemas/contrato.schema'
 export * from './schemas/af.schema'
 export * from './schemas/local.schema'
 export * from './schemas/valor.schema'

@@ -137,7 +137,6 @@ export class ItemService {
       where: { id: item.AF_id },
       select: { data_inicio: true, data_fim: true },
     })
-
     const total = await getItemTotal(this.prisma, item.id, {
       afStart: af.data_inicio,
       afEnd: af.data_fim,
