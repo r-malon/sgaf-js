@@ -16,7 +16,7 @@ export function AFDrawer({ contratoId, contratoNumero }: AFDrawerProps) {
     <GenericDrawer
       trigger={
         <Button size="sm">
-          <List /> Itens
+          <List /> AFs
         </Button>
       }
       entity="af"

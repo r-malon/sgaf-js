@@ -74,6 +74,7 @@ export default function Home() {
 
   return (
     <main className="p-4 space-y-4">
+      <h1>Contratos</h1>
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
           <TabsTrigger value="contrato">Contratos</TabsTrigger>
