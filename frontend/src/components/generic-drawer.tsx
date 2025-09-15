@@ -39,10 +39,12 @@ export function GenericDrawer<T>({
   createDialog,
 }: GenericDrawerProps<T>) {
   const [open, setOpen] = React.useState(false)
+  const [sorting, setSorting] = React.useState<SortingState>([])
 
   const { key } = useEntityHandlers(entity)
-  const { data, error, isLoading } = useAPISWR<T>(open ? key(query) : null)
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const { data, error, isLoading } = useAPISWR<T>(open ? key(query) : null, {
+    keepPreviousData: true,
+  })
 
   const table = useReactTable({
     data: data ?? [],
@@ -53,6 +55,15 @@ export function GenericDrawer<T>({
     state: { sorting },
     onSortingChange: setSorting,
   })
+
+  React.useEffect(() => {
+    return () => {
+      table.reset()
+      setSorting([])
+    }
+  }, [table])
+
+  if (error) return <div>Error: {error.message}</div>
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>

@@ -56,7 +56,12 @@ export function ContratoActionCell({ contrato }: { contrato: Contrato }) {
         {
           key: 'list-afs',
           show: (contrato) => contrato.af_count > 0,
-          render: (contrato) => <AFDrawer contratoId={contrato.id} contratoNumero={contrato.numero} />,
+          render: (contrato) => (
+            <AFDrawer
+              contratoId={contrato.id}
+              contratoNumero={contrato.numero}
+            />
+          ),
         },
       ]}
     />

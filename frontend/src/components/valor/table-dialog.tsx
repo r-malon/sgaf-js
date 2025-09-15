@@ -36,6 +36,7 @@ export function ValorTableDialog({
   const { key } = useEntityHandlers('valor')
   const { data, error, isLoading } = useAPISWR<Valor>(
     open ? key({ Item_id: itemId }) : null,
+    { keepPreviousData: true }, // Throttle during unmount
   )
 
   const table = useReactTable({
@@ -45,12 +46,22 @@ export function ValorTableDialog({
     getSortedRowModel: getSortedRowModel(),
     state: { sorting },
     onSortingChange: setSorting,
-    debugAll: true,
   })
+
+  // Reset table state on unmount to stop recomputation
+  React.useEffect(() => {
+    return () => {
+      table.reset()
+      setSorting([])
+    }
+  }, [table])
+
   const rowClassName = React.useCallback(
     (row) => (row.original.data_fim === null ? 'bg-green-100' : undefined),
     [],
   )
+
+  if (error) return <div>Error: {error.message}</div>
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
