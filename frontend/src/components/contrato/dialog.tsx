@@ -36,7 +36,7 @@ export function ContratoDialog({
           name: 'numero',
           label: 'Número',
           type: 'text',
-          description: 'Formato: nnn/AAAA (ex: 123/2025)',
+          description: 'Formato: número/ano (ex: 123/2025)',
         },
         { name: 'nome', label: 'Nome', type: 'text' },
         { name: 'endereco', label: 'Endereço', type: 'text' },

@@ -9,7 +9,7 @@ const afBaseSchema = z.object({
           ? 'Número inválido'
           : 'Número é obrigatório',
     })
-    .regex(/^\d+\/\d{4}$/, 'Formato obrigatório: nnn/AAAA'),
+    .regex(/^\d+\/\d{4}$/, 'Formato: número/ano'),
   fornecedor: z
     .string({
       error: () => 'Fornecedor é obrigatório',

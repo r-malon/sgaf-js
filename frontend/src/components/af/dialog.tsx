@@ -8,6 +8,8 @@ import { useEntityHandlers } from '@/lib/handlers'
 
 interface AFDialogProps {
   af?: AF
+  contratoId: number
+  contratoNumero?: string
   triggerLabel?: React.ReactElement | string
   title?: React.ReactElement | string
   onSubmit?: (values: z.infer<typeof afSchema>) => Promise<void>
@@ -15,6 +17,8 @@ interface AFDialogProps {
 
 export function AFDialog({
   af,
+  contratoId,
+  contratoNumero,
   triggerLabel = 'Nova AF',
   title,
   onSubmit,
@@ -32,13 +36,14 @@ export function AFDialog({
         data_inicio: af?.data_inicio ?? '',
         data_fim: af?.data_fim ?? '',
         status: af?.status ?? true,
+        Contrato_id: af?.Contrato_id ?? contratoId,
       }}
       fields={[
         {
           name: 'numero',
           label: 'Número',
           type: 'text',
-          description: 'Formato: nnn/AAAA (ex: 123/2025)',
+          description: 'Formato: número/ano (ex: 123/2025)',
         },
         { name: 'fornecedor', label: 'Fornecedor', type: 'text' },
         { name: 'descricao', label: 'Descrição', type: 'textarea' },
@@ -54,7 +59,7 @@ export function AFDialog({
           if (isEdit) {
             await handleEdit(af.id, values)
           } else {
-            await handleCreate(values)
+            await handleCreate({ ...values, Contrato_id: contratoId })
           }
         })
       }

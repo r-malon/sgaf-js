@@ -39,30 +39,6 @@ export function ContratoActionCell({ contrato }: { contrato: Contrato }) {
             </Button>
           ),
         },
-        {
-          key: 'add-af',
-          render: (contrato) => (
-            <AFDialog
-              contratoId={contrato.id}
-              contratoNumero={contrato.numero}
-              triggerLabel={
-                <>
-                  <Plus /> AF
-                </>
-              }
-            />
-          ),
-        },
-        {
-          key: 'list-afs',
-          show: (contrato) => contrato.af_count > 0,
-          render: (contrato) => (
-            <AFDrawer
-              contratoId={contrato.id}
-              contratoNumero={contrato.numero}
-            />
-          ),
-        },
       ]}
     />
   )

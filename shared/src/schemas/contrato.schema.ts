@@ -8,7 +8,7 @@ const contratoBaseSchema = z.object({
           ? 'Número inválido'
           : 'Número é obrigatório',
     })
-    .regex(/^\d+\/\d{4}$/, 'Formato obrigatório: nnn/AAAA'),
+    .regex(/^\d+\/\d{4}$/, 'Formato: número/ano'),
   nome: z
     .string({
       error: () => 'Nome é obrigatório',
