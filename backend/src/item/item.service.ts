@@ -15,6 +15,7 @@ export class ItemService {
     return await this.prisma.$transaction(async (tx) => {
       const item = await tx.item.create({
         data: omit(createItemDto, ['valor']),
+        include: { local: { select: { nome: true } } }
       })
 
       await tx.valor.create({
@@ -28,6 +29,7 @@ export class ItemService {
 
       return {
         ...item,
+        local: item.local.nome,
         data_instalacao: item.data_instalacao.toISOString().slice(0, 10),
         total: 0,
         valor_count: 1,
@@ -38,7 +40,10 @@ export class ItemService {
   async findOne(id: number): Promise<Item | null> {
     const item = await this.prisma.item.findUniqueOrThrow({
       where: { id },
-      include: { af: { select: { data_inicio: true, data_fim: true } } },
+      include: {
+        af: { select: { data_inicio: true, data_fim: true } },
+        local: { select: { nome: true } }
+      },
     })
 
     const total = await getItemTotal(this.prisma, item.id, {
@@ -47,9 +52,10 @@ export class ItemService {
     })
     const valor_count = await countValoresForItem(this.prisma, item.id)
 
-    const { af, ...itemWithoutRelations } = item
+    const { af, local, ...itemWithoutRelations } = item
     return {
       ...itemWithoutRelations,
+      local: local.nome,
       data_instalacao: item.data_instalacao.toISOString().slice(0, 10),
       total,
       valor_count,
@@ -58,7 +64,10 @@ export class ItemService {
 
   async findMany(): Promise<Item[]> {
     const items = await this.prisma.item.findMany({
-      include: { af: { select: { data_inicio: true, data_fim: true } } },
+      include: {
+        af: { select: { data_inicio: true, data_fim: true } },
+        local: { select: { nome: true } }
+      },
     })
 
     return Promise.all(
@@ -69,9 +78,10 @@ export class ItemService {
         })
         const valor_count = await countValoresForItem(this.prisma, item.id)
 
-        const { af, ...itemWithoutRelations } = item
+        const { af, local, ...itemWithoutRelations } = item
         return {
           ...itemWithoutRelations,
+          local: local.nome,
           data_instalacao: item.data_instalacao.toISOString().slice(0, 10),
           total,
           valor_count,
@@ -83,7 +93,10 @@ export class ItemService {
   async findManyByAf(afId: number): Promise<Item[]> {
     const items = await this.prisma.item.findMany({
       where: { AF_id: afId },
-      include: { af: { select: { data_inicio: true, data_fim: true } } },
+      include: {
+        af: { select: { data_inicio: true, data_fim: true } },
+        local: { select: { nome: true } }
+      },
     })
 
     return Promise.all(
@@ -94,9 +107,10 @@ export class ItemService {
         })
         const valor_count = await countValoresForItem(this.prisma, item.id)
 
-        const { af, ...itemWithoutRelations } = item
+        const { af, local, ...itemWithoutRelations } = item
         return {
           ...itemWithoutRelations,
+          local: local.nome,
           data_instalacao: item.data_instalacao.toISOString().slice(0, 10),
           total,
           valor_count,
@@ -112,6 +126,7 @@ export class ItemService {
       const item = await tx.item.update({
         where: { id },
         data: omit(updateItemDto, ['valor']),
+        include: { local: { select: { nome: true } } }
       })
 
       await tx.valor.updateMany({
@@ -145,6 +160,7 @@ export class ItemService {
 
     return {
       ...item,
+      local: item.local.nome,
       data_instalacao: item.data_instalacao.toISOString().slice(0, 10),
       total,
       valor_count,

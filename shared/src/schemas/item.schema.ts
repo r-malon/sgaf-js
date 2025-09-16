@@ -54,6 +54,7 @@ export const itemSchema = itemBaseSchema
 // For responses
 export const itemOutputSchema = itemBaseSchema.safeExtend({
   id: z.number().int().positive().readonly(),
+  local: z.string(),
   data_instalacao: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato de data inválido'),

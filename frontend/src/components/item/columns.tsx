@@ -19,6 +19,12 @@ export const itemColumns: ColumnDef<Item>[] = [
     ),
   },
   {
+    accessorKey: 'local',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Local" />
+    ),
+  },
+  {
     accessorKey: 'banda_maxima',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Banda Máxima" />
@@ -35,7 +41,6 @@ export const itemColumns: ColumnDef<Item>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Instalação" />
     ),
-    cell: ({ row }) => row.original.data_instalacao,
   },
   {
     accessorKey: 'quantidade',
