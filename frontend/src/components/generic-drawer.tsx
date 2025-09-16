@@ -70,7 +70,7 @@ export function GenericDrawer<T>({
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>{trigger}</DrawerTrigger>
-      <DrawerContent className="p-4 space-y-4">
+      <DrawerContent className="p-4">
         <DrawerHeader className="flex items-center justify-between">
           <DrawerTitle>{title ?? ''}</DrawerTitle>
           {createDialog}

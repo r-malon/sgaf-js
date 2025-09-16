@@ -2,20 +2,19 @@
 
 import * as React from 'react'
 import { z } from 'zod'
+import { Plus } from 'lucide-react'
 import { localSchema, type Local } from '@sgaf/shared'
 import { GenericDialogForm } from '@/components/generic-dialog-form'
 import { useEntityHandlers } from '@/lib/handlers'
 
 interface LocalDialogProps {
   local?: Local
-  triggerLabel?: React.ReactElement | string
   title?: React.ReactElement | string
   onSubmit?: (values: z.infer<typeof localSchema>) => Promise<void>
 }
 
 export function LocalDialog({
   local,
-  triggerLabel = 'Novo Local',
   title,
   onSubmit,
 }: LocalDialogProps) {
@@ -30,7 +29,11 @@ export function LocalDialog({
       }}
       fields={[{ name: 'nome', label: 'Endereço', type: 'text' }]}
       title={title ?? (isEdit ? 'Editar Local' : 'Novo Local')}
-      triggerLabel={triggerLabel}
+      triggerLabel={
+        <>
+          <Plus /> Local
+        </>
+      }
       onSubmit={
         onSubmit ??
         (async (values) => {

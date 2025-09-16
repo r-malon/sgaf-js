@@ -14,6 +14,7 @@ interface AFDrawerProps {
 export function AFDrawer({ contratoId, contratoNumero }: AFDrawerProps) {
   return (
     <GenericDrawer
+      title={`AFs do contrato ${contratoNumero}`}
       trigger={
         <Button size="sm">
           <List /> AFs

@@ -14,6 +14,7 @@ interface ItemDrawerProps {
 export function ItemDrawer({ afId, afNumero }: ItemDrawerProps) {
   return (
     <GenericDrawer
+      title={`Itens da AF ${afNumero}`}
       trigger={
         <Button size="sm">
           <List /> Itens
