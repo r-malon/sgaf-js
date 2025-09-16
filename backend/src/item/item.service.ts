@@ -14,7 +14,10 @@ export class ItemService {
   async create(createItemDto: CreateItemDto) {
     return await this.prisma.$transaction(async (tx) => {
       const item = await tx.item.create({
-        data: omit(createItemDto, ['valor']),
+        data: {
+          ...omit(createItemDto, ['valor']),
+          data_instalacao: new Date(createItemDto.data_instalacao),
+        },
         include: { local: { select: { nome: true } } },
       })
 
@@ -125,7 +128,12 @@ export class ItemService {
 
       const item = await tx.item.update({
         where: { id },
-        data: omit(updateItemDto, ['valor']),
+        data: {
+          ...omit(updateItemDto, ['valor']),
+          data_instalacao: updateItemDto.data_instalacao
+            ? new Date(updateItemDto.data_instalacao)
+            : undefined,
+        },
         include: { local: { select: { nome: true } } },
       })
 

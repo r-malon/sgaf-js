@@ -28,5 +28,11 @@ export async function getItemTotal(
     select: { valor: true, data_inicio: true, data_fim: true },
   })
 
-  return prorateTotal(start!, end!, valores)
+  const formattedValores = valores.map((valor) => ({
+    ...valor,
+    data_inicio: valor.data_inicio.toISOString().slice(0, 10),
+    data_fim: valor.data_fim ? valor.data_fim.toISOString().slice(0, 10) : null,
+  }))
+
+  return prorateTotal(start!, end!, formattedValores)
 }

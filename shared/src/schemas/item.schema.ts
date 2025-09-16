@@ -4,6 +4,9 @@ const itemBaseSchema = z.object({
   AF_id: z.number().int().positive().readonly(),
   Local_id: z.number().int().positive().readonly(),
   descricao: z.string().trim().nullish(),
+  data_instalacao: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato de data inválido'),
   banda_maxima: z
     .number({
       error: () => 'Banda máxima é obrigatória',
@@ -29,12 +32,6 @@ const itemBaseSchema = z.object({
 
 // For input DTOs
 export const itemSchema = itemBaseSchema.safeExtend({
-  data_instalacao: z.coerce.date({
-    error: (issue) =>
-      issue.code === 'invalid_type'
-        ? 'Data de instalação inválida'
-        : 'Data de instalação é obrigatória',
-  }),
   valor: z
     .number({
       error: (issue) =>
@@ -54,9 +51,6 @@ export const itemSchema = itemBaseSchema.safeExtend({
 export const itemOutputSchema = itemBaseSchema.safeExtend({
   id: z.number().int().positive().readonly(),
   local: z.string(),
-  data_instalacao: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato de data inválido'),
   valor_count: z.number().int().nonnegative(),
   total: z.number().int().nonnegative(),
 })

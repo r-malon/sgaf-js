@@ -1,54 +1,41 @@
 import { z } from 'zod'
 
-const afBaseSchema = z.object({
-  Contrato_id: z.number().int().positive().readonly(),
-  numero: z
-    .string({
-      error: (issue) =>
-        issue.code === 'invalid_type'
-          ? 'Número inválido'
-          : 'Número é obrigatório',
-    })
-    .regex(/^\d+\/\d{4}$/, 'Formato: número/ano'),
-  fornecedor: z
-    .string({
-      error: () => 'Fornecedor é obrigatório',
-    })
-    .min(1),
-  descricao: z.string().trim().nullish(),
-  status: z.boolean({
-    error: () => 'Status inválido',
-  }),
-})
-
-// For input DTOs
-export const afSchema = afBaseSchema.safeExtend({
-  data_inicio: z.coerce.date({
-    error: (issue) =>
-      issue.code === 'invalid_type'
-        ? 'Data inicial inválida'
-        : 'Data inicial é obrigatória',
-  }),
-  data_fim: z.coerce.date({
-    error: (issue) =>
-      issue.code === 'invalid_type'
-        ? 'Data final inválida'
-        : 'Data final é obrigatória',
-  }),
-})
-.refine((data) => data.data_fim >= data.data_inicio, {
-  message: 'Data final não pode ser anterior à data inicial',
-  path: ['data_fim'],
-})
+export const afSchema = z
+  .object({
+    Contrato_id: z.number().int().positive().readonly(),
+    numero: z
+      .string({
+        error: (issue) =>
+          issue.code === 'invalid_type'
+            ? 'Número inválido'
+            : 'Número é obrigatório',
+      })
+      .regex(/^\d+\/\d{4}$/, 'Formato: número/ano'),
+    fornecedor: z
+      .string({
+        error: () => 'Fornecedor é obrigatório',
+      })
+      .min(1),
+    descricao: z.string().trim().nullish(),
+    status: z.boolean({
+      error: () => 'Status inválido',
+    }),
+    data_inicio: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato de data inválido'),
+    data_fim: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato de data inválido'),
+  })
+  .refine((data) => new Date(data.data_fim) >= new Date(data.data_inicio), {
+    message: 'Data final não pode ser anterior à data inicial',
+    path: ['data_fim'],
+  })
 
 // For responses
-export const afOutputSchema = afBaseSchema.safeExtend({
+export const afOutputSchema = afSchema.safeExtend({
   id: z.number().int().positive().readonly(),
   principal: z.boolean().readonly(),
-  data_inicio: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato de data inválido'),
-  data_fim: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato de data inválido'),
   item_count: z.number().int().nonnegative(),
   total: z.number().int().nonnegative(),
 })

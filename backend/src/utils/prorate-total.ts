@@ -11,15 +11,16 @@ export function prorateTotal(
   valores: Valor[],
 ): number {
   valores = [...valores].sort(
-    (a, b) => a.data_inicio.getTime() - b.data_inicio.getTime(),
+    (a, b) =>
+      new Date(a.data_inicio).getTime() - new Date(b.data_inicio).getTime(),
   )
 
   const effectiveAfEnd = addDays(afEnd, 1) // Treat as exclusive end
 
   const changePoints = new Set<Date>([afStart, effectiveAfEnd])
   valores.forEach((v) => {
-    changePoints.add(v.data_inicio)
-    if (v.data_fim) changePoints.add(addDays(v.data_fim, 1)) // Exclusive
+    changePoints.add(new Date(v.data_inicio))
+    if (v.data_fim) changePoints.add(addDays(new Date(v.data_fim), 1)) // Exclusive
   })
 
   let current = new Date(afStart.getFullYear(), afStart.getMonth(), 1)
@@ -50,8 +51,11 @@ export function prorateTotal(
 
     let activeValor: number | null = null
     for (const v of valores) {
-      const vEnd = v.data_fim ? addDays(v.data_fim, 1) : effectiveAfEnd
-      if (v.data_inicio <= segStartActual && segStartActual < vEnd) {
+      const vStart = new Date(v.data_inicio)
+      const vEnd = v.data_fim
+        ? addDays(new Date(v.data_fim), 1)
+        : effectiveAfEnd
+      if (vStart <= segStartActual && segStartActual < vEnd) {
         activeValor = v.valor
         break
       }

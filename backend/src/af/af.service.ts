@@ -15,7 +15,12 @@ export class AfService {
       where: { Contrato_id: createAfDto.Contrato_id },
     })
     const af = await this.prisma.aF.create({
-      data: { ...createAfDto, principal: existingCount === 0 },
+      data: {
+        ...createAfDto,
+        principal: existingCount === 0,
+        data_inicio: new Date(createAfDto.data_inicio),
+        data_fim: new Date(createAfDto.data_fim),
+      },
     })
     return {
       ...af,
@@ -79,7 +84,15 @@ export class AfService {
   async update(id: number, updateAfDto: UpdateAfDto): Promise<AF> {
     const af = await this.prisma.aF.update({
       where: { id },
-      data: updateAfDto,
+      data: {
+        ...updateAfDto,
+        data_inicio: updateAfDto.data_inicio
+          ? new Date(updateAfDto.data_inicio)
+          : undefined,
+        data_fim: updateAfDto.data_fim
+          ? new Date(updateAfDto.data_fim)
+          : undefined,
+      },
     })
     const total = await getAfTotal(this.prisma, af.id)
     const item_count = await countItemsForAF(this.prisma, af.id)
