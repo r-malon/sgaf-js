@@ -11,8 +11,11 @@ export class AfService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createAfDto: CreateAfDto): Promise<AF> {
+    const existingCount = await this.prisma.aF.count({
+      where: { Contrato_id: createAfDto.Contrato_id }
+    })
     const af = await this.prisma.aF.create({
-      data: { ...createAfDto, principal: false },
+      data: { ...createAfDto, principal: existingCount === 0 },
     })
     return {
       ...af,
