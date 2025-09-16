@@ -12,7 +12,7 @@ export class AfService {
 
   async create(createAfDto: CreateAfDto): Promise<AF> {
     const existingCount = await this.prisma.aF.count({
-      where: { Contrato_id: createAfDto.Contrato_id }
+      where: { Contrato_id: createAfDto.Contrato_id },
     })
     const af = await this.prisma.aF.create({
       data: { ...createAfDto, principal: existingCount === 0 },

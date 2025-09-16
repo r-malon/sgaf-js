@@ -1,4 +1,4 @@
-# Sistema de Gestão de Autorizações de Fornecimento (SGAF)
+# Sistema de Gestão de Autorizações de Fornecimento (SGAF) - DEPRECADO
 
 ## 1. Objetivo
 

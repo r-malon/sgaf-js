@@ -1,6 +1,15 @@
 @startuml
 skinparam linetype ortho
 
+entity Contrato {
+  *id : Int <<PK>>
+  --
+  numero : String <<UNIQUE>>
+  nome : String
+  endereco : String
+  cpf : String
+}
+
 entity AF {
   *id : Int <<PK>>
   --
@@ -41,6 +50,7 @@ entity Valor {
   data_fim : Date?
 }
 
+CONTRATO ||--o{ AF : "AFs"
 AF ||--o{ Item : "items"
 Local ||--o{ Item : "items"
 Item ||--|{ Valor : "valores"
