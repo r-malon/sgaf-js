@@ -76,7 +76,11 @@ export function GenericDrawer<T>({
           {createDialog}
         </DrawerHeader>
 
-        {isLoading ? <h1>Carregando...</h1> : <DataTable table={table} rowClassName={rowClassName} />}
+        {isLoading ? (
+          <h1>Carregando...</h1>
+        ) : (
+          <DataTable table={table} rowClassName={rowClassName} />
+        )}
       </DrawerContent>
     </Drawer>
   )

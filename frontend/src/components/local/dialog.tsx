@@ -10,12 +10,18 @@ import { useEntityHandlers } from '@/lib/handlers'
 interface LocalDialogProps {
   local?: Local
   title?: React.ReactElement | string
+  triggerLabel?: React.ReactElement | string
   onSubmit?: (values: z.infer<typeof localSchema>) => Promise<void>
 }
 
 export function LocalDialog({
   local,
   title,
+  triggerLabel = (
+    <>
+      <Plus /> Local
+    </>
+  ),
   onSubmit,
 }: LocalDialogProps) {
   const isEdit = !!local
@@ -29,11 +35,7 @@ export function LocalDialog({
       }}
       fields={[{ name: 'nome', label: 'Endereço', type: 'text' }]}
       title={title ?? (isEdit ? 'Editar Local' : 'Novo Local')}
-      triggerLabel={
-        <>
-          <Plus /> Local
-        </>
-      }
+      triggerLabel={triggerLabel}
       onSubmit={
         onSubmit ??
         (async (values) => {

@@ -23,7 +23,9 @@ export function AFDrawer({ contratoId, contratoNumero }: AFDrawerProps) {
       entity="af"
       query={{ Contrato_id: contratoId }}
       columns={afColumns}
-      rowClassName={(row) => (row.original.principal ? 'bg-green-100' : undefined)}
+      rowClassName={(row) =>
+        row.original.principal ? 'bg-green-100' : undefined
+      }
       createDialog={
         <AFDialog
           contratoId={contratoId}

@@ -15,7 +15,7 @@ export class ItemService {
     return await this.prisma.$transaction(async (tx) => {
       const item = await tx.item.create({
         data: omit(createItemDto, ['valor']),
-        include: { local: { select: { nome: true } } }
+        include: { local: { select: { nome: true } } },
       })
 
       await tx.valor.create({
@@ -42,7 +42,7 @@ export class ItemService {
       where: { id },
       include: {
         af: { select: { data_inicio: true, data_fim: true } },
-        local: { select: { nome: true } }
+        local: { select: { nome: true } },
       },
     })
 
@@ -66,7 +66,7 @@ export class ItemService {
     const items = await this.prisma.item.findMany({
       include: {
         af: { select: { data_inicio: true, data_fim: true } },
-        local: { select: { nome: true } }
+        local: { select: { nome: true } },
       },
     })
 
@@ -95,7 +95,7 @@ export class ItemService {
       where: { AF_id: afId },
       include: {
         af: { select: { data_inicio: true, data_fim: true } },
-        local: { select: { nome: true } }
+        local: { select: { nome: true } },
       },
     })
 
@@ -126,7 +126,7 @@ export class ItemService {
       const item = await tx.item.update({
         where: { id },
         data: omit(updateItemDto, ['valor']),
-        include: { local: { select: { nome: true } } }
+        include: { local: { select: { nome: true } } },
       })
 
       await tx.valor.updateMany({
