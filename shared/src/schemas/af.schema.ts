@@ -22,25 +22,24 @@ const afBaseSchema = z.object({
 })
 
 // For input DTOs
-export const afSchema = afBaseSchema
-  .safeExtend({
-    data_inicio: z.coerce.date({
-      error: (issue) =>
-        issue.code === 'invalid_type'
-          ? 'Data inicial inválida'
-          : 'Data inicial é obrigatória',
-    }),
-    data_fim: z.coerce.date({
-      error: (issue) =>
-        issue.code === 'invalid_type'
-          ? 'Data final inválida'
-          : 'Data final é obrigatória',
-    }),
-  })
-  .refine((data) => data.data_fim >= data.data_inicio, {
-    message: 'Data final não pode ser anterior à data inicial',
-    path: ['data_fim'],
-  })
+export const afSchema = afBaseSchema.safeExtend({
+  data_inicio: z.coerce.date({
+    error: (issue) =>
+      issue.code === 'invalid_type'
+        ? 'Data inicial inválida'
+        : 'Data inicial é obrigatória',
+  }),
+  data_fim: z.coerce.date({
+    error: (issue) =>
+      issue.code === 'invalid_type'
+        ? 'Data final inválida'
+        : 'Data final é obrigatória',
+  }),
+})
+.refine((data) => data.data_fim >= data.data_inicio, {
+  message: 'Data final não pode ser anterior à data inicial',
+  path: ['data_fim'],
+})
 
 // For responses
 export const afOutputSchema = afBaseSchema.safeExtend({

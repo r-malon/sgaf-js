@@ -28,28 +28,27 @@ const itemBaseSchema = z.object({
 })
 
 // For input DTOs
-export const itemSchema = itemBaseSchema
-  .safeExtend({
-    data_instalacao: z.coerce.date({
+export const itemSchema = itemBaseSchema.safeExtend({
+  data_instalacao: z.coerce.date({
+    error: (issue) =>
+      issue.code === 'invalid_type'
+        ? 'Data de instalação inválida'
+        : 'Data de instalação é obrigatória',
+  }),
+  valor: z
+    .number({
       error: (issue) =>
         issue.code === 'invalid_type'
-          ? 'Data de instalação inválida'
-          : 'Data de instalação é obrigatória',
-    }),
-    valor: z
-      .number({
-        error: (issue) =>
-          issue.code === 'invalid_type'
-            ? 'Valor inválido'
-            : 'Valor é obrigatório',
-      })
-      .int()
-      .nonnegative(),
-  })
-  .refine((data) => data.banda_maxima >= data.banda_instalada, {
-    message: 'Banda instalada não pode ser maior do que a banda máxima',
-    path: ['banda_instalada'],
-  })
+          ? 'Valor inválido'
+          : 'Valor é obrigatório',
+    })
+    .int()
+    .nonnegative(),
+})
+.refine((data) => data.banda_maxima >= data.banda_instalada, {
+  message: 'Banda instalada não pode ser maior do que a banda máxima',
+  path: ['banda_instalada'],
+})
 
 // For responses
 export const itemOutputSchema = itemBaseSchema.safeExtend({
