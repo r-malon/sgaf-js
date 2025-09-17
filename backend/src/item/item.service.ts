@@ -24,7 +24,7 @@ export class ItemService {
       await tx.valor.create({
         data: {
           valor: createItemDto.valor,
-          data_inicio: createItemDto.data_instalacao,
+          data_inicio: new Date(createItemDto.data_instalacao),
           data_fim: null,
           Item_id: item.id,
         },
