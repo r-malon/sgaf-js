@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS Item (
 	id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	AF_id INTEGER NOT NULL,
 	Local_id INTEGER NOT NULL,
-	descricao TEXT NOT NULL,
+	descricao TEXT,
 	banda_maxima INTEGER NOT NULL,
 	banda_instalada INTEGER NOT NULL,
 	data_instalacao TEXT NOT NULL,

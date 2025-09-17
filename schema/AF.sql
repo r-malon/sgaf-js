@@ -4,9 +4,9 @@ CREATE TABLE IF NOT EXISTS AF (
 	principal BOOLEAN NOT NULL,
 	numero INTEGER NOT NULL UNIQUE,
 	fornecedor TEXT NOT NULL,
-	descricao TEXT NOT NULL,
+	descricao TEXT,
 	data_inicio TEXT NOT NULL,
 	data_fim TEXT NOT NULL,
 	status BOOLEAN NOT NULL,
-	FOREIGN KEY (Contrato_id_id) REFERENCES Contrato(id) ON DELETE RESTRICT
+	FOREIGN KEY (Contrato_id) REFERENCES Contrato(id) ON DELETE RESTRICT
 );
