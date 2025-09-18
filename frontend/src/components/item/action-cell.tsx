@@ -29,7 +29,7 @@ export function ItemActionCell({ item }: { item: Item }) {
           render: (item) => (
             <Button
               variant="destructive"
-              size="sm"
+              size="icon"
               onClick={() => handleDelete(item.id)}
             >
               <Trash2 />

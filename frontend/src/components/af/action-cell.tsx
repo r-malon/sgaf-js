@@ -20,9 +20,8 @@ export function AFActionCell({ af }: { af: AF }) {
           render: (af) => (
             <AFDialog
               af={af}
+              contratoId={af.Contrato_id}
               triggerLabel={<Pencil />}
-              title="Editar AF"
-              onSubmit={(values) => handleEdit(af.id, values)}
             />
           ),
         },

@@ -38,7 +38,7 @@ export function ItemDialog({
         quantidade: item?.quantidade ?? 1,
         valor: item?.valor ?? 0,
         status: item?.status ?? true,
-        Local_id: item?.Local_id ?? null,
+        Local_id: item?.Local_id,
         AF_id: item?.AF_id ?? afId,
       }}
       fields={[
