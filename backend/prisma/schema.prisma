@@ -7,6 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Local {
+  id              Int    @id @default(autoincrement())
+  nome            String @unique
+  nome_normalized String @unique
+
+  items Item[]
+
+  @@map("Local")
+}
+
 model Contrato {
   id       Int    @id @default(autoincrement())
   numero   String @unique
@@ -30,26 +40,18 @@ model AF {
   data_fim    DateTime
   status      Boolean
 
-  contrato Contrato @relation(fields: [Contrato_id], references: [id], onDelete: Restrict)
-  items    Item[]
+  contrato       Contrato @relation(fields: [Contrato_id], references: [id], onDelete: Restrict)
+  items          Item[]
+  principalItems Item[]   @relation("principalItems")
+  valores        Valor[]
 
   @@index([Contrato_id])
   @@map("AF")
 }
 
-model Local {
-  id              Int    @id @default(autoincrement())
-  nome            String @unique
-  nome_normalized String @unique
-
-  items Item[]
-
-  @@map("Local")
-}
-
 model Item {
   id              Int      @id @default(autoincrement())
-  AF_id           Int
+  principal_id    Int
   Local_id        Int
   descricao       String?
   banda_maxima    Int
@@ -58,11 +60,12 @@ model Item {
   quantidade      Int
   status          Boolean
 
-  af      AF      @relation(fields: [AF_id], references: [id], onDelete: Restrict)
-  local   Local   @relation(fields: [Local_id], references: [id], onDelete: Restrict)
-  valores Valor[]
+  local     Local   @relation(fields: [Local_id], references: [id], onDelete: Restrict)
+  principal AF      @relation("principalItems", fields: [principal_id], references: [id], onDelete: Restrict)
+  afs       AF[]
+  valores   Valor[]
 
-  @@index([AF_id])
+  @@index([principal_id])
   @@index([Local_id])
   @@map("Item")
 }
@@ -70,12 +73,15 @@ model Item {
 model Valor {
   id          Int       @id @default(autoincrement())
   Item_id     Int
+  AF_id       Int
   valor       Int
   data_inicio DateTime
   data_fim    DateTime?
 
   item Item @relation(fields: [Item_id], references: [id], onDelete: Restrict)
+  af   AF   @relation(fields: [AF_id], references: [id], onDelete: Restrict)
 
   @@index([Item_id])
+  @@index([AF_id])
   @@map("Valor")
 }
