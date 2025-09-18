@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const valorBaseSchema = z.object({
+const valorBaseSchema = z.object({
   valor: z
     .number({
       error: (issue) =>
@@ -29,7 +29,15 @@ export const valorBaseSchema = z.object({
 
 // For input DTOs
 export const valorSchema = valorBaseSchema.safeExtend({
+  AF_id: z.number().int().positive().readonly(),
   Item_id: z.number().int().positive().readonly(),
+})
+
+export const attachToAfSchema = z.object({
+  AF_id: z.number().int().positive().readonly(),
+  items: z
+    .array(valorSchema)
+    .min(1, 'Pelo menos um item deve ser selecionado'),
 })
 
 export type Valor = z.infer<typeof valorBaseSchema>

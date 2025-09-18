@@ -10,10 +10,16 @@ import {
   ParseIntPipe,
 } from '@nestjs/common'
 import { ValorService } from './valor.service'
+import { AttachToAfDto } from './dto/attach-to-af.dto'
 
 @Controller('valor')
 export class ValorController {
   constructor(private readonly valorService: ValorService) {}
+
+  @Post()
+  async attachItemsToAf(@Body() dto: AttachToAfDto) {
+    await this.valorService.attachItemsToAf(dto)
+  }
 
   @Get()
   async findMany(@Query('Item_id') itemId?: number) {
