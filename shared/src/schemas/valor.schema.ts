@@ -33,11 +33,23 @@ export const valorSchema = valorBaseSchema.safeExtend({
   Item_id: z.number().int().positive().readonly(),
 })
 
+// For bulk attach items (no per-item AF_id)
+const attachItemPayloadSchema = valorBaseSchema.extend({
+  Item_id: z.number().int().positive().readonly(),
+})
+
 export const attachToAfSchema = z.object({
   AF_id: z.number().int().positive().readonly(),
   items: z
-    .array(valorSchema)
-    .min(1, 'Pelo menos um item deve ser selecionado'),
+    .array(attachItemPayloadSchema)
+    .min(1, 'Pelo menos um item deve ser selecionado')
+    .refine(
+      (data) => new Set(data.map(i => i.Item_id)).size === data.length,
+      {
+        message: 'Itens duplicados não são permitidos',
+        path: ['items'],
+      },
+    ),
 })
 
 export type Valor = z.infer<typeof valorBaseSchema>
