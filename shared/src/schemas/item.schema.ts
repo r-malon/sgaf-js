@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 const itemBaseSchema = z.object({
-  AF_id: z.number().int().positive().readonly(),
+  AF_id: z.number().int().positive().readonly(), // rename to principal_id?
   Local_id: z.number().int().positive().readonly(),
   descricao: z.string().trim().nullish(),
   data_instalacao: z
