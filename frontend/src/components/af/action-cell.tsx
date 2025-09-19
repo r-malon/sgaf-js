@@ -1,8 +1,9 @@
-import { Pencil, Plus, Trash2 } from 'lucide-react'
+import { Pencil, Plus, Link, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useEntityHandlers } from '@/lib/handlers'
 import { ActionCell } from '@/components/action-cell'
 import { AFDialog } from '@/components/af/dialog'
+import { AttachDialog } from '@/components/item/attach-dialog'
 import { ItemDialog } from '@/components/item/dialog'
 import { ItemDrawer } from '@/components/item/drawer'
 import { type AF } from '@sgaf/shared'
@@ -41,13 +42,24 @@ export function AFActionCell({ af }: { af: AF }) {
         {
           key: 'add-item',
           show: (af) => af.status,
-          render: (af) => (
+          render: (af) => af.principal ? (
             <ItemDialog
               afId={af.id}
               afNumero={af.numero}
               triggerLabel={
                 <>
                   <Plus /> Item
+                </>
+              }
+            />
+          ) : (
+            <AttachDialog
+              principalId={12} // temp
+              afId={af.id}
+              afNumero={af.numero}
+              triggerLabel={
+                <>
+                  <Link /> Itens
                 </>
               }
             />
