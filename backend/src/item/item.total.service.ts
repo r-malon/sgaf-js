@@ -4,27 +4,15 @@ import { prorateTotal } from '../utils/prorate-total'
 export async function getItemTotal(
   prisma: PrismaClient,
   itemId: number,
-  options?: { afStart?: Date; afEnd?: Date },
+  afId: number,
 ): Promise<number> {
-  let { afStart: start, afEnd: end } = options || {}
-
-  if (!start || !end) {
-    const item = await prisma.item.findUniqueOrThrow({
-      where: { id: itemId },
-      select: { AF_id: true },
-    })
-
-    const af = await prisma.aF.findUniqueOrThrow({
-      where: { id: item.AF_id },
-      select: { data_inicio: true, data_fim: true },
-    })
-
-    start ??= af.data_inicio
-    end ??= af.data_fim
-  }
+  const af = await prisma.aF.findUniqueOrThrow({
+    where: { id: afId },
+    select: { data_inicio: true, data_fim: true },
+  })
 
   const valores = await prisma.valor.findMany({
-    where: { Item_id: itemId },
+    where: { Item_id: itemId, AF_id: afId },
     select: { valor: true, data_inicio: true, data_fim: true },
   })
 
@@ -34,5 +22,5 @@ export async function getItemTotal(
     data_fim: valor.data_fim ? valor.data_fim.toISOString().slice(0, 10) : null,
   }))
 
-  return prorateTotal(start!, end!, formattedValores)
+  return prorateTotal(af.data_inicio, af.data_fim, formattedValores)
 }

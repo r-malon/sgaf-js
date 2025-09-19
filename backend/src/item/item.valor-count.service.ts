@@ -3,16 +3,10 @@ import { PrismaClient } from '@prisma/client'
 export async function countValoresForItem(
   prisma: PrismaClient,
   itemId: number,
+  afId?: number,
 ): Promise<number> {
-  const item = await prisma.item.findUniqueOrThrow({
-    where: {
-      id: itemId,
-    },
-    select: {
-      _count: {
-        select: { valores: true },
-      },
-    },
-  })
-  return item?._count.valores ?? 0
+  const where = { Item_id: itemId }
+  if (afId) where['AF_id'] = afId
+
+  return await prisma.valor.count({ where })
 }
