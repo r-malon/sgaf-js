@@ -27,6 +27,7 @@ export class ItemService {
           data_inicio: new Date(createItemDto.data_instalacao),
           data_fim: null,
           Item_id: item.id,
+          AF_id: createItemDto.principal_id,
         },
       })
 
@@ -41,21 +42,19 @@ export class ItemService {
   }
 
   async findOne(id: number): Promise<Item | null> {
+    // principal is a temp fix, pass afId like findManyByAf
     const item = await this.prisma.item.findUniqueOrThrow({
       where: { id },
       include: {
-        af: { select: { data_inicio: true, data_fim: true } },
+        principal: { select: { data_inicio: true, data_fim: true } },
         local: { select: { nome: true } },
       },
     })
 
-    const total = await getItemTotal(this.prisma, item.id, {
-      afStart: item.af.data_inicio,
-      afEnd: item.af.data_fim,
-    })
+    const total = await getItemTotal(this.prisma, item.id, item.principal_id)
     const valor_count = await countValoresForItem(this.prisma, item.id)
 
-    const { af, local, ...itemWithoutRelations } = item
+    const { principal, local, ...itemWithoutRelations } = item
     return {
       ...itemWithoutRelations,
       local: local.nome,
@@ -65,52 +64,44 @@ export class ItemService {
     }
   }
 
-  async findMany(): Promise<Item[]> {
-    const items = await this.prisma.item.findMany({
-      include: {
-        af: { select: { data_inicio: true, data_fim: true } },
-        local: { select: { nome: true } },
-      },
-    })
-
-    return Promise.all(
-      items.map(async (item) => {
-        const total = await getItemTotal(this.prisma, item.id, {
-          afStart: item.af.data_inicio,
-          afEnd: item.af.data_fim,
-        })
-        const valor_count = await countValoresForItem(this.prisma, item.id)
-
-        const { af, local, ...itemWithoutRelations } = item
-        return {
-          ...itemWithoutRelations,
-          local: local.nome,
-          data_instalacao: item.data_instalacao.toISOString().slice(0, 10),
-          total,
-          valor_count,
-        }
-      }),
-    )
-  }
-
   async findManyByAf(afId: number): Promise<Item[]> {
-    const items = await this.prisma.item.findMany({
-      where: { AF_id: afId },
-      include: {
-        af: { select: { data_inicio: true, data_fim: true } },
-        local: { select: { nome: true } },
-      },
+    const af = await this.prisma.aF.findUniqueOrThrow({
+      where: { id: afId },
+      select: { principal: true },
     })
+
+    let items: any[]
+    if (af.principal) {
+      items = await this.prisma.item.findMany({
+        where: { principal_id: afId },
+        include: {
+          local: { select: { nome: true } },
+        },
+      })
+    } else {
+      // Related AF: items via current Valor (data_fim: null)
+      const currentValores = await this.prisma.valor.findMany({
+        where: { AF_id: afId, data_fim: null },
+        include: {
+          item: {
+            include: { local: { select: { nome: true } } },
+          },
+        },
+      })
+      // Map to unique items (assume 1 current Valor per Item-AF)
+      items = currentValores.map((v) => v.item)
+    }
 
     return Promise.all(
       items.map(async (item) => {
-        const total = await getItemTotal(this.prisma, item.id, {
-          afStart: item.af.data_inicio,
-          afEnd: item.af.data_fim,
-        })
-        const valor_count = await countValoresForItem(this.prisma, item.id)
+        const total = await getItemTotal(this.prisma, item.id, afId)
+        const valor_count = await countValoresForItem(
+          this.prisma,
+          item.id,
+          afId,
+        )
 
-        const { af, local, ...itemWithoutRelations } = item
+        const { local, ...itemWithoutRelations } = item
         return {
           ...itemWithoutRelations,
           local: local.nome,
@@ -138,10 +129,8 @@ export class ItemService {
       })
 
       await tx.valor.updateMany({
-        where: { Item_id: item.id, data_fim: null },
-        data: {
-          data_fim: now,
-        },
+        where: { Item_id: item.id, AF_id: item.principal_id, data_fim: null },
+        data: { data_fim: now },
       })
 
       await tx.valor.create({
@@ -150,6 +139,7 @@ export class ItemService {
           data_inicio: now,
           data_fim: null,
           Item_id: item.id,
+          AF_id: updateItemDto.principal_id!, // temp
         },
       })
 
@@ -157,14 +147,19 @@ export class ItemService {
     })
 
     const af = await this.prisma.aF.findUniqueOrThrow({
-      where: { id: item.AF_id },
+      where: { id: item.principal_id },
       select: { data_inicio: true, data_fim: true },
     })
-    const total = await getItemTotal(this.prisma, item.id, {
-      afStart: af.data_inicio,
-      afEnd: af.data_fim,
-    })
-    const valor_count = await countValoresForItem(this.prisma, item.id)
+    const total = await getItemTotal(
+      this.prisma,
+      item.id,
+      updateItemDto.principal_id!,
+    )
+    const valor_count = await countValoresForItem(
+      this.prisma,
+      item.id,
+      updateItemDto.principal_id!,
+    )
 
     return {
       ...item,

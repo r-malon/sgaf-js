@@ -23,9 +23,8 @@ export class ItemController {
   }
 
   @Get()
-  async findMany(@Query('AF_id') afId?: number) {
-    if (afId) return await this.itemService.findManyByAf(+afId)
-    return await this.itemService.findMany()
+  async findMany(@Query('AF_id') afId: number) {
+    return await this.itemService.findManyByAf(+afId)
   }
 
   @Get(':id')
