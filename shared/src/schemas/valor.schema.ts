@@ -34,7 +34,7 @@ export const valorSchema = valorBaseSchema.safeExtend({
 })
 
 // For bulk attach items (no per-item AF_id)
-const attachItemPayloadSchema = valorBaseSchema.extend({
+const attachItemPayloadSchema = valorBaseSchema.safeExtend({
   Item_id: z.number().int().positive().readonly(),
 })
 
