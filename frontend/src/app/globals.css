@@ -112,12 +112,11 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-.lucide {
-  display: inline;}
+button { cursor: pointer; }
 
-.lucide-x,.lucide-check,.lucide-plus,.lucide-minus,.lucide-list {
-  stroke-width: 4;
-}
+.lucide { display: inline; }
+
+.lucide-x,.lucide-check,.lucide-plus,.lucide-minus,.lucide-list { stroke-width: 4; }
 
 @layer base {
   * {
