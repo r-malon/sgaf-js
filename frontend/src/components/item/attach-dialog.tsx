@@ -45,7 +45,9 @@ export function AttachDialog({
 }: AttachDialogProps) {
   const [open, setOpen] = useState(false)
   const { key } = useEntityHandlers('item')
-  const { data: principalItems = [], isLoading } = useAPISWR<Item>(key({ afId: principalId }))
+  const { data: principalItems = [], isLoading } = useAPISWR<Item>(
+    key({ afId: principalId }),
+  )
 
   const [selectedIds, setSelectedIds] = useState<number[]>([])
   const [stateById, setStateById] = useState<Record<number, SelectedState>>({})

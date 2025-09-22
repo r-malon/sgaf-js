@@ -57,6 +57,8 @@ export const afColumns: ColumnDef<AF>[] = [
   {
     id: 'actions',
     header: 'Ações',
-    cell: ({ row }) => <AFActionCell af={row.original} />,
+    cell: ({ row, ...rowProps }) => (
+      <AFActionCell af={row.original} {...rowProps} />
+    ),
   },
 ]

@@ -27,7 +27,8 @@ interface GenericDrawerProps<T> {
   entity: string
   query?: Record<string, any>
   columns: ColumnDef<T, any>[]
-  rowClassName?: (row: Row<TData>) => string | undefined
+  rowClassName?: (row: Row<T>) => string | undefined
+  rowProps?: Record<string, any>
   createDialog?: React.ReactNode
 }
 
@@ -38,6 +39,7 @@ export function GenericDrawer<T>({
   query,
   columns,
   rowClassName,
+  rowProps,
   createDialog,
 }: GenericDrawerProps<T>) {
   const [open, setOpen] = React.useState(false)
@@ -79,7 +81,11 @@ export function GenericDrawer<T>({
         {isLoading ? (
           <h1>Carregando...</h1>
         ) : (
-          <DataTable table={table} rowClassName={rowClassName} />
+          <DataTable
+            table={table}
+            rowClassName={rowClassName}
+            rowProps={rowProps}
+          />
         )}
       </DrawerContent>
     </Drawer>

@@ -21,14 +21,17 @@ import { cn } from '@/lib/utils'
 interface DataTableProps<TData, TValue> {
   table: ReactTable<TData>
   rowClassName?: (row: Row<TData>) => string | undefined
+  rowProps?: Record<string, any>
 }
 
 const MemoizedTableRow = React.memo(function MemoizedTableRow<TData>({
   row,
   className,
+  rowProps,
 }: {
   row: Row<TData>
   className?: string
+  rowProps?: Record<string, any>
 }) {
   return (
     <TableRow
@@ -37,7 +40,12 @@ const MemoizedTableRow = React.memo(function MemoizedTableRow<TData>({
     >
       {row.getVisibleCells().map((cell) => (
         <TableCell key={cell.id} className="text-center">
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          {cell.column.id === 'actions' && cell.column.columnDef.cell
+            ? flexRender(cell.column.columnDef.cell, {
+                ...cell.getContext(),
+                ...rowProps,
+              })
+            : flexRender(cell.column.columnDef.cell, cell.getContext())}
         </TableCell>
       ))}
     </TableRow>
@@ -47,6 +55,7 @@ const MemoizedTableRow = React.memo(function MemoizedTableRow<TData>({
 export function DataTable<TData, TValue>({
   table,
   rowClassName,
+  rowProps,
 }: DataTableProps<TData, TValue>) {
   const columns = table.getAllLeafColumns()
   const hasFooter = columns.some((column) => !!column.columnDef.footer)
@@ -79,6 +88,7 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   row={row}
                   className={rowClassName?.(row)}
+                  rowProps={rowProps}
                 />
               ))
           ) : (

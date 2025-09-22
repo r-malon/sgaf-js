@@ -8,9 +8,22 @@ import { ItemDialog } from '@/components/item/dialog'
 import { ItemDrawer } from '@/components/item/drawer'
 import { type AF } from '@sgaf/shared'
 
-export function AFActionCell({ af }: { af: AF }) {
+export function AFActionCell({
+  af,
+  principalId,
+}: {
+  af: AF
+  principalId?: number
+}) {
   const { handleEdit, handleDelete } = useEntityHandlers('af')
   const { handleCreate } = useEntityHandlers('item')
+
+  const effectivePrincipalId = af.principal
+    ? af.id
+    : (principalId ??
+      (() => {
+        throw new Error('AF principal necessária')
+      })())
 
   return (
     <ActionCell<AF>
@@ -42,28 +55,29 @@ export function AFActionCell({ af }: { af: AF }) {
         {
           key: 'add-item',
           show: (af) => af.status,
-          render: (af) => af.principal ? (
-            <ItemDialog
-              afId={af.id}
-              afNumero={af.numero}
-              triggerLabel={
-                <>
-                  <Plus /> Item
-                </>
-              }
-            />
-          ) : (
-            <AttachDialog
-              principalId={12} // temp
-              afId={af.id}
-              afNumero={af.numero}
-              triggerLabel={
-                <>
-                  <Link /> Itens
-                </>
-              }
-            />
-          ),
+          render: (af) =>
+            af.principal ? (
+              <ItemDialog
+                afId={af.id}
+                afNumero={af.numero}
+                triggerLabel={
+                  <>
+                    <Plus /> Item
+                  </>
+                }
+              />
+            ) : (
+              <AttachDialog
+                principalId={effectivePrincipalId}
+                afId={af.id}
+                afNumero={af.numero}
+                triggerLabel={
+                  <>
+                    <Link /> Itens
+                  </>
+                }
+              />
+            ),
         },
         {
           key: 'list-items',
