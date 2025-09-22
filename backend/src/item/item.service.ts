@@ -26,8 +26,8 @@ export class ItemService {
           valor: createItemDto.valor,
           data_inicio: new Date(createItemDto.data_instalacao),
           data_fim: null,
-          Item_id: item.id,
-          AF_id: createItemDto.principal_id,
+          itemId: item.id,
+          afId: createItemDto.principalId,
         },
       })
 
@@ -51,7 +51,7 @@ export class ItemService {
       },
     })
 
-    const total = await getItemTotal(this.prisma, item.id, item.principal_id)
+    const total = await getItemTotal(this.prisma, item.id, item.principalId)
     const valor_count = await countValoresForItem(this.prisma, item.id)
 
     const { principal, local, ...itemWithoutRelations } = item
@@ -73,7 +73,7 @@ export class ItemService {
     let items: any[]
     if (af.principal) {
       items = await this.prisma.item.findMany({
-        where: { principal_id: afId },
+        where: { principalId: afId },
         include: {
           local: { select: { nome: true } },
         },
@@ -81,7 +81,7 @@ export class ItemService {
     } else {
       // Related AF: items via current Valor (data_fim: null)
       const currentValores = await this.prisma.valor.findMany({
-        where: { AF_id: afId, data_fim: null },
+        where: { afId: afId, data_fim: null },
         include: {
           item: {
             include: { local: { select: { nome: true } } },
@@ -129,7 +129,7 @@ export class ItemService {
       })
 
       await tx.valor.updateMany({
-        where: { Item_id: item.id, AF_id: item.principal_id, data_fim: null },
+        where: { itemId: item.id, afId: item.principalId, data_fim: null },
         data: { data_fim: now },
       })
 
@@ -138,8 +138,8 @@ export class ItemService {
           valor: updateItemDto.valor!,
           data_inicio: now,
           data_fim: null,
-          Item_id: item.id,
-          AF_id: updateItemDto.principal_id!, // temp
+          itemId: item.id,
+          afId: updateItemDto.principalId!, // temp
         },
       })
 
@@ -147,18 +147,18 @@ export class ItemService {
     })
 
     const af = await this.prisma.aF.findUniqueOrThrow({
-      where: { id: item.principal_id },
+      where: { id: item.principalId },
       select: { data_inicio: true, data_fim: true },
     })
     const total = await getItemTotal(
       this.prisma,
       item.id,
-      updateItemDto.principal_id!,
+      updateItemDto.principalId!,
     )
     const valor_count = await countValoresForItem(
       this.prisma,
       item.id,
-      updateItemDto.principal_id!,
+      updateItemDto.principalId!,
     )
 
     return {

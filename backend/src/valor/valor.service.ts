@@ -11,12 +11,12 @@ export class ValorService {
     await this.prisma.$transaction(async (tx) => {
       const now = new Date(new Date(Date.now()).setUTCHours(0, 0, 0, 0))
 
-      for (const { Item_id, valor, data_inicio, data_fim } of dto.items) {
+      for (const { itemId, valor, data_inicio, data_fim } of dto.items) {
         // Close any existing open Valor for this Item-AF pair
         await tx.valor.updateMany({
           where: {
-            Item_id,
-            AF_id: dto.AF_id,
+            itemId,
+            afId: dto.afId,
             data_fim: null,
           },
           data: { data_fim: now },
@@ -24,8 +24,8 @@ export class ValorService {
 
         await tx.valor.create({
           data: {
-            Item_id,
-            AF_id: dto.AF_id,
+            itemId,
+            afId: dto.afId,
             valor,
             data_inicio: new Date(data_inicio),
             data_fim: data_fim ? new Date(data_fim) : null,
@@ -48,7 +48,7 @@ export class ValorService {
 
   async findManyByItem(itemId: number): Promise<Valor[]> {
     const valores = await this.prisma.valor.findMany({
-      where: { Item_id: itemId },
+      where: { itemId },
     })
     return valores.map((valor) => ({
       ...valor,

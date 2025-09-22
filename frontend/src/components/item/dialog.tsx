@@ -38,8 +38,8 @@ export function ItemDialog({
         quantidade: item?.quantidade ?? 1,
         valor: item?.valor ?? 0,
         status: item?.status ?? true,
-        Local_id: item?.Local_id,
-        AF_id: item?.AF_id ?? afId,
+        localId: item?.localId,
+        afId: item?.afId ?? afId,
       }}
       fields={[
         { name: 'descricao', label: 'Descrição', type: 'textarea' },
@@ -50,7 +50,7 @@ export function ItemDialog({
         { name: 'quantidade', label: 'Quantidade', type: 'number' },
         { name: 'status', label: 'Ativo?', type: 'switch' },
         {
-          name: 'Local_id',
+          name: 'localId',
           type: 'custom',
           render: (field) => (
             <LocalCombobox
@@ -71,7 +71,7 @@ export function ItemDialog({
           if (isEdit) {
             await handleEdit(item.id, values)
           } else {
-            await handleCreate({ ...values, AF_id: afId })
+            await handleCreate({ ...values, afId })
           }
         })
       }

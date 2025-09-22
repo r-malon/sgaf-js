@@ -45,7 +45,7 @@ export function AttachDialog({
 }: AttachDialogProps) {
   const [open, setOpen] = useState(false)
   const { key } = useEntityHandlers('item')
-  const { data: principalItems = [], isLoading } = useAPISWR<Item>(key({ AF_id: principalId }))
+  const { data: principalItems = [], isLoading } = useAPISWR<Item>(key({ afId: principalId }))
 
   const [selectedIds, setSelectedIds] = useState<number[]>([])
   const [stateById, setStateById] = useState<Record<number, SelectedState>>({})
@@ -135,13 +135,13 @@ export function AttachDialog({
 
     try {
       if (onSubmit) {
-        await onSubmit({ AF_id: afId, items: itemsPayload })
+        await onSubmit({ afId, items: itemsPayload })
       } else {
         // default behavior: POST to backend endpoint (optional)
         const res = await fetch(`${API_BASE_URL}/valor`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ AF_id: afId, items: itemsPayload }),
+          body: JSON.stringify({ afId, items: itemsPayload }),
         })
         if (!res.ok) {
           const body = await res.json().catch(() => ({}))

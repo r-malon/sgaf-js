@@ -12,7 +12,7 @@ export async function getItemTotal(
   })
 
   const valores = await prisma.valor.findMany({
-    where: { Item_id: itemId, AF_id: afId },
+    where: { itemId, afId: afId },
     select: { valor: true, data_inicio: true, data_fim: true },
   })
 

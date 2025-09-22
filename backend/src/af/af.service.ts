@@ -12,7 +12,7 @@ export class AfService {
 
   async create(createAfDto: CreateAfDto): Promise<AF> {
     const existingCount = await this.prisma.aF.count({
-      where: { Contrato_id: createAfDto.Contrato_id },
+      where: { contratoId: createAfDto.contratoId },
     })
     const af = await this.prisma.aF.create({
       data: {
@@ -62,7 +62,7 @@ export class AfService {
 
   async findManyByContrato(contratoId: number): Promise<AF[]> {
     const afs = await this.prisma.aF.findMany({
-      where: { Contrato_id: contratoId },
+      where: { contratoId },
     })
 
     return Promise.all(

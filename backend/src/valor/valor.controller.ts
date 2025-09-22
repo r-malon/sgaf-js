@@ -22,7 +22,7 @@ export class ValorController {
   }
 
   @Get()
-  async findMany(@Query('Item_id') itemId?: number) {
+  async findMany(@Query('itemId') itemId?: number) {
     if (itemId) return await this.valorService.findManyByItem(+itemId)
     return await this.valorService.findMany()
   }

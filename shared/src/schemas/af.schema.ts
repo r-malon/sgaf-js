@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const afSchema = z
   .object({
-    Contrato_id: z.number().int().positive().readonly(),
+    contratoId: z.number().int().positive().readonly(),
     numero: z
       .string({
         error: (issue) =>

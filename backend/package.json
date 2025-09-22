@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "db": "prisma validate && prisma generate && prisma migrate dev",
+    "db": "prisma format && prisma validate && prisma generate && prisma migrate dev",
     "build": "nest build",
     "clean": "rimraf dist/ tsconfig.build.tsbuildinfo",
     "start": "nest start",

@@ -23,7 +23,7 @@ export class AfController {
   }
 
   @Get()
-  async findMany(@Query('Contrato_id') contratoId?: number) {
+  async findMany(@Query('contratoId') contratoId?: number) {
     if (contratoId) return await this.afService.findManyByContrato(+contratoId)
     return await this.afService.findMany()
   }

@@ -35,7 +35,7 @@ export function ValorTableDialog({
 
   const { key } = useEntityHandlers('valor')
   const { data, error, isLoading } = useAPISWR<Valor>(
-    open ? key({ Item_id: itemId }) : null,
+    open ? key({ itemId }) : null,
     { keepPreviousData: true }, // Throttle during unmount
   )
 

@@ -1,8 +1,8 @@
 import { z } from 'zod'
 
 const itemBaseSchema = z.object({
-  principal_id: z.number().int().positive().readonly(),
-  Local_id: z.number().int().positive().readonly(),
+  principalId: z.number().int().positive().readonly(),
+  localId: z.number().int().positive().readonly(),
   descricao: z.string().trim().nullish(),
   data_instalacao: z
     .string()

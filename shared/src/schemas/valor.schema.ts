@@ -29,22 +29,22 @@ const valorBaseSchema = z.object({
 
 // For input DTOs
 export const valorSchema = valorBaseSchema.safeExtend({
-  AF_id: z.number().int().positive().readonly(),
-  Item_id: z.number().int().positive().readonly(),
+  afId: z.number().int().positive().readonly(),
+  itemId: z.number().int().positive().readonly(),
 })
 
-// For bulk attach items (no per-item AF_id)
+// For bulk attach items (no per-item afId)
 const attachItemPayloadSchema = valorBaseSchema.safeExtend({
-  Item_id: z.number().int().positive().readonly(),
+  itemId: z.number().int().positive().readonly(),
 })
 
 export const attachToAfSchema = z.object({
-  AF_id: z.number().int().positive().readonly(),
+  afId: z.number().int().positive().readonly(),
   items: z
     .array(attachItemPayloadSchema)
     .min(1, 'Pelo menos um item deve ser selecionado')
     .refine(
-      (data) => new Set(data.map(i => i.Item_id)).size === data.length,
+      (data) => new Set(data.map(i => i.itemId)).size === data.length,
       {
         message: 'Itens duplicados não são permitidos',
         path: ['items'],

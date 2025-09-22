@@ -21,7 +21,7 @@ export function AFDrawer({ contratoId, contratoNumero }: AFDrawerProps) {
         </Button>
       }
       entity="af"
-      query={{ Contrato_id: contratoId }}
+      query={{ contratoId }}
       columns={afColumns}
       rowClassName={(row) =>
         row.original.principal ? 'bg-blue-100' : undefined

@@ -21,7 +21,7 @@ export function AFActionCell({ af }: { af: AF }) {
           render: (af) => (
             <AFDialog
               af={af}
-              contratoId={af.Contrato_id}
+              contratoId={af.contratoId}
               triggerLabel={<Pencil />}
             />
           ),

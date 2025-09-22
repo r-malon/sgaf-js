@@ -10,7 +10,7 @@ export async function getContratoTotal(
   })
 
   const afs = await prisma.aF.findMany({
-    where: { Contrato_id: contratoId },
+    where: { contratoId },
     select: { id: true },
   })
 

@@ -31,7 +31,7 @@ model Contrato {
 
 model AF {
   id          Int      @id @default(autoincrement())
-  Contrato_id Int
+  contratoId  Int      @map("Contrato_id")
   principal   Boolean
   numero      String   @unique
   fornecedor  String
@@ -40,19 +40,19 @@ model AF {
   data_fim    DateTime
   status      Boolean
 
-  contrato       Contrato @relation(fields: [Contrato_id], references: [id], onDelete: Restrict)
+  contrato       Contrato @relation(fields: [contratoId], references: [id], onDelete: Restrict)
   items          Item[]
   principalItems Item[]   @relation("principalItems")
   valores        Valor[]
 
-  @@index([Contrato_id])
+  @@index([contratoId])
   @@map("AF")
 }
 
 model Item {
   id              Int      @id @default(autoincrement())
-  principal_id    Int
-  Local_id        Int
+  principalId     Int      @map("principal_id")
+  localId         Int      @map("Local_id")
   descricao       String?
   banda_maxima    Int
   banda_instalada Int
@@ -60,28 +60,28 @@ model Item {
   quantidade      Int
   status          Boolean
 
-  local     Local   @relation(fields: [Local_id], references: [id], onDelete: Restrict)
-  principal AF      @relation("principalItems", fields: [principal_id], references: [id], onDelete: Restrict)
+  local     Local   @relation(fields: [localId], references: [id], onDelete: Restrict)
+  principal AF      @relation("principalItems", fields: [principalId], references: [id], onDelete: Restrict)
   afs       AF[]
   valores   Valor[]
 
-  @@index([principal_id])
-  @@index([Local_id])
+  @@index([principalId])
+  @@index([localId])
   @@map("Item")
 }
 
 model Valor {
   id          Int       @id @default(autoincrement())
-  Item_id     Int
-  AF_id       Int
+  itemId      Int       @map("Item_id")
+  afId        Int       @map("AF_id")
   valor       Int
   data_inicio DateTime
   data_fim    DateTime?
 
-  item Item @relation(fields: [Item_id], references: [id], onDelete: Restrict)
-  af   AF   @relation(fields: [AF_id], references: [id], onDelete: Restrict)
+  item Item @relation(fields: [itemId], references: [id], onDelete: Restrict)
+  af   AF   @relation(fields: [afId], references: [id], onDelete: Restrict)
 
-  @@index([Item_id])
-  @@index([AF_id])
+  @@index([itemId])
+  @@index([afId])
   @@map("Valor")
 }

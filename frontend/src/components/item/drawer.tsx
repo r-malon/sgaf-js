@@ -21,7 +21,7 @@ export function ItemDrawer({ afId, afNumero }: ItemDrawerProps) {
         </Button>
       }
       entity="item"
-      query={{ AF_id: afId }}
+      query={{ afId }}
       columns={itemColumns}
       createDialog={
         <ItemDialog

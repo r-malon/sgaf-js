@@ -5,8 +5,8 @@ export async function countValoresForItem(
   itemId: number,
   afId?: number,
 ): Promise<number> {
-  const where = { Item_id: itemId }
-  if (afId) where['AF_id'] = afId
+  const where = { itemId }
+  if (afId) where['afId'] = afId
 
   return await prisma.valor.count({ where })
 }

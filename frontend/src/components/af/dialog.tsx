@@ -36,7 +36,7 @@ export function AFDialog({
         data_inicio: af?.data_inicio ?? '',
         data_fim: af?.data_fim ?? '',
         status: af?.status ?? true,
-        Contrato_id: af?.Contrato_id ?? contratoId,
+        contratoId: af?.contratoId ?? contratoId,
       }}
       fields={[
         {
@@ -59,7 +59,7 @@ export function AFDialog({
           if (isEdit) {
             await handleEdit(af.id, values)
           } else {
-            await handleCreate({ ...values, Contrato_id: contratoId })
+            await handleCreate({ ...values, contratoId })
           }
         })
       }
