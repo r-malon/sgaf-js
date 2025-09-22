@@ -51,7 +51,7 @@ export class ItemService {
       },
     })
 
-    const total = await getItemTotal(this.prisma, item.id, item.principalId)
+    const total = await getItemTotal(this.prisma, item.id, item.principalId) // temp
     const valor_count = await countValoresForItem(this.prisma, item.id)
 
     const { principal, local, ...itemWithoutRelations } = item
@@ -129,7 +129,7 @@ export class ItemService {
       })
 
       await tx.valor.updateMany({
-        where: { itemId: item.id, afId: item.principalId, data_fim: null },
+        where: { itemId: item.id, afId: item.principalId, data_fim: null }, // temp
         data: { data_fim: now },
       })
 
@@ -147,18 +147,18 @@ export class ItemService {
     })
 
     const af = await this.prisma.aF.findUniqueOrThrow({
-      where: { id: item.principalId },
+      where: { id: item.principalId }, // temp
       select: { data_inicio: true, data_fim: true },
     })
     const total = await getItemTotal(
       this.prisma,
       item.id,
-      updateItemDto.principalId!,
+      updateItemDto.principalId!, // temp
     )
     const valor_count = await countValoresForItem(
       this.prisma,
       item.id,
-      updateItemDto.principalId!,
+      updateItemDto.principalId!, // temp
     )
 
     return {
