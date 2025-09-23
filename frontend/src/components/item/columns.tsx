@@ -50,7 +50,8 @@ export const itemColumns: ColumnDef<Item>[] = [
       table
         .getFilteredRowModel()
         .rows.reduce(
-          (total: number, row: Row<Item>) => total + (row.getValue('quantidade') as number),
+          (total: number, row: Row<Item>) =>
+            total + (row.getValue('quantidade') as number),
           0,
         ),
   },

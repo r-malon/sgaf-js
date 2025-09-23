@@ -18,13 +18,6 @@ export function AFActionCell({
   const { handleEdit, handleDelete } = useEntityHandlers('af')
   const { handleCreate } = useEntityHandlers('item')
 
-  const effectivePrincipalId = af.principal
-    ? af.id
-    : (principalId ??
-      (() => {
-        throw new Error('AF principal necessária')
-      })())
-
   return (
     <ActionCell<AF>
       entity={af}
@@ -68,7 +61,7 @@ export function AFActionCell({
               />
             ) : (
               <AttachDialog
-                principalId={effectivePrincipalId}
+                principalId={af.principal ? af.id : principalId}
                 afId={af.id}
                 afNumero={af.numero}
                 triggerLabel={
