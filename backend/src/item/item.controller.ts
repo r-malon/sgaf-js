@@ -28,16 +28,20 @@ export class ItemController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
-    return await this.itemService.findOne(+id)
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('afId', ParseIntPipe) afId: number,
+  ) {
+    return await this.itemService.findOne(+id, afId)
   }
 
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateItemDto: UpdateItemDto,
+    @Query('afId', ParseIntPipe) afId: number,
   ) {
-    return await this.itemService.update(+id, updateItemDto)
+    return await this.itemService.update(+id, updateItemDto, afId)
   }
 
   @Delete(':id')

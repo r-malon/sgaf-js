@@ -41,8 +41,7 @@ export class ItemService {
     })
   }
 
-  async findOne(id: number): Promise<Item | null> {
-    // principal is a temp fix, pass afId like findManyByAf
+  async findOne(id: number, afId: number): Promise<Item | null> {
     const item = await this.prisma.item.findUniqueOrThrow({
       where: { id },
       include: {
@@ -51,7 +50,7 @@ export class ItemService {
       },
     })
 
-    const total = await getItemTotal(this.prisma, item.id, item.principalId) // temp
+    const total = await getItemTotal(this.prisma, item.id, afId)
     const valor_count = await countValoresForItem(this.prisma, item.id)
 
     const { principal, local, ...itemWithoutRelations } = item
@@ -113,7 +112,11 @@ export class ItemService {
     )
   }
 
-  async update(id: number, updateItemDto: UpdateItemDto): Promise<Item> {
+  async update(
+    id: number,
+    updateItemDto: UpdateItemDto,
+    afId: number,
+  ): Promise<Item> {
     const item = await this.prisma.$transaction(async (tx) => {
       const now = new Date(new Date(Date.now()).setUTCHours(0, 0, 0, 0))
 
@@ -129,7 +132,7 @@ export class ItemService {
       })
 
       await tx.valor.updateMany({
-        where: { itemId: item.id, afId: item.principalId, data_fim: null }, // temp
+        where: { itemId: item.id, afId: afId, data_fim: null },
         data: { data_fim: now },
       })
 
@@ -139,27 +142,15 @@ export class ItemService {
           data_inicio: now,
           data_fim: null,
           itemId: item.id,
-          afId: updateItemDto.principalId!, // temp
+          afId: afId,
         },
       })
 
       return item
     })
 
-    const af = await this.prisma.aF.findUniqueOrThrow({
-      where: { id: item.principalId }, // temp
-      select: { data_inicio: true, data_fim: true },
-    })
-    const total = await getItemTotal(
-      this.prisma,
-      item.id,
-      updateItemDto.principalId!, // temp
-    )
-    const valor_count = await countValoresForItem(
-      this.prisma,
-      item.id,
-      updateItemDto.principalId!, // temp
-    )
+    const total = await getItemTotal(this.prisma, item.id, afId)
+    const valor_count = await countValoresForItem(this.prisma, item.id, afId)
 
     return {
       ...item,
