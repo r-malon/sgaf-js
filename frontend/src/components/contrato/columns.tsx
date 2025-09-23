@@ -1,6 +1,6 @@
 'use client'
 
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef, type Row } from '@tanstack/react-table'
 import { DataTableColumnHeader } from '@/components/data-table-column-header'
 import { ContratoActionCell } from '@/components/contrato/action-cell'
 import { MoneyColumn } from '@/components/money-column'
@@ -41,7 +41,7 @@ export const contratoColumns: ColumnDef<Contrato>[] = [
         .getFilteredRowModel()
         .rows.reduce(
           (total: number, row: Row<Contrato>) =>
-            total + row.getValue('af_count'),
+            total + (row.getValue('af_count') as number),
           0,
         ),
   },

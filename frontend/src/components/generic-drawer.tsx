@@ -11,6 +11,7 @@ import {
 import { DataTable } from '@/components/data-table'
 import { DataTableFilter } from '@/components/data-table-filter'
 import {
+  type Row,
   useReactTable,
   getCoreRowModel,
   getFilteredRowModel,

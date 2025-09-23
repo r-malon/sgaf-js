@@ -1,13 +1,12 @@
 'use client'
 
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef, type Row } from '@tanstack/react-table'
 import { Minus, Check, X } from 'lucide-react'
 import { DataTableColumnHeader } from '@/components/data-table-column-header'
 import { ItemActionCell } from '@/components/item/action-cell'
 import { DescriptionCell } from '@/components/description-cell'
 import { MoneyColumn } from '@/components/money-column'
 import { DescricaoColumnCell } from '@/components/descricao-column-cell'
-import { type Row } from '@tanstack/react-table'
 import { type Item } from '@sgaf/shared'
 
 export const itemColumns: ColumnDef<Item>[] = [
@@ -51,7 +50,7 @@ export const itemColumns: ColumnDef<Item>[] = [
       table
         .getFilteredRowModel()
         .rows.reduce(
-          (total: number, row: Row<Item>) => total + row.getValue('quantidade'),
+          (total: number, row: Row<Item>) => total + (row.getValue('quantidade') as number),
           0,
         ),
   },
