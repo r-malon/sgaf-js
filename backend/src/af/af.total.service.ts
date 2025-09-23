@@ -5,9 +5,7 @@ export async function getAfTotal(
   prisma: PrismaClient,
   afId: number,
 ): Promise<number> {
-  const items = await prisma.item.findMany({
-    select: { id: true },
-  })
+  const items = await prisma.item.findMany({ select: { id: true } })
 
   const totals = await Promise.all(
     items.map((item) => getItemTotal(prisma, item.id, afId)),
