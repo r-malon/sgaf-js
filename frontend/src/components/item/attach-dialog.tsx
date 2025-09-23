@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { z } from 'zod'
 import { useState, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import {
@@ -15,7 +16,7 @@ import { Input } from '@/components/ui/input'
 import { MoneyInput } from '@/components/money-input'
 import { useEntityHandlers } from '@/lib/handlers'
 import { useAPISWR } from '@/lib/hooks'
-import { type Item } from '@sgaf/shared'
+import { type Item, attachToAfSchema } from '@sgaf/shared'
 
 type SelectedState = {
   valor: number
@@ -42,13 +43,17 @@ export function AttachDialog({
   const [selectedIds, setSelectedIds] = useState<number[]>([])
   const [stateById, setStateById] = useState<Record<number, SelectedState>>({})
 
-  const { key } = useEntityHandlers('item')
-  const { data: principalItems = [], isLoading } = useAPISWR<Item>(
-    key({ afId: principalId }),
-  )
   const { handleCreate } = useEntityHandlers('valor')
+  const { key } = useEntityHandlers('item')
+  const { data: principalItems = [], isLoading: loadingPrincipal } =
+    useAPISWR<Item>(key({ afId: principalId }))
+  const { data: attachedItems = [], isLoading: loadingAttached } =
+    useAPISWR<Item>(key({ afId }))
 
-  const availableItems = useMemo(() => principalItems, [principalItems])
+  const availableItems = useMemo(() => {
+    const attachedIds = new Set(attachedItems.map((item) => item.id))
+    return principalItems.filter((item) => !attachedIds.has(item.id))
+  }, [principalItems, attachedItems])
 
   React.useEffect(() => {
     if (!open) return
@@ -56,7 +61,7 @@ export function AttachDialog({
       const updated = { ...prev }
       selectedIds.forEach((id) => {
         if (!updated[id]) {
-          const item = principalItems.find((i) => i.id === id)
+          const item = availableItems.find((i) => i.id === id)
           updated[id] = {
             valor: 0,
             data_inicio: item?.data_instalacao ?? '',
@@ -66,7 +71,7 @@ export function AttachDialog({
       })
       return updated
     })
-  }, [open, selectedIds, principalItems])
+  }, [open, selectedIds, availableItems])
 
   function handleSelectChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const selected = Array.from(e.target.selectedOptions, (o) =>
@@ -134,7 +139,7 @@ export function AttachDialog({
               onChange={handleSelectChange}
               className="w-full border rounded-md p-2 h-48"
             >
-              {isLoading ? (
+              {loadingPrincipal || loadingAttached ? (
                 <option disabled>Carregando...</option>
               ) : availableItems.length === 0 ? (
                 <option disabled>Nenhum item encontrado</option>
@@ -152,7 +157,7 @@ export function AttachDialog({
             <div className="space-y-3">
               <h3 className="font-medium">Configurar valores por item</h3>
               {selectedIds.map((id) => {
-                const item = principalItems.find((p) => p.id === id)
+                const item = availableItems.find((p) => p.id === id)
                 const state = stateById[id]
                 if (!state) return null
 
