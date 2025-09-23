@@ -25,7 +25,7 @@ export function ItemDrawer({ afId, afNumero }: ItemDrawerProps) {
       columns={itemColumns}
       createDialog={
         <ItemDialog
-          afId={afId}
+          principalId={afId}
           afNumero={afNumero}
           triggerLabel={
             <>

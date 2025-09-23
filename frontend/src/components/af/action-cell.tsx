@@ -58,7 +58,7 @@ export function AFActionCell({
           render: (af) =>
             af.principal ? (
               <ItemDialog
-                afId={af.id}
+                principalId={af.id}
                 afNumero={af.numero}
                 triggerLabel={
                   <>

@@ -18,7 +18,7 @@ export function ItemActionCell({ item }: { item: Item }) {
           render: (item) => (
             <ItemDialog
               item={item}
-              afId={item.afId}
+              principalId={item.principalId}
               triggerLabel={<Pencil />}
             />
           ),

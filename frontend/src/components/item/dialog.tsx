@@ -9,7 +9,7 @@ import { LocalCombobox } from '@/components/local/combobox'
 
 interface ItemDialogProps {
   item?: Item
-  afId: number
+  principalId: number
   afNumero?: string
   triggerLabel?: React.ReactElement | string
   title?: React.ReactElement | string
@@ -18,7 +18,7 @@ interface ItemDialogProps {
 
 export function ItemDialog({
   item,
-  afId,
+  principalId,
   afNumero,
   triggerLabel = 'Novo Item',
   title,
@@ -39,7 +39,7 @@ export function ItemDialog({
         valor: item?.valor ?? 0,
         status: item?.status ?? true,
         localId: item?.localId,
-        afId: item?.afId ?? afId,
+        principalId: item?.principalId ?? principalId,
       }}
       fields={[
         { name: 'descricao', label: 'Descrição', type: 'textarea' },
@@ -71,7 +71,7 @@ export function ItemDialog({
           if (isEdit) {
             await handleEdit(item.id, values)
           } else {
-            await handleCreate({ ...values, afId })
+            await handleCreate({ ...values, principalId })
           }
         })
       }
