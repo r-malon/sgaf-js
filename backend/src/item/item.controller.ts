@@ -39,9 +39,8 @@ export class ItemController {
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateItemDto: UpdateItemDto,
-    @Query('afId', ParseIntPipe) afId: number,
   ) {
-    return await this.itemService.update(+id, updateItemDto, afId)
+    return await this.itemService.update(+id, updateItemDto)
   }
 
   @Delete(':id')

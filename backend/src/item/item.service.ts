@@ -112,45 +112,24 @@ export class ItemService {
     )
   }
 
-  async update(
-    id: number,
-    updateItemDto: UpdateItemDto,
-    afId: number,
-  ): Promise<Item> {
-    const item = await this.prisma.$transaction(async (tx) => {
-      const now = new Date(new Date(Date.now()).setUTCHours(0, 0, 0, 0))
-
-      const item = await tx.item.update({
-        where: { id },
-        data: {
-          ...omit(updateItemDto, ['valor']),
-          data_instalacao: updateItemDto.data_instalacao
-            ? new Date(updateItemDto.data_instalacao)
-            : undefined,
-        },
-        include: { local: { select: { nome: true } } },
-      })
-
-      await tx.valor.updateMany({
-        where: { itemId: item.id, afId: afId, data_fim: null },
-        data: { data_fim: now },
-      })
-
-      await tx.valor.create({
-        data: {
-          valor: updateItemDto.valor!,
-          data_inicio: now,
-          data_fim: null,
-          itemId: item.id,
-          afId: afId,
-        },
-      })
-
-      return item
+  async update(id: number, updateItemDto: UpdateItemDto): Promise<Item> {
+    const item = await this.prisma.item.update({
+      where: { id },
+      data: {
+        ...omit(updateItemDto, ['valor']),
+        data_instalacao: updateItemDto.data_instalacao
+          ? new Date(updateItemDto.data_instalacao)
+          : undefined,
+      },
+      include: { local: { select: { nome: true } } },
     })
 
-    const total = await getItemTotal(this.prisma, item.id, afId)
-    const valor_count = await countValoresForItem(this.prisma, item.id, afId)
+    const total = await getItemTotal(this.prisma, item.id, item.principalId)
+    const valor_count = await countValoresForItem(
+      this.prisma,
+      item.id,
+      item.principalId,
+    )
 
     return {
       ...item,
