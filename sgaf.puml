@@ -1,58 +1,63 @@
 @startuml
 skinparam linetype ortho
 
-entity Contrato {
-  *id : Int <<PK>>
+entity "Local" {
+  * id : int <<PK>> <<autoincrement()>>
   --
-  numero : String <<UNIQUE>>
-  nome : String
-  endereco : String
-  cpf : String
+  nome : string <<UK>>
+  nome_normalized : string <<UK>>
 }
 
-entity AF {
-  *id : Int <<PK>>
+entity "Contrato" {
+  * id : int <<PK>> <<autoincrement()>>
   --
-  numero : String <<UNIQUE>>
-  fornecedor : String
-  descricao : String?
-  data_inicio : Date
-  data_fim : Date
-  status : Boolean
+  numero : string <<UK>>
+  nome : string
+  endereco : string
+  cpf : string
 }
 
-entity Local {
-  *id : Int <<PK>>
+entity "AF" {
+  * id : int <<PK>> <<autoincrement()>>
   --
-  nome : String <<UNIQUE>>
-  nome_normalized : String <<UNIQUE>>
+  contratoId : int <<FK>> <<Contrato_id>>
+  principal : boolean
+  numero : string <<UK>>
+  fornecedor : string
+  descricao : string <<optional>>
+  data_inicio : datetime
+  data_fim : datetime
+  status : boolean
 }
 
-entity Item {
-  *id : Int <<PK>>
+entity "Item" {
+  * id : int <<PK>> <<autoincrement()>>
   --
-  AF_id : Int <<FK>>
-  Local_id : Int <<FK>>
-  descricao : String?
-  banda_maxima : Int
-  banda_instalada : Int
-  data_instalacao : Date
-  quantidade : Int
-  status : Boolean
+  principalId : int <<FK>> <<principal_id>>
+  localId : int <<FK>> <<Local_id>>
+  descricao : string <<optional>>
+  banda_maxima : int
+  banda_instalada : int
+  data_instalacao : datetime
+  quantidade : int
+  status : boolean
 }
 
-entity Valor {
-  *id : Int <<PK>>
+entity "Valor" {
+  * id : int <<PK>> <<autoincrement()>>
   --
-  Item_id : Int <<FK>>
-  valor : Int
-  data_inicio : Date
-  data_fim : Date?
+  itemId : int <<FK>> <<Item_id>>
+  afId : int <<FK>> <<AF_id>>
+  valor : int
+  data_inicio : datetime
+  data_fim : datetime <<optional>>
 }
 
-CONTRATO ||--o{ AF : "AFs"
-AF ||--o{ Item : "items"
-Local ||--o{ Item : "items"
-Item ||--|{ Valor : "valores"
+Local ||--o{ Item : has
+Contrato ||--o{ AF : has
+AF ||--o{ Item : principalItems
+AF }o--o{ Item : afs
+AF ||--o{ Valor : has
+Item ||--o{ Valor : has
 
 @enduml
