@@ -15,20 +15,20 @@ export class ValorService {
         // Close any existing open Valor for this Item-AF pair
         await tx.valor.updateMany({
           where: {
+            data_fim: null,
             itemId,
             afId: dto.afId,
-            data_fim: null,
           },
           data: { data_fim: now },
         })
 
         await tx.valor.create({
           data: {
-            itemId,
-            afId: dto.afId,
             valor,
             data_inicio: new Date(data_inicio),
             data_fim: data_fim ? new Date(data_fim) : null,
+            itemId,
+            afId: dto.afId,
           },
         })
       }

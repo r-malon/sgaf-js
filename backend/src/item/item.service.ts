@@ -13,6 +13,8 @@ export class ItemService {
 
   async create(createItemDto: CreateItemDto) {
     return await this.prisma.$transaction(async (tx) => {
+      const now = new Date(new Date(Date.now()).setUTCHours(0, 0, 0, 0))
+
       const item = await tx.item.create({
         data: {
           ...omit(createItemDto, ['valor']),
@@ -25,7 +27,7 @@ export class ItemService {
         data: {
           valor: createItemDto.valor,
           data_inicio: new Date(createItemDto.data_instalacao),
-          data_fim: null,
+          data_fim: item.status ? null : now,
           itemId: item.id,
           afId: createItemDto.principalId,
         },
