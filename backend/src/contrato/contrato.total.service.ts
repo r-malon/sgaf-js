@@ -1,20 +1,18 @@
 import { PrismaClient } from '@prisma/client'
-import { getAfTotal } from '../af/af.total.service'
+import { getValorTotal } from '../valor/valor.total.service'
 
 export async function getContratoTotal(
   prisma: PrismaClient,
   contratoId: number,
 ): Promise<number> {
-  const contrato = await prisma.contrato.findUniqueOrThrow({
-    where: { id: contratoId },
-  })
-
-  const afs = await prisma.aF.findMany({
-    where: { contratoId },
+  const valores = await prisma.valor.findMany({
+    where: { af: { contratoId } },
     select: { id: true },
   })
 
-  const totals = await Promise.all(afs.map((af) => getAfTotal(prisma, af.id)))
+  const totals = await Promise.all(
+    valores.map((valor) => getValorTotal(prisma, valor.id)),
+  )
 
   return totals.reduce((sum, t) => sum + t, 0)
 }

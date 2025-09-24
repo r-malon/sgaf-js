@@ -1,26 +1,19 @@
 import { PrismaClient } from '@prisma/client'
-import { prorateTotal } from '../utils/prorate-total'
+import { getValorTotal } from '../valor/valor.total.service'
 
 export async function getItemTotal(
   prisma: PrismaClient,
   itemId: number,
   afId: number,
 ): Promise<number> {
-  const af = await prisma.aF.findUniqueOrThrow({
-    where: { id: afId },
-    select: { data_inicio: true, data_fim: true },
-  })
-
   const valores = await prisma.valor.findMany({
     where: { itemId, afId },
-    select: { valor: true, data_inicio: true, data_fim: true },
+    select: { id: true },
   })
 
-  const formattedValores = valores.map((valor) => ({
-    ...valor,
-    data_inicio: valor.data_inicio.toISOString().slice(0, 10),
-    data_fim: valor.data_fim ? valor.data_fim.toISOString().slice(0, 10) : null,
-  }))
+  const totals = await Promise.all(
+    valores.map((valor) => getValorTotal(prisma, valor.id)),
+  )
 
-  return prorateTotal(af.data_inicio, af.data_fim, formattedValores)
+  return totals.reduce((sum, t) => sum + t, 0)
 }
