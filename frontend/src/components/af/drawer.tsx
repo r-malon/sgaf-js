@@ -2,13 +2,13 @@
 
 import { useMemo } from 'react'
 import { Plus, List } from 'lucide-react'
-import { GenericDrawer } from '@/components/generic-drawer'
-import { afColumns } from '@/components/af/columns'
-import { AFDialog } from '@/components/af/dialog'
 import { Button } from '@/components/ui/button'
-import { type AF } from '@sgaf/shared'
+import { GenericDrawer } from '@/components/generic-drawer'
 import { useAPISWR } from '@/lib/hooks'
 import { useEntityHandlers } from '@/lib/handlers'
+import { afColumns } from '@/components/af/columns'
+import { AFDialog } from '@/components/af/dialog'
+import { type AF } from '@sgaf/shared'
 
 interface AFDrawerProps {
   contratoId: number

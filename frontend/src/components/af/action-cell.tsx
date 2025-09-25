@@ -13,7 +13,7 @@ export function AFActionCell({
   principalId,
 }: {
   af: AF
-  principalId?: number
+  principalId: number
 }) {
   const { handleEdit, handleDelete } = useEntityHandlers('af')
   const { handleCreate } = useEntityHandlers('item')

@@ -5,6 +5,7 @@ import { GenericDrawer } from '@/components/generic-drawer'
 import { itemColumns } from '@/components/item/columns'
 import { ItemDialog } from '@/components/item/dialog'
 import { Button } from '@/components/ui/button'
+import { type AF } from '@sgaf/shared'
 
 export function ItemDrawer({ af }: { af: AF }) {
   return (
