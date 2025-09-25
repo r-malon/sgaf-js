@@ -3,7 +3,6 @@ import {
   Catch,
   ArgumentsHost,
   HttpStatus,
-  HttpException,
 } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 

@@ -71,7 +71,7 @@ export class ItemService {
       select: { principal: true },
     })
 
-    let items: any[]
+    let items
     if (af.principal) {
       items = await this.prisma.item.findMany({
         where: { principalId: afId },

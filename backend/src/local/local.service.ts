@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
 import { CreateLocalDto } from './dto/create-local.dto'
 import { UpdateLocalDto } from './dto/update-local.dto'
@@ -14,7 +14,7 @@ export class LocalService {
     const local = await this.prisma.local.create({
       data: {
         ...createLocalDto,
-        nome_normalized: normalize(createLocalDto.nome as string),
+        nome_normalized: normalize(createLocalDto.nome),
       },
     })
 
