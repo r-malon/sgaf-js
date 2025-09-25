@@ -6,7 +6,15 @@ import { ActionCell } from '@/components/action-cell'
 import { ValorTableDialog } from '@/components/valor/table-dialog'
 import { type Item } from '@sgaf/shared'
 
-export function ItemActionCell({ item, afId }: { item: Item; afId: number }) {
+export function ItemActionCell({
+  item,
+  afId,
+  isPrincipal,
+}: {
+  item: Item
+  afId: number
+  isPrincipal: boolean
+}) {
   const { handleEdit, handleDelete } = useEntityHandlers('item')
 
   return (
@@ -15,6 +23,7 @@ export function ItemActionCell({ item, afId }: { item: Item; afId: number }) {
       actions={[
         {
           key: 'edit',
+          show: () => isPrincipal,
           render: (item) => (
             <ItemDialog
               item={item}

@@ -75,6 +75,7 @@ export const itemColumns: ColumnDef<Item>[] = [
       <ItemActionCell
         item={row.original}
         afId={table.options.meta?.afId as number}
+        isPrincipal={table.options.meta?.isPrincipal as boolean}
       />
     ),
   },

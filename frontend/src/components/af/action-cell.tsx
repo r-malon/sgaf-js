@@ -75,7 +75,7 @@ export function AFActionCell({
         {
           key: 'list-items',
           show: (af) => af.item_count > 0,
-          render: (af) => <ItemDrawer afId={af.id} afNumero={af.numero} />,
+          render: (af) => <ItemDrawer af={af} />,
         },
       ]}
     />
