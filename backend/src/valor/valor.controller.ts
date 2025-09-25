@@ -22,14 +22,11 @@ export class ValorController {
   }
 
   @Get()
-  async findMany(@Query('itemId') itemId?: number) {
-    if (itemId) return await this.valorService.findManyByItem(+itemId)
-    return await this.valorService.findMany()
-  }
-
-  @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
-    return await this.valorService.findOne(+id)
+  async findMany(
+    @Query('itemId', ParseIntPipe) itemId: number,
+    @Query('afId', ParseIntPipe) afId: number,
+  ) {
+    return await this.valorService.findMany(itemId, afId)
   }
 
   @Delete(':id')

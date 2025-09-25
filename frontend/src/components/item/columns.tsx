@@ -71,6 +71,11 @@ export const itemColumns: ColumnDef<Item>[] = [
   {
     id: 'actions',
     header: 'Ações',
-    cell: ({ row }) => <ItemActionCell item={row.original} />,
+    cell: ({ row, table }) => (
+      <ItemActionCell
+        item={row.original}
+        afId={table.options.meta?.afId as number}
+      />
+    ),
   },
 ]

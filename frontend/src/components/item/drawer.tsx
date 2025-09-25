@@ -23,6 +23,7 @@ export function ItemDrawer({ afId, afNumero }: ItemDrawerProps) {
       entity="item"
       query={{ afId }}
       columns={itemColumns}
+      meta={{ afId }}
       createDialog={
         <ItemDialog
           principalId={afId}

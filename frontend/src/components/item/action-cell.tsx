@@ -6,7 +6,7 @@ import { ActionCell } from '@/components/action-cell'
 import { ValorTableDialog } from '@/components/valor/table-dialog'
 import { type Item } from '@sgaf/shared'
 
-export function ItemActionCell({ item }: { item: Item }) {
+export function ItemActionCell({ item, afId }: { item: Item; afId: number }) {
   const { handleEdit, handleDelete } = useEntityHandlers('item')
 
   return (
@@ -42,6 +42,7 @@ export function ItemActionCell({ item }: { item: Item }) {
           render: (item) => (
             <ValorTableDialog
               itemId={item.id}
+              afId={afId}
               triggerLabel={
                 <>
                   <List /> Valores

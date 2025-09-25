@@ -23,11 +23,13 @@ import { useAPISWR } from '@/lib/hooks'
 
 interface ValorTableDialogProps {
   itemId: number
+  afId: number
   triggerLabel?: React.ReactElement | string
 }
 
 export function ValorTableDialog({
   itemId,
+  afId,
   triggerLabel,
 }: ValorTableDialogProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -35,7 +37,7 @@ export function ValorTableDialog({
 
   const { key } = useEntityHandlers('valor')
   const { data, error, isLoading } = useAPISWR<Valor>(
-    open ? key({ itemId }) : null,
+    open ? key({ itemId, afId }) : null,
     { keepPreviousData: true }, // Throttle during unmount
   )
 

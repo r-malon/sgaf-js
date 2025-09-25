@@ -31,6 +31,7 @@ interface GenericDrawerProps<T> {
   rowClassName?: (row: Row<T>) => string | undefined
   rowProps?: Record<string, any>
   createDialog?: React.ReactNode
+  meta?: Record<string, unknown>
 }
 
 export function GenericDrawer<T>({
@@ -42,6 +43,7 @@ export function GenericDrawer<T>({
   rowClassName,
   rowProps,
   createDialog,
+  meta,
 }: GenericDrawerProps<T>) {
   const [open, setOpen] = React.useState(false)
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -59,6 +61,7 @@ export function GenericDrawer<T>({
     getSortedRowModel: getSortedRowModel(),
     state: { sorting },
     onSortingChange: setSorting,
+    meta,
   })
 
   React.useEffect(() => {

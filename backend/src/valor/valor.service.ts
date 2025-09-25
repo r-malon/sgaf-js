@@ -35,20 +35,9 @@ export class ValorService {
     })
   }
 
-  async findMany(): Promise<Valor[]> {
-    const valores = await this.prisma.valor.findMany()
-    return valores.map((valor) => ({
-      ...valor,
-      data_inicio: valor.data_inicio.toISOString().slice(0, 10),
-      data_fim: valor.data_fim
-        ? valor.data_fim.toISOString().slice(0, 10)
-        : null,
-    }))
-  }
-
-  async findManyByItem(itemId: number): Promise<Valor[]> {
+  async findMany(itemId: number, afId: number): Promise<Valor[]> {
     const valores = await this.prisma.valor.findMany({
-      where: { itemId },
+      where: { itemId, afId },
     })
     return valores.map((valor) => ({
       ...valor,
@@ -57,19 +46,6 @@ export class ValorService {
         ? valor.data_fim.toISOString().slice(0, 10)
         : null,
     }))
-  }
-
-  async findOne(id: number): Promise<Valor | null> {
-    const valor = await this.prisma.valor.findUniqueOrThrow({
-      where: { id },
-    })
-    return {
-      ...valor,
-      data_inicio: valor.data_inicio.toISOString().slice(0, 10),
-      data_fim: valor.data_fim
-        ? valor.data_fim.toISOString().slice(0, 10)
-        : null,
-    }
   }
 
   async delete(id: number): Promise<void> {
