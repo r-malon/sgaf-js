@@ -4,6 +4,8 @@
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontFamily': 'monospace', 'primaryColor': '#ffffff', 'primaryTextColor': '#000000', 'primaryBorderColor': '#000000', 'lineColor': '#888888', 'secondaryColor': '#ffffff', 'tertiaryColor': '#ffffff', 'background': '#ffffff'}}}%%
 erDiagram
+    direction LR
+
     Local ||--o{ Item : has
     Contrato ||--o{ AF : has
     AF ||--o{ Item : principalItems
