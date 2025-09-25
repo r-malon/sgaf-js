@@ -1,5 +1,7 @@
 import type { NextConfig } from "next"
 
+const inProduction: boolean = process.env.NODE_ENV === "production"
+
 const nextConfig: NextConfig = {
   async headers() {
     return [
@@ -14,8 +16,8 @@ const nextConfig: NextConfig = {
       }
     ]
   },
-  eslint: { ignoreDuringBuilds: true },
-  typescript: { ignoreBuildErrors: true }
+  eslint: { ignoreDuringBuilds: inProduction },
+  typescript: { ignoreBuildErrors: inProduction }
 }
 
 export default nextConfig

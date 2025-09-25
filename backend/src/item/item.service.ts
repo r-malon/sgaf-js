@@ -80,7 +80,7 @@ export class ItemService {
         },
       })
     } else {
-      // Related AF: items via current Valor (data_fim: null)
+      // AF relacionada: items via current Valor (data_fim: null)
       const currentValores = await this.prisma.valor.findMany({
         where: { afId: afId, data_fim: null },
         include: {
