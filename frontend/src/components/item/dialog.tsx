@@ -46,15 +46,29 @@ export function ItemDialog({
         { name: 'valor', label: 'Valor mensal', type: 'money' },
         {
           name: 'banda_maxima',
-          label: 'Banda Máxima',
+          label: (
+            <>
+              Banda Máxima
+              <span className="text-sm text-muted-foreground">
+                (ignore caso serviço)
+              </span>
+            </>
+          ),
           type: 'number',
-          show: item?.banda_maxima > 1,
+          show: !isEdit || item?.banda_maxima > 1,
         },
         {
           name: 'banda_instalada',
-          label: 'Banda Instalada',
+          label: (
+            <>
+              Banda Instalada
+              <span className="text-sm text-muted-foreground">
+                (ignore caso serviço)
+              </span>
+            </>
+          ),
           type: 'number',
-          show: item?.banda_maxima > 1,
+          show: !isEdit || item?.banda_maxima > 1,
         },
         { name: 'data_instalacao', label: 'Data de Instalação', type: 'date' },
         { name: 'quantidade', label: 'Quantidade', type: 'number' },

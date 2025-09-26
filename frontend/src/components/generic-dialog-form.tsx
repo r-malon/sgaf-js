@@ -28,7 +28,7 @@ import { MoneyInput } from '@/components/money-input'
 
 type BaseFieldConfig = {
   name: string
-  label?: string
+  label?: React.ReactElement | string
   description?: string
   show?: boolean
 }
