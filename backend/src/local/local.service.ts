@@ -22,11 +22,11 @@ export class LocalService {
   }
 
   async findMany(): Promise<Local[]> {
-    const locals: Local[] = await this.prisma.local.findMany({
+    const locais: Local[] = await this.prisma.local.findMany({
       omit: { nome_normalized: true },
     })
 
-    return locals
+    return locais
   }
 
   async findOne(id: number): Promise<Local | null> {

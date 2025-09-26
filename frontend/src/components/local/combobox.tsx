@@ -45,10 +45,10 @@ export function LocalCombobox({
   }, [value])
 
   const { key, handleEdit, handleDelete } = useEntityHandlers('local')
-  const { data: locals = [] } = useAPISWR<Local>(key())
+  const { data: locais = [] } = useAPISWR<Local>(key())
 
   const selectedId = value ?? internalId
-  const selected = locals.find((l) => l.id === selectedId) ?? null
+  const selected = locais.find((l) => l.id === selectedId) ?? null
 
   const setSelected = (next: Local | null) => {
     onChange?.(next?.id ?? null, next)
@@ -85,7 +85,7 @@ export function LocalCombobox({
             <CommandList>
               <CommandEmpty>Nenhum local encontrado.</CommandEmpty>
               <CommandGroup>
-                {locals.map((local) => (
+                {locais.map((local) => (
                   <CommandItem
                     key={local.id}
                     value={local.nome}
