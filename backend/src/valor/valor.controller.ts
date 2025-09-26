@@ -30,6 +30,6 @@ export class ValorController {
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
-    return await this.valorService.delete(+id)
+    return await this.valorService.delete(id)
   }
 }

@@ -28,7 +28,7 @@ export class ContratoController {
 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    return await this.contratoService.findOne(+id)
+    return await this.contratoService.findOne(id)
   }
 
   @Patch(':id')
@@ -36,11 +36,11 @@ export class ContratoController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateContratoDto: UpdateContratoDto,
   ) {
-    return await this.contratoService.update(+id, updateContratoDto)
+    return await this.contratoService.update(id, updateContratoDto)
   }
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
-    return await this.contratoService.delete(+id)
+    return await this.contratoService.delete(id)
   }
 }

@@ -30,7 +30,7 @@ export class AfController {
 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    return await this.afService.findOne(+id)
+    return await this.afService.findOne(id)
   }
 
   @Patch(':id')
@@ -38,11 +38,11 @@ export class AfController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateAfDto: UpdateAfDto,
   ) {
-    return await this.afService.update(+id, updateAfDto)
+    return await this.afService.update(id, updateAfDto)
   }
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
-    return await this.afService.delete(+id)
+    return await this.afService.delete(id)
   }
 }

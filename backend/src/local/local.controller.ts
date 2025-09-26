@@ -28,7 +28,7 @@ export class LocalController {
 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    return await this.localService.findOne(+id)
+    return await this.localService.findOne(id)
   }
 
   @Patch(':id')
@@ -36,11 +36,11 @@ export class LocalController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateLocalDto: UpdateLocalDto,
   ) {
-    return await this.localService.update(+id, updateLocalDto)
+    return await this.localService.update(id, updateLocalDto)
   }
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
-    return await this.localService.delete(+id)
+    return await this.localService.delete(id)
   }
 }

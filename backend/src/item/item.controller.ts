@@ -32,7 +32,7 @@ export class ItemController {
     @Param('id', ParseIntPipe) id: number,
     @Query('afId', ParseIntPipe) afId: number,
   ) {
-    return await this.itemService.findOne(+id, afId)
+    return await this.itemService.findOne(id, afId)
   }
 
   @Patch(':id')
@@ -40,11 +40,11 @@ export class ItemController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateItemDto: UpdateItemDto,
   ) {
-    return await this.itemService.update(+id, updateItemDto)
+    return await this.itemService.update(id, updateItemDto)
   }
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
-    return await this.itemService.delete(+id)
+    return await this.itemService.delete(id)
   }
 }
