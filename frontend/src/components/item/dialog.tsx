@@ -44,8 +44,18 @@ export function ItemDialog({
       fields={[
         { name: 'descricao', label: 'Descrição', type: 'textarea' },
         { name: 'valor', label: 'Valor mensal', type: 'money' },
-        { name: 'banda_maxima', label: 'Banda Máxima', type: 'number' },
-        { name: 'banda_instalada', label: 'Banda Instalada', type: 'number' },
+        {
+          name: 'banda_maxima',
+          label: 'Banda Máxima',
+          type: 'number',
+          show: item?.banda_maxima > 1,
+        },
+        {
+          name: 'banda_instalada',
+          label: 'Banda Instalada',
+          type: 'number',
+          show: item?.banda_maxima > 1,
+        },
         { name: 'data_instalacao', label: 'Data de Instalação', type: 'date' },
         { name: 'quantidade', label: 'Quantidade', type: 'number' },
         { name: 'status', label: 'Ativo?', type: 'switch' },

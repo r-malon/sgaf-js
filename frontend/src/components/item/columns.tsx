@@ -28,12 +28,24 @@ export const itemColumns: ColumnDef<Item>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Banda Máxima" />
     ),
+    cell: ({ row }) =>
+      row.original.banda_maxima > 1 ? (
+        row.original.banda_maxima
+      ) : (
+        <Minus color="lightgray" />
+      ),
   },
   {
     accessorKey: 'banda_instalada',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Banda Instalada" />
     ),
+    cell: ({ row }) =>
+      row.original.banda_maxima > 1 ? (
+        row.original.banda_instalada
+      ) : (
+        <Minus color="lightgray" />
+      ),
   },
   {
     accessorKey: 'data_instalacao',
