@@ -12,7 +12,7 @@ model Local {
   nome            String @unique
   nome_normalized String @unique
 
-  items Item[]
+  itemLocais ItemLocal[]
 
   @@map("Local")
 }
@@ -50,24 +50,37 @@ model AF {
 }
 
 model Item {
+  id                Int     @id @default(autoincrement())
+  principalId       Int     @map("principal_id")
+  descricao         String?
+  banda_maxima      Int
+  quantidade_maxima Int
+
+  principal  AF          @relation("principalItems", fields: [principalId], references: [id], onDelete: Restrict)
+  afs        AF[]
+  valores    Valor[]
+  itemLocais ItemLocal[]
+
+  @@index([principalId])
+  @@map("Item")
+}
+
+model ItemLocal {
   id              Int      @id @default(autoincrement())
-  principalId     Int      @map("principal_id")
+  itemId          Int      @map("Item_id")
   localId         Int      @map("Local_id")
-  descricao       String?
-  banda_maxima    Int
   banda_instalada Int
   data_instalacao DateTime
   quantidade      Int
   status          Boolean
 
-  local     Local   @relation(fields: [localId], references: [id], onDelete: Restrict)
-  principal AF      @relation("principalItems", fields: [principalId], references: [id], onDelete: Restrict)
-  afs       AF[]
-  valores   Valor[]
+  item  Item  @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  local Local @relation(fields: [localId], references: [id], onDelete: Restrict)
 
-  @@index([principalId])
+  @@unique([itemId, localId])
+  @@index([itemId])
   @@index([localId])
-  @@map("Item")
+  @@map("ItemLocal")
 }
 
 model Valor {
