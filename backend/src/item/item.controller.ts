@@ -8,13 +8,10 @@ import {
   Query,
   Delete,
   ParseIntPipe,
-  HttpCode,
-  HttpStatus,
 } from '@nestjs/common'
 import { ItemService } from './item.service'
 import { CreateItemDto } from './dto/create-item.dto'
 import { UpdateItemDto } from './dto/update-item.dto'
-import { AttachLocaisDto } from './dto/attach-locais.dto'
 
 @Controller('item')
 export class ItemController {
@@ -25,12 +22,6 @@ export class ItemController {
     return await this.itemService.create(createItemDto)
   }
 
-  @Post('locais')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async attachLocais(@Body() dto: AttachLocaisDto) {
-    await this.itemService.attachLocais(dto)
-  }
-
   @Get()
   async findMany(@Query('afId', ParseIntPipe) afId: number) {
     return await this.itemService.findManyByAf(afId)
@@ -39,7 +30,7 @@ export class ItemController {
   @Get(':id')
   async findOne(
     @Param('id', ParseIntPipe) id: number,
-    @Query('afId', ParseIntPipe) afId: number,
+    @Query('afId', ParseIntPipe) afId: number
   ) {
     return await this.itemService.findOne(id, afId)
   }
@@ -47,7 +38,7 @@ export class ItemController {
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateItemDto: UpdateItemDto,
+    @Body() updateItemDto: UpdateItemDto
   ) {
     return await this.itemService.update(id, updateItemDto)
   }

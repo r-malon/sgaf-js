@@ -1,10 +1,9 @@
-import { Injectable, BadRequestException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
 import { CreateItemDto } from './dto/create-item.dto'
 import { UpdateItemDto } from './dto/update-item.dto'
 import { getItemTotal } from './item.total.service'
 import { countValoresForItem } from './item.valor-count.service'
-import { AttachLocaisDto } from './dto/attach-locais.dto'
 import { type Item } from '@sgaf/shared'
 import { omit } from '../utils/omit'
 
@@ -14,8 +13,6 @@ export class ItemService {
 
   async create(createItemDto: CreateItemDto): Promise<Item> {
     return await this.prisma.$transaction(async (tx) => {
-      const now = new Date(new Date(Date.now()).setUTCHours(0, 0, 0, 0))
-
       const principal = await this.prisma.aF.findUniqueOrThrow({
         where: { id: createItemDto.principalId },
       })
@@ -128,7 +125,7 @@ export class ItemService {
         const valor_count = await countValoresForItem(
           this.prisma,
           item.id,
-          afId,
+          afId
         )
 
         const { itemLocais, ...itemWithoutRelations } = item
@@ -151,124 +148,13 @@ export class ItemService {
           })),
           quantidade_total: itemLocais.reduce(
             (sum, il) => sum + il.quantidade,
-            0,
+            0
           ),
           total,
           valor_count,
         }
-      }),
+      })
     )
-  }
-
-  async attachLocais(dto: AttachLocaisDto): Promise<void> {
-    return await this.prisma.$transaction(async (tx) => {
-      const item = await tx.item.findUniqueOrThrow({
-        where: { id: dto.itemId },
-        include: { itemLocais: true },
-      })
-
-      // Calculate current quantidade total
-      const currentTotal = item.itemLocais.reduce(
-        (sum, il) => sum + il.quantidade,
-        0,
-      )
-      const newTotal = dto.locais.reduce(
-        (sum, local) => sum + local.quantidade,
-        0,
-      )
-
-      if (currentTotal + newTotal > item.quantidade_maxima) {
-        throw new BadRequestException(
-          `Quantidade (${currentTotal + newTotal}) excede máximo (${item.quantidade_maxima})`,
-        )
-      }
-
-      // Validate banda constraints
-      for (const local of dto.locais) {
-        if (local.banda_instalada > item.banda_maxima) {
-          throw new BadRequestException(
-            'Banda instalada não pode exceder banda máxima',
-          )
-        }
-      }
-
-      // Create new ItemLocal records
-      const promises = dto.locais.map((local) =>
-        tx.itemLocal.create({
-          data: {
-            itemId: dto.itemId,
-            localId: local.localId,
-            banda_instalada: local.banda_instalada,
-            data_instalacao: new Date(local.data_instalacao),
-            data_desinstalacao: local.data_desinstalacao
-              ? new Date(local.data_desinstalacao)
-              : null,
-            quantidade: local.quantidade,
-            status: local.status,
-          },
-        }),
-      )
-
-      await Promise.all(promises)
-    })
-  }
-
-  async updateItemLocal(
-    itemId: number,
-    localId: number,
-    data: {
-      banda_instalada?: number
-      data_instalacao?: string
-      quantidade?: number
-      status?: boolean
-    },
-  ): Promise<void> {
-    return await this.prisma.$transaction(async (tx) => {
-      const item = await tx.item.findUniqueOrThrow({
-        where: { id: itemId },
-        include: { itemLocais: true },
-      })
-
-      // Validate banda constraint if updating
-      if (
-        data.banda_instalada !== undefined &&
-        data.banda_instalada > item.banda_maxima
-      ) {
-        throw new BadRequestException(
-          'Banda instalada não pode exceder banda máxima',
-        )
-      }
-
-      // Validate quantidade constraint if updating
-      if (data.quantidade !== undefined) {
-        const currentItemLocal = item.itemLocais.find(
-          (il) => il.localId === localId,
-        )
-        if (!currentItemLocal) {
-          throw new BadRequestException('ItemLocal não encontrado')
-        }
-
-        const otherQuantidades = item.itemLocais
-          .filter((il) => il.localId !== localId)
-          .reduce((sum, il) => sum + il.quantidade, 0)
-
-        if (otherQuantidades + data.quantidade > item.quantidade_maxima) {
-          throw new BadRequestException(
-            `Total quantidade excederia máximo (${item.quantidade_maxima})`,
-          )
-        }
-      }
-
-      await tx.itemLocal.updateMany({
-        where: { itemId, localId },
-        data: {
-          ...data,
-          data_instalacao: data.data_instalacao
-            ? new Date(data.data_instalacao)
-            : undefined,
-        },
-      })
-    })
   }
 
   async update(id: number, updateItemDto: UpdateItemDto): Promise<Item> {
@@ -290,7 +176,7 @@ export class ItemService {
     const valor_count = await countValoresForItem(
       this.prisma,
       item.id,
-      item.principalId,
+      item.principalId
     )
 
     const { itemLocais, ...itemWithoutRelations } = item
