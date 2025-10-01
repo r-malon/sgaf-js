@@ -24,7 +24,7 @@ type SelectedState = {
   data_fim?: string | null
 }
 
-interface AttachDialogProps {
+interface ItemAttachDialogProps {
   afId: number
   afNumero?: string
   principalId: number
@@ -32,13 +32,13 @@ interface AttachDialogProps {
   title?: React.ReactElement | string
 }
 
-export function AttachDialog({
+export function ItemAttachDialog({
   afId,
   afNumero,
   principalId,
   triggerLabel,
   title,
-}: AttachDialogProps) {
+}: ItemAttachDialogProps) {
   const [open, setOpen] = useState(false)
   const [selectedIds, setSelectedIds] = useState<number[]>([])
   const [stateById, setStateById] = useState<Record<number, SelectedState>>({})
