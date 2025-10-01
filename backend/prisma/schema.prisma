@@ -50,9 +50,10 @@ model AF {
 }
 
 model Item {
-  id                Int     @id @default(autoincrement())
-  principalId       Int     @map("principal_id")
+  id                Int       @id @default(autoincrement())
+  principalId       Int       @map("principal_id")
   descricao         String?
+  data_alteracao    DateTime?
   banda_maxima      Int
   quantidade_maxima Int
 
@@ -66,13 +67,14 @@ model Item {
 }
 
 model ItemLocal {
-  id              Int      @id @default(autoincrement())
-  itemId          Int      @map("Item_id")
-  localId         Int      @map("Local_id")
-  banda_instalada Int
-  data_instalacao DateTime
-  quantidade      Int
-  status          Boolean
+  id                 Int       @id @default(autoincrement())
+  itemId             Int       @map("Item_id")
+  localId            Int       @map("Local_id")
+  banda_instalada    Int
+  data_instalacao    DateTime
+  data_desinstalacao DateTime?
+  quantidade         Int
+  status             Boolean
 
   item  Item  @relation(fields: [itemId], references: [id], onDelete: Cascade)
   local Local @relation(fields: [localId], references: [id], onDelete: Restrict)

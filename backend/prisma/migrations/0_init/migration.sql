@@ -32,15 +32,25 @@ CREATE TABLE "AF" (
 CREATE TABLE "Item" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "principal_id" INTEGER NOT NULL,
-    "Local_id" INTEGER NOT NULL,
     "descricao" TEXT,
+    "data_alteracao" DATETIME,
     "banda_maxima" INTEGER NOT NULL,
+    "quantidade_maxima" INTEGER NOT NULL,
+    CONSTRAINT "Item_principal_id_fkey" FOREIGN KEY ("principal_id") REFERENCES "AF" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "ItemLocal" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "Item_id" INTEGER NOT NULL,
+    "Local_id" INTEGER NOT NULL,
     "banda_instalada" INTEGER NOT NULL,
     "data_instalacao" DATETIME NOT NULL,
+    "data_desinstalacao" DATETIME,
     "quantidade" INTEGER NOT NULL,
     "status" BOOLEAN NOT NULL,
-    CONSTRAINT "Item_Local_id_fkey" FOREIGN KEY ("Local_id") REFERENCES "Local" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "Item_principal_id_fkey" FOREIGN KEY ("principal_id") REFERENCES "AF" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "ItemLocal_Item_id_fkey" FOREIGN KEY ("Item_id") REFERENCES "Item" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "ItemLocal_Local_id_fkey" FOREIGN KEY ("Local_id") REFERENCES "Local" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -82,7 +92,13 @@ CREATE INDEX "AF_Contrato_id_idx" ON "AF"("Contrato_id");
 CREATE INDEX "Item_principal_id_idx" ON "Item"("principal_id");
 
 -- CreateIndex
-CREATE INDEX "Item_Local_id_idx" ON "Item"("Local_id");
+CREATE INDEX "ItemLocal_Item_id_idx" ON "ItemLocal"("Item_id");
+
+-- CreateIndex
+CREATE INDEX "ItemLocal_Local_id_idx" ON "ItemLocal"("Local_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ItemLocal_Item_id_Local_id_key" ON "ItemLocal"("Item_id", "Local_id");
 
 -- CreateIndex
 CREATE INDEX "Valor_Item_id_idx" ON "Valor"("Item_id");
