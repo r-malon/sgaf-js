@@ -7,6 +7,8 @@ import {
   Query,
   Delete,
   ParseIntPipe,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common'
 import { ValorService } from './valor.service'
 import { AttachToAfDto } from './dto/attach-to-af.dto'
@@ -16,6 +18,7 @@ export class ValorController {
   constructor(private readonly valorService: ValorService) {}
 
   @Post()
+  @HttpCode(HttpStatus.NO_CONTENT)
   async attachItemsToAf(@Body() dto: AttachToAfDto) {
     await this.valorService.attachItemsToAf(dto)
   }

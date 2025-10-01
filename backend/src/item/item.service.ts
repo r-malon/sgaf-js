@@ -4,6 +4,7 @@ import { CreateItemDto } from './dto/create-item.dto'
 import { UpdateItemDto } from './dto/update-item.dto'
 import { getItemTotal } from './item.total.service'
 import { countValoresForItem } from './item.valor-count.service'
+import { AttachLocaisDto } from './dto/attach-locais.dto'
 import { type Item } from '@sgaf/shared'
 import { omit } from '../utils/omit'
 
@@ -11,23 +12,13 @@ import { omit } from '../utils/omit'
 export class ItemService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createItemDto: CreateItemDto) {
+  async create(createItemDto: CreateItemDto): Promise<Item> {
     return await this.prisma.$transaction(async (tx) => {
       const now = new Date(new Date(Date.now()).setUTCHours(0, 0, 0, 0))
 
-      // Validate banda constraint
-      if (createItemDto.banda_instalada > createItemDto.banda_maxima) {
-        throw new BadRequestException(
-          'Banda instalada não pode exceder banda máxima',
-        )
-      }
-
-      // Validate quantidade constraint
-      if (createItemDto.quantidade > createItemDto.quantidade_maxima) {
-        throw new BadRequestException(
-          'Quantidade não pode exceder quantidade máxima',
-        )
-      }
+      const principal = await this.prisma.aF.findUniqueOrThrow({
+        where: { id: createItemDto.principalId },
+      })
 
       const item = await tx.item.create({
         data: {
@@ -38,45 +29,23 @@ export class ItemService {
         },
       })
 
-      await tx.itemLocal.create({
-        data: {
-          itemId: item.id,
-          localId: createItemDto.localId,
-          banda_instalada: createItemDto.banda_instalada,
-          data_instalacao: new Date(createItemDto.data_instalacao),
-          quantidade: createItemDto.quantidade,
-          status: createItemDto.status,
-        },
-      })
-
       await tx.valor.create({
         data: {
           valor: createItemDto.valor,
-          data_inicio: new Date(createItemDto.data_instalacao),
-          data_fim: createItemDto.status ? null : now,
+          data_inicio: new Date(principal.data_inicio),
+          data_fim: null,
           itemId: item.id,
           afId: createItemDto.principalId,
         },
       })
 
-      const local = await tx.local.findUniqueOrThrow({
-        where: { id: createItemDto.localId },
-        select: { nome: true },
-      })
-
       return {
-        ...item,
-        locais: [
-          {
-            id: createItemDto.localId,
-            nome: local.nome,
-            banda_instalada: createItemDto.banda_instalada,
-            data_instalacao: createItemDto.data_instalacao,
-            quantidade: createItemDto.quantidade,
-            status: createItemDto.status,
-          },
-        ],
-        quantidade_total: createItemDto.quantidade,
+        ...omit(item, ['data_alteracao']),
+        data_alteracao: item.data_alteracao
+          ? item.data_alteracao.toISOString().slice(0, 10)
+          : null,
+        locais: [],
+        quantidade_total: 0,
         total: 0,
         valor_count: 1,
       }
@@ -99,12 +68,18 @@ export class ItemService {
     const { itemLocais, ...itemWithoutRelations } = item
 
     return {
-      ...itemWithoutRelations,
+      ...omit(itemWithoutRelations, ['data_alteracao']),
+      data_alteracao: item.data_alteracao
+        ? item.data_alteracao.toISOString().slice(0, 10)
+        : null,
       locais: itemLocais.map((il) => ({
         id: il.localId,
         nome: il.local.nome,
         banda_instalada: il.banda_instalada,
         data_instalacao: il.data_instalacao.toISOString().slice(0, 10),
+        data_desinstalacao: il.data_desinstalacao
+          ? il.data_desinstalacao.toISOString().slice(0, 10)
+          : null,
         quantidade: il.quantidade,
         status: il.status,
       })),
@@ -159,12 +134,18 @@ export class ItemService {
         const { itemLocais, ...itemWithoutRelations } = item
 
         return {
-          ...itemWithoutRelations,
+          ...omit(itemWithoutRelations, ['data_alteracao']),
+          data_alteracao: item.data_alteracao
+            ? item.data_alteracao.toISOString().slice(0, 10)
+            : null,
           locais: itemLocais.map((il) => ({
             id: il.localId,
             nome: il.local.nome,
             banda_instalada: il.banda_instalada,
             data_instalacao: il.data_instalacao.toISOString().slice(0, 10),
+            data_desinstalacao: il.data_desinstalacao
+              ? il.data_desinstalacao.toISOString().slice(0, 10)
+              : null,
             quantidade: il.quantidade,
             status: il.status,
           })),
@@ -179,28 +160,22 @@ export class ItemService {
     )
   }
 
-  async attachLocais(
-    itemId: number,
-    locais: Array<{
-      localId: number
-      banda_instalada: number
-      data_instalacao: string
-      quantidade: number
-      status: boolean
-    }>,
-  ) {
+  async attachLocais(dto: AttachLocaisDto): Promise<void> {
     return await this.prisma.$transaction(async (tx) => {
       const item = await tx.item.findUniqueOrThrow({
-        where: { id: itemId },
+        where: { id: dto.itemId },
         include: { itemLocais: true },
       })
 
-      // Calculate current total quantidade
+      // Calculate current quantidade total
       const currentTotal = item.itemLocais.reduce(
         (sum, il) => sum + il.quantidade,
         0,
       )
-      const newTotal = locais.reduce((sum, local) => sum + local.quantidade, 0)
+      const newTotal = dto.locais.reduce(
+        (sum, local) => sum + local.quantidade,
+        0,
+      )
 
       if (currentTotal + newTotal > item.quantidade_maxima) {
         throw new BadRequestException(
@@ -209,7 +184,7 @@ export class ItemService {
       }
 
       // Validate banda constraints
-      for (const local of locais) {
+      for (const local of dto.locais) {
         if (local.banda_instalada > item.banda_maxima) {
           throw new BadRequestException(
             'Banda instalada não pode exceder banda máxima',
@@ -218,13 +193,16 @@ export class ItemService {
       }
 
       // Create new ItemLocal records
-      const promises = locais.map((local) =>
+      const promises = dto.locais.map((local) =>
         tx.itemLocal.create({
           data: {
-            itemId,
+            itemId: dto.itemId,
             localId: local.localId,
             banda_instalada: local.banda_instalada,
             data_instalacao: new Date(local.data_instalacao),
+            data_desinstalacao: local.data_desinstalacao
+              ? new Date(local.data_desinstalacao)
+              : null,
             quantidade: local.quantidade,
             status: local.status,
           },
@@ -244,7 +222,7 @@ export class ItemService {
       quantidade?: number
       status?: boolean
     },
-  ) {
+  ): Promise<void> {
     return await this.prisma.$transaction(async (tx) => {
       const item = await tx.item.findUniqueOrThrow({
         where: { id: itemId },
@@ -318,12 +296,18 @@ export class ItemService {
     const { itemLocais, ...itemWithoutRelations } = item
 
     return {
-      ...itemWithoutRelations,
+      ...omit(itemWithoutRelations, ['data_alteracao']),
+      data_alteracao: item.data_alteracao
+        ? item.data_alteracao.toISOString().slice(0, 10)
+        : null,
       locais: itemLocais.map((il) => ({
         id: il.localId,
         nome: il.local.nome,
         banda_instalada: il.banda_instalada,
         data_instalacao: il.data_instalacao.toISOString().slice(0, 10),
+        data_desinstalacao: il.data_desinstalacao
+          ? il.data_desinstalacao.toISOString().slice(0, 10)
+          : null,
         quantidade: il.quantidade,
         status: il.status,
       })),

@@ -9,8 +9,6 @@ export class ValorService {
 
   async attachItemsToAf(dto: AttachToAfDto): Promise<void> {
     await this.prisma.$transaction(async (tx) => {
-      const now = new Date(new Date(Date.now()).setUTCHours(0, 0, 0, 0))
-
       for (const { itemId, valor, data_inicio, data_fim } of dto.items) {
         // Close any existing open Valor for this Item-AF pair
         await tx.valor.updateMany({
@@ -19,7 +17,7 @@ export class ValorService {
             itemId,
             afId: dto.afId,
           },
-          data: { data_fim: now },
+          data: { data_fim: new Date(data_inicio) },
         })
 
         await tx.valor.create({
