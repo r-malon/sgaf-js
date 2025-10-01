@@ -3,6 +3,9 @@ import { z } from 'zod'
 const itemBaseSchema = z.object({
   principalId: z.number().int().positive().readonly(),
   descricao: z.string().trim().nullish(),
+  data_alteracao: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Data inválida').nullish(),
   banda_maxima: z
     .number({
       error: () => 'Banda máxima é obrigatória',
@@ -17,44 +20,16 @@ const itemBaseSchema = z.object({
     .positive('Quantidade máxima deve ser >= 1'),
 })
 
-// For input DTOs - single location creation
+// For input DTOs
 export const itemSchema = itemBaseSchema.extend({
-  localId: z.number().int().positive().readonly(),
-  banda_instalada: z
-    .number({
-      error: () => 'Banda instalada é obrigatória',
-    })
-    .int()
-    .nonnegative('Banda instalada deve ser >= 0'),
-  data_instalacao: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato de data inválido'),
-  quantidade: z
-    .number({
-      error: () => 'Quantidade é obrigatória',
-    })
-    .int()
-    .positive('Quantidade deve ser >= 1'),
-  status: z.boolean({
-    error: () => 'Status inválido',
-  }),
-  valor: z
-    .number({
-      error: (issue) =>
-        issue.code === 'invalid_type'
-          ? 'Valor inválido'
-          : 'Valor é obrigatório',
+  valor: z.number({
+    error: (issue) =>
+      issue.code === 'invalid_type'
+        ? 'Valor inválido'
+        : 'Valor é obrigatório',
     })
     .int()
     .nonnegative(),
-})
-.refine((data) => data.banda_maxima >= data.banda_instalada, {
-  message: 'Banda instalada não pode ser maior do que a banda máxima',
-  path: ['banda_instalada'],
-})
-.refine((data) => data.quantidade_maxima >= data.quantidade, {
-  message: 'Quantidade não pode ser maior do que a quantidade máxima',
-  path: ['quantidade'],
 })
 
 // For ItemLocal creation/update
@@ -66,12 +41,23 @@ export const itemLocalSchema = z.object({
     .nonnegative('Banda instalada deve ser >= 0'),
   data_instalacao: z
     .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato de data inválido'),
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Data inválida'),
+  data_desinstalacao: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Data inválida').nullish(),
   quantidade: z
     .number()
     .int()
     .positive('Quantidade deve ser >= 1'),
   status: z.boolean(),
+})
+.refine((data) => !data.status && !data.data_desinstalacao, {
+    message: 'Data de desinstalação é obrigatória quando inativo',
+    path: ['data_desinstalacao'],
+})
+.refine((data) => !data.data_desinstalacao || new Date(data.data_desinstalacao) >= new Date(data.data_instalacao), {
+    message: 'Data de desinstalação deve ser posterior à instalação',
+    path: ['data_desinstalacao'],
 })
 
 // For bulk location attachment

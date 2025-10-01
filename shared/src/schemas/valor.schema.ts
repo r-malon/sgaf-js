@@ -12,10 +12,10 @@ const valorBaseSchema = z.object({
     .nonnegative(),
   data_inicio: z
     .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato de data inválido'),
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Data inválida'),
   data_fim: z
     .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato de data inválido')
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Data inválida')
     .nullish(),
 })
 .refine(
