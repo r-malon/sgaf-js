@@ -59,7 +59,7 @@ export const updateItemLocalSchema = itemLocalBaseSchema
   .partial()
 
 // For responses
-export const itemLocalOutputSchema = itemLocalBaseSchema.extend({
+export const itemLocalOutputSchema = itemLocalBaseSchema.safeExtend({
   id: z.number().int().positive().readonly(),
   local: z
     .object({

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { AfModule } from './af/af.module'
 import { ItemModule } from './item/item.module'
+import { ItemLocalModule } from './item-local/item-local.module'
 import { LocalModule } from './local/local.module'
 import { ValorModule } from './valor/valor.module'
 import { PrismaModule } from './prisma/prisma.module'
@@ -11,6 +12,7 @@ import { ContratoModule } from './contrato/contrato.module'
     ContratoModule,
     AfModule,
     ItemModule,
+    ItemLocalModule,
     LocalModule,
     ValorModule,
     PrismaModule,
