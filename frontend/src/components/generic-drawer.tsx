@@ -8,6 +8,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer'
+import { Button } from '@/components/ui/button'
 import { DataTable } from '@/components/data-table'
 import { DataTableFilter } from '@/components/data-table-filter'
 import {
@@ -24,7 +25,7 @@ import { useAPISWR } from '@/lib/hooks'
 
 interface GenericDrawerProps<T> {
   title?: React.ReactElement | string
-  trigger: React.ReactNode
+  triggerLabel: React.ReactElement | string
   entity: string
   query?: Record<string, any>
   columns: ColumnDef<T, any>[]
@@ -35,7 +36,7 @@ interface GenericDrawerProps<T> {
 
 export function GenericDrawer<T>({
   title,
-  trigger,
+  triggerLabel,
   entity,
   query,
   columns,
@@ -72,7 +73,11 @@ export function GenericDrawer<T>({
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>{trigger}</DrawerTrigger>
+      <DrawerTrigger asChild>
+        <Button size="sm">
+          {triggerLabel}
+        </Button>
+      </DrawerTrigger>
       <DrawerContent className="p-4">
         <DrawerHeader className="flex items-center justify-between">
           <DrawerTitle>{title ?? ''}</DrawerTitle>

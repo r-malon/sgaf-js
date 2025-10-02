@@ -26,10 +26,10 @@ export function AFDrawer({ contratoId, contratoNumero }: AFDrawerProps) {
   return (
     <GenericDrawer
       title={`AFs do contrato ${contratoNumero}`}
-      trigger={
-        <Button size="sm">
+      triggerLabel={
+        <>
           <List /> AFs
-        </Button>
+        </>
       }
       entity="af"
       query={{ contratoId }}

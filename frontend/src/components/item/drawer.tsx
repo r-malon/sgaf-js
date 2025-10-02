@@ -11,10 +11,10 @@ export function ItemDrawer({ af }: { af: AF }) {
   return (
     <GenericDrawer
       title={`Itens da AF ${af.numero}`}
-      trigger={
-        <Button size="sm">
+      triggerLabel={
+        <>
           <List /> Itens
-        </Button>
+        </>
       }
       entity="item"
       query={{ afId: af.id }}
