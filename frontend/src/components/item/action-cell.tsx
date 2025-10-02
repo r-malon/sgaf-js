@@ -1,10 +1,11 @@
-import { Pencil, Plus, Trash2, List, MapPin } from 'lucide-react'
+import { Pencil, Plus, Trash2, List, Link, MapPin } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ItemDialog } from '@/components/item/dialog'
 import { useEntityHandlers } from '@/lib/handlers'
 import { ActionCell } from '@/components/action-cell'
 import { ValorTableDialog } from '@/components/valor/table-dialog'
 import { LocalAttachDialog } from '@/components/local/attach-dialog'
+import { ItemLocalTableDialog } from '@/components/item-local/table-dialog'
 import { type Item } from '@sgaf/shared'
 
 export function ItemActionCell({
@@ -69,7 +70,21 @@ export function ItemActionCell({
               title="Adicionar locais"
               triggerLabel={
                 <>
-                  <MapPin /> Locais
+                  <Link /> Locais
+                </>
+              }
+            />
+          ),
+        },
+        {
+          key: 'list-instalados',
+          show: (item) => item.instalados_count > 0,
+          render: (item) => (
+            <ItemLocalTableDialog
+              itemId={item.id}
+              triggerLabel={
+                <>
+                  <MapPin /> Instalados
                 </>
               }
             />
