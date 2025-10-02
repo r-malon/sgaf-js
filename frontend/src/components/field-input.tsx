@@ -55,7 +55,13 @@ export function getFieldInput(field: FieldConfig, controlledField: any) {
     case 'money':
       return <MoneyInput {...controlledField} />
     case 'date':
-      return <Input type="date" {...controlledField} />
+      return (
+        <Input
+          type="date"
+          {...controlledField}
+          value={controlledField.value ?? ''}
+        />
+      )
     case 'switch':
       return (
         <Switch

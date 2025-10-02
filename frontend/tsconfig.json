@@ -8,7 +8,6 @@
       "./.next/types"
     ],
     "jsx": "preserve",
-    "strict": false,
     "incremental": true,
     "composite": true,
     "allowJs": true,
