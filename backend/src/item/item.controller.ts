@@ -30,7 +30,7 @@ export class ItemController {
   @Get(':id')
   async findOne(
     @Param('id', ParseIntPipe) id: number,
-    @Query('afId', ParseIntPipe) afId: number
+    @Query('afId', ParseIntPipe) afId: number,
   ) {
     return await this.itemService.findOne(id, afId)
   }
@@ -38,7 +38,7 @@ export class ItemController {
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateItemDto: UpdateItemDto
+    @Body() updateItemDto: UpdateItemDto,
   ) {
     return await this.itemService.update(id, updateItemDto)
   }

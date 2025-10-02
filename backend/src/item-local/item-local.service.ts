@@ -19,18 +19,18 @@ export class ItemLocalService {
       // Validate quantidade constraint
       const currentTotal = item.itemLocais.reduce(
         (sum, il) => sum + il.quantidade,
-        0
+        0,
       )
       if (currentTotal + createDto.quantidade > item.quantidade_maxima) {
         throw new BadRequestException(
-          `Quantidade total (${currentTotal + createDto.quantidade}) excede máximo (${item.quantidade_maxima})`
+          `Quantidade total (${currentTotal + createDto.quantidade}) excede máximo (${item.quantidade_maxima})`,
         )
       }
 
       // Validate banda constraint
       if (createDto.banda_instalada > item.banda_maxima) {
         throw new BadRequestException(
-          'Banda instalada não pode exceder banda máxima'
+          'Banda instalada não pode exceder banda máxima',
         )
       }
 
@@ -79,16 +79,16 @@ export class ItemLocalService {
       // Validate total quantidade
       const currentTotal = item.itemLocais.reduce(
         (sum, il) => sum + il.quantidade,
-        0
+        0,
       )
       const newTotal = dto.locais.reduce(
         (sum, local) => sum + local.quantidade,
-        0
+        0,
       )
 
       if (currentTotal + newTotal > item.quantidade_maxima) {
         throw new BadRequestException(
-          `Quantidade total (${currentTotal + newTotal}) excede máximo (${item.quantidade_maxima})`
+          `Quantidade total (${currentTotal + newTotal}) excede máximo (${item.quantidade_maxima})`,
         )
       }
 
@@ -96,7 +96,7 @@ export class ItemLocalService {
       for (const local of dto.locais) {
         if (local.banda_instalada > item.banda_maxima) {
           throw new BadRequestException(
-            'Banda instalada não pode exceder banda máxima'
+            'Banda instalada não pode exceder banda máxima',
           )
         }
       }
@@ -116,8 +116,8 @@ export class ItemLocalService {
               quantidade: local.quantidade,
               status: local.status,
             },
-          })
-        )
+          }),
+        ),
       )
     })
   }
@@ -198,7 +198,7 @@ export class ItemLocalService {
         updateDto.banda_instalada > item.banda_maxima
       ) {
         throw new BadRequestException(
-          'Banda instalada não pode exceder banda máxima'
+          'Banda instalada não pode exceder banda máxima',
         )
       }
 
@@ -210,7 +210,7 @@ export class ItemLocalService {
 
         if (otherQuantidades + updateDto.quantidade > item.quantidade_maxima) {
           throw new BadRequestException(
-            `Total quantidade (${otherQuantidades + updateDto.quantidade}) excederia máximo (${item.quantidade_maxima})`
+            `Total quantidade (${otherQuantidades + updateDto.quantidade}) excederia máximo (${item.quantidade_maxima})`,
           )
         }
       }

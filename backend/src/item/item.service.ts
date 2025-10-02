@@ -125,7 +125,7 @@ export class ItemService {
         const valor_count = await countValoresForItem(
           this.prisma,
           item.id,
-          afId
+          afId,
         )
 
         const { itemLocais, ...itemWithoutRelations } = item
@@ -148,12 +148,12 @@ export class ItemService {
           })),
           quantidade_total: itemLocais.reduce(
             (sum, il) => sum + il.quantidade,
-            0
+            0,
           ),
           total,
           valor_count,
         }
-      })
+      }),
     )
   }
 
@@ -176,7 +176,7 @@ export class ItemService {
     const valor_count = await countValoresForItem(
       this.prisma,
       item.id,
-      item.principalId
+      item.principalId,
     )
 
     const { itemLocais, ...itemWithoutRelations } = item
