@@ -13,6 +13,7 @@ export const localSchema = z.object({
 // For responses
 export const localOutputSchema = localSchema.safeExtend({
   id: z.number().int().positive().readonly(),
+  instalados_count: z.number().int().nonnegative(),
 })
 
 export type Local = z.infer<typeof localOutputSchema>

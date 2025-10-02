@@ -18,15 +18,25 @@ export class LocalService {
       },
     })
 
-    return omit(local, ['nome_normalized'])
+    return {
+      ...omit(local, ['nome_normalized']),
+      instalados_count: 0,
+    }
   }
 
   async findMany(): Promise<Local[]> {
-    const locais: Local[] = await this.prisma.local.findMany({
+    const locais = await this.prisma.local.findMany({
       omit: { nome_normalized: true },
     })
 
-    return locais
+    return Promise.all(
+      locais.map(async (local) => ({
+        ...local,
+        instalados_count: await this.prisma.itemLocal.count({
+          where: { localId: local.id },
+        }),
+      })),
+    )
   }
 
   async findOne(id: number): Promise<Local | null> {
@@ -35,7 +45,12 @@ export class LocalService {
       omit: { nome_normalized: true },
     })
 
-    return local
+    return {
+      ...local,
+      instalados_count: await this.prisma.itemLocal.count({
+        where: { localId: local.id },
+      }),
+    }
   }
 
   async update(id: number, updateLocalDto: UpdateLocalDto): Promise<Local> {
@@ -47,7 +62,12 @@ export class LocalService {
       },
     })
 
-    return local
+    return {
+      ...local,
+      instalados_count: await this.prisma.itemLocal.count({
+        where: { localId: local.id },
+      }),
+    }
   }
 
   async delete(id: number): Promise<void> {

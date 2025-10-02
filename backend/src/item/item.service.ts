@@ -45,6 +45,7 @@ export class ItemService {
         quantidade_total: 0,
         total: 0,
         valor_count: 1,
+        instalados_count: 0,
       }
     })
   }
@@ -83,6 +84,7 @@ export class ItemService {
       quantidade_total: itemLocais.reduce((sum, il) => sum + il.quantidade, 0),
       total,
       valor_count,
+      instalados_count: itemLocais.length,
     }
   }
 
@@ -152,6 +154,7 @@ export class ItemService {
           ),
           total,
           valor_count,
+          instalados_count: itemLocais.length,
         }
       }),
     )
@@ -200,6 +203,7 @@ export class ItemService {
       quantidade_total: itemLocais.reduce((sum, il) => sum + il.quantidade, 0),
       total,
       valor_count,
+      instalados_count: itemLocais.length,
     }
   }
 
