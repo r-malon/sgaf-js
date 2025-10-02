@@ -18,12 +18,6 @@ export const itemColumns: ColumnDef<Item>[] = [
     ),
   },
   {
-    accessorKey: 'local',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Local" />
-    ),
-  },
-  {
     accessorKey: 'banda_maxima',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Banda Máxima" />
@@ -36,44 +30,18 @@ export const itemColumns: ColumnDef<Item>[] = [
       ),
   },
   {
-    accessorKey: 'banda_instalada',
+    accessorKey: 'data_alteracao',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Banda Instalada" />
+      <DataTableColumnHeader column={column} title="Alteração" />
     ),
     cell: ({ row }) =>
-      row.original.banda_maxima > 1 ? (
-        row.original.banda_instalada
-      ) : (
-        <Minus color="lightgray" />
-      ),
+      row.original.data_alteracao ?? <Minus color="lightgray" />,
   },
   {
-    accessorKey: 'data_instalacao',
+    accessorKey: 'quantidade_maxima',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Instalação" />
+      <DataTableColumnHeader column={column} title="Qtd. Max." />
     ),
-  },
-  {
-    accessorKey: 'quantidade',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Qtd." />
-    ),
-    footer: ({ table }) =>
-      table
-        .getFilteredRowModel()
-        .rows.reduce(
-          (total: number, row: Row<Item>) =>
-            total + (row.getValue('quantidade') as number),
-          0,
-        ),
-  },
-  {
-    accessorKey: 'status',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Ativo?" />
-    ),
-    cell: ({ row }) =>
-      row.original.status ? <Check color="green" /> : <X color="red" />,
   },
   MoneyColumn<Item>({
     header: 'Total',
