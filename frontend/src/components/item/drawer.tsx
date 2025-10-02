@@ -19,7 +19,7 @@ export function ItemDrawer({ af }: { af: AF }) {
       entity="item"
       query={{ afId: af.id }}
       columns={itemColumns}
-      meta={{ afId: af.id, isPrincipal: af.principal }}
+      rowProps={{ afId: af.id, isPrincipal: af.principal }}
       createDialog={
         <ItemDialog
           principalId={af.id}

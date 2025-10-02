@@ -33,17 +33,19 @@ export function ItemDialog({
       defaultValues={{
         descricao: item?.descricao ?? '',
         banda_maxima: item?.banda_maxima ?? 1,
-        banda_instalada: item?.banda_instalada ?? 0,
-        data_instalacao: item?.data_instalacao ?? '',
-        quantidade: item?.quantidade ?? 1,
+        quantidade_maxima: item?.quantidade_maxima ?? 1,
         valor: item?.valor ?? 0,
-        status: item?.status ?? true,
-        localId: item?.localId,
         principalId: item?.principalId ?? principalId,
       }}
       fields={[
         { name: 'descricao', label: 'Descrição', type: 'textarea' },
         { name: 'valor', label: 'Valor mensal', type: 'money' },
+        {
+          name: 'data_alteracao',
+          label: 'Alteração',
+          type: 'date',
+          show: isEdit,
+        },
         {
           name: 'banda_maxima',
           label: (
@@ -58,31 +60,9 @@ export function ItemDialog({
           show: !isEdit || item?.banda_maxima > 1,
         },
         {
-          name: 'banda_instalada',
-          label: (
-            <>
-              Banda Instalada
-              <span className="text-sm text-muted-foreground">
-                (ignore caso serviço)
-              </span>
-            </>
-          ),
+          name: 'quantidade_maxima',
+          label: 'Quantidade máxima',
           type: 'number',
-          show: !isEdit || item?.banda_maxima > 1,
-        },
-        { name: 'data_instalacao', label: 'Data de Instalação', type: 'date' },
-        { name: 'quantidade', label: 'Quantidade', type: 'number' },
-        { name: 'status', label: 'Ativo?', type: 'switch' },
-        {
-          name: 'localId',
-          type: 'custom',
-          render: (field) => (
-            <LocalCombobox
-              value={field.value}
-              onChange={(id) => field.onChange(id)}
-              readOnly
-            />
-          ),
         },
       ]}
       title={

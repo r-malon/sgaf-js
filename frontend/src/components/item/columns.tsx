@@ -83,12 +83,8 @@ export const itemColumns: ColumnDef<Item>[] = [
   {
     id: 'actions',
     header: 'Ações',
-    cell: ({ row, table }) => (
-      <ItemActionCell
-        item={row.original}
-        afId={table.options.meta?.afId as number}
-        isPrincipal={table.options.meta?.isPrincipal as boolean}
-      />
+    cell: ({ row, ...rowProps }) => (
+      <ItemActionCell item={row.original} {...rowProps} />
     ),
   },
 ]
