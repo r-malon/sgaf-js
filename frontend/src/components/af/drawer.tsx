@@ -19,9 +19,10 @@ export function AFDrawer({ contratoId, contratoNumero }: AFDrawerProps) {
   const { key } = useEntityHandlers('af')
   const { data: afs = [] } = useAPISWR<AF>(key({ contratoId }))
 
-  const principalId = useMemo(() => {
-    return afs.find((af) => af.principal)?.id
+  const principal = useMemo(() => {
+    return afs.find((af) => af.principal)
   }, [afs])
+
   return (
     <GenericDrawer
       title={`AFs do contrato ${contratoNumero}`}
@@ -36,7 +37,10 @@ export function AFDrawer({ contratoId, contratoNumero }: AFDrawerProps) {
       rowClassName={(row) =>
         row.original.principal ? 'bg-blue-100' : undefined
       }
-      rowProps={{ principalId }}
+      rowProps={{
+        principalId: principal?.id,
+        principalItemCount: principal?.item_count,
+      }}
       createDialog={
         <AFDialog
           contratoId={contratoId}

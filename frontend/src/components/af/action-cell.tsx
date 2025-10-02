@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { useEntityHandlers } from '@/lib/handlers'
 import { ActionCell } from '@/components/action-cell'
 import { AFDialog } from '@/components/af/dialog'
-import { AttachDialog } from '@/components/item/attach-dialog'
+import { ItemAttachDialog } from '@/components/item/attach-dialog'
 import { ItemDialog } from '@/components/item/dialog'
 import { ItemDrawer } from '@/components/item/drawer'
 import { type AF } from '@sgaf/shared'
@@ -11,9 +11,11 @@ import { type AF } from '@sgaf/shared'
 export function AFActionCell({
   af,
   principalId,
+  principalItemCount,
 }: {
   af: AF
   principalId: number
+  principalItemCount: number
 }) {
   const { handleEdit, handleDelete } = useEntityHandlers('af')
   const { handleCreate } = useEntityHandlers('item')
@@ -47,30 +49,34 @@ export function AFActionCell({
         },
         {
           key: 'add-item',
-          show: (af) => af.status,
-          render: (af) =>
-            af.principal ? (
-              <ItemDialog
-                principalId={af.id}
-                afNumero={af.numero}
-                triggerLabel={
-                  <>
-                    <Plus /> Item
-                  </>
-                }
-              />
-            ) : (
-              <AttachDialog
-                principalId={af.principal ? af.id : principalId}
-                afId={af.id}
-                afNumero={af.numero}
-                triggerLabel={
-                  <>
-                    <Link /> Itens
-                  </>
-                }
-              />
-            ),
+          show: (af) => af.status && af.principal,
+          render: (af) => (
+            <ItemDialog
+              principalId={af.id}
+              afNumero={af.numero}
+              triggerLabel={
+                <>
+                  <Plus /> Item
+                </>
+              }
+            />
+          ),
+        },
+        {
+          key: 'link-items',
+          show: (af) => af.status && !af.principal && principalItemCount > 0,
+          render: (af) => (
+            <ItemAttachDialog
+              principalId={af.principal ? af.id : principalId}
+              afId={af.id}
+              afNumero={af.numero}
+              triggerLabel={
+                <>
+                  <Link /> Itens
+                </>
+              }
+            />
+          ),
         },
         {
           key: 'list-items',
