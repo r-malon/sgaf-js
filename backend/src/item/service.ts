@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common'
-import { PrismaService } from '../prisma/prisma.service'
+import { PrismaService } from '../prisma/service'
 import { CreateItemDto } from './dto/create-item.dto'
 import { UpdateItemDto } from './dto/update-item.dto'
-import { getItemTotal } from './item.total.service'
-import { countValoresForItem } from './item.valor-count.service'
+import { getItemTotal } from './total.service'
+import { countValoresForItem } from './valor-count.service'
 import { type Item } from '@sgaf/shared'
 import { omit } from '../utils/omit'
 

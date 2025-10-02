@@ -9,7 +9,7 @@ import {
   Delete,
   ParseIntPipe,
 } from '@nestjs/common'
-import { AfService } from './af.service'
+import { AfService } from './service'
 import { CreateAfDto } from './dto/create-af.dto'
 import { UpdateAfDto } from './dto/update-af.dto'
 

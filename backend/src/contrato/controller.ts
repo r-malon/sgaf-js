@@ -8,7 +8,7 @@ import {
   Delete,
   ParseIntPipe,
 } from '@nestjs/common'
-import { ContratoService } from './contrato.service'
+import { ContratoService } from './service'
 import { CreateContratoDto } from './dto/create-contrato.dto'
 import { UpdateContratoDto } from './dto/update-contrato.dto'
 

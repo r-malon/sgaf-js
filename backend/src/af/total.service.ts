@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { getValorTotal } from '../valor/valor.total.service'
+import { getValorTotal } from '../valor/total.service'
 
 export async function getAfTotal(
   prisma: PrismaClient,

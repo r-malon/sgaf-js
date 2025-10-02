@@ -1,5 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common'
-import { PrismaService } from '../prisma/prisma.service'
+import { PrismaService } from '../prisma/service'
 import { CreateItemLocalDto } from './dto/create-item-local.dto'
 import { UpdateItemLocalDto } from './dto/update-item-local.dto'
 import { AttachLocaisDto } from './dto/attach-locais.dto'

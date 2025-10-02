@@ -11,7 +11,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common'
-import { ItemLocalService } from './item-local.service'
+import { ItemLocalService } from './service'
 import { CreateItemLocalDto } from './dto/create-item-local.dto'
 import { UpdateItemLocalDto } from './dto/update-item-local.dto'
 import { AttachLocaisDto } from './dto/attach-locais.dto'

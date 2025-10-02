@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
-import { LocalService } from './local.service'
-import { LocalController } from './local.controller'
-import { PrismaModule } from '../prisma/prisma.module'
+import { LocalService } from './service'
+import { LocalController } from './controller'
+import { PrismaModule } from '../prisma/module'
 
 @Module({
   controllers: [LocalController],

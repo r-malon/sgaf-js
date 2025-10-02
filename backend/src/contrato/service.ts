@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common'
-import { PrismaService } from '../prisma/prisma.service'
+import { PrismaService } from '../prisma/service'
 import { CreateContratoDto } from './dto/create-contrato.dto'
 import { UpdateContratoDto } from './dto/update-contrato.dto'
-import { getContratoTotal } from './contrato.total.service'
-import { countAFsForContrato } from './contrato.af-count.service'
+import { getContratoTotal } from './total.service'
+import { countAFsForContrato } from './af-count.service'
 import { type Contrato } from '@sgaf/shared'
 
 @Injectable()

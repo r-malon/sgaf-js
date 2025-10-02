@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { PrismaService } from '../prisma/prisma.service'
+import { PrismaService } from '../prisma/service'
 import { type Valor } from '@sgaf/shared'
 import { AttachToAfDto } from './dto/attach-to-af.dto'
 

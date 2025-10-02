@@ -10,7 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common'
-import { ValorService } from './valor.service'
+import { ValorService } from './service'
 import { AttachToAfDto } from './dto/attach-to-af.dto'
 
 @Controller('valor')

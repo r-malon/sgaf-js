@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
-import { ValorService } from './valor.service'
-import { ValorController } from './valor.controller'
-import { PrismaModule } from '../prisma/prisma.module'
+import { ValorService } from './service'
+import { ValorController } from './controller'
+import { PrismaModule } from '../prisma/module'
 
 @Module({
   controllers: [ValorController],
