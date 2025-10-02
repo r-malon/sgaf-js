@@ -74,9 +74,7 @@ export function GenericDrawer<T>({
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button size="sm">
-          {triggerLabel}
-        </Button>
+        <Button size="sm">{triggerLabel}</Button>
       </DrawerTrigger>
       <DrawerContent className="p-4">
         <DrawerHeader className="flex items-center justify-between">
