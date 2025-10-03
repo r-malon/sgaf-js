@@ -23,7 +23,7 @@ export const itemColumns: ColumnDef<Item>[] = [
       <DataTableColumnHeader column={column} title="Banda Máxima" />
     ),
     cell: ({ row }) =>
-      row.original.banda_maxima > 1 ? (
+      row.original.banda_maxima > 0 ? (
         row.original.banda_maxima
       ) : (
         <Minus color="lightgray" />

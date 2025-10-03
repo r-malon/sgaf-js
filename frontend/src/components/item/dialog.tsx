@@ -32,7 +32,7 @@ export function ItemDialog({
       schema={itemSchema}
       defaultValues={{
         descricao: item?.descricao ?? '',
-        banda_maxima: item?.banda_maxima ?? 1,
+        banda_maxima: item?.banda_maxima ?? 0,
         quantidade_maxima: item?.quantidade_maxima ?? 1,
         valor: item?.valor ?? 0,
         principalId: item?.principalId ?? principalId,

@@ -27,7 +27,7 @@ export const afSchema = z.object({
     .regex(/^\d{4}-\d{2}-\d{2}$/, 'Data inválida'),
 })
 .refine((data) => new Date(data.data_fim) >= new Date(data.data_inicio), {
-  message: 'Data final não pode ser anterior à data inicial',
+  message: 'Data final deve ser posterior à data inicial',
   path: ['data_fim'],
 })
 

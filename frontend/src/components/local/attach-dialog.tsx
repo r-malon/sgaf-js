@@ -185,30 +185,31 @@ export function LocalAttachDialog({
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <FormField
-                        control={form.control}
-                        name={`locais.${idx}.banda_instalada`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>
-                              Banda Instalada (max. {item.banda_maxima})
-                            </FormLabel>
-                            <FormControl>
-                              {getFieldInput(
-                                { type: 'number', name: field.name },
-                                field,
+                      {item.banda_maxima > 0 && (
+                        <FormField
+                          control={form.control}
+                          name={`locais.${idx}.banda_instalada`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>
+                                Banda Instalada (max. {item.banda_maxima})
+                              </FormLabel>
+                              <FormControl>
+                                {getFieldInput(
+                                  { type: 'number', name: field.name },
+                                  field,
+                                )}
+                              </FormControl>
+                              {bandaExceeded && (
+                                <p className="text-xs text-red-500">
+                                  Excede banda máxima
+                                </p>
                               )}
-                            </FormControl>
-                            {bandaExceeded && (
-                              <p className="text-xs text-red-500">
-                                Excede banda máxima
-                              </p>
-                            )}
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      )}
                       <FormField
                         control={form.control}
                         name={`locais.${idx}.quantidade`}
@@ -260,7 +261,7 @@ export function LocalAttachDialog({
                                 field,
                               )}
                             </FormControl>
-                            <FormLabel>Ativo</FormLabel>
+                            <FormLabel>Ativo?</FormLabel>
                           </FormItem>
                         )}
                       />

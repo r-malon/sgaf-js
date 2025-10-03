@@ -21,19 +21,19 @@ const itemLocalBaseSchema = z.object({
     .positive('Quantidade deve ser >= 1'),
   status: z.boolean(),
 })
-  .refine((data) => data.status || data.data_desinstalacao, {
-    message: 'Data de desinstalação é obrigatória quando inativo',
+.refine((data) => data.status || data.data_desinstalacao, {
+  message: 'Data de desinstalação é obrigatória se inativo',
+  path: ['data_desinstalacao'],
+})
+.refine(
+  (data) =>
+    !data.data_desinstalacao ||
+    new Date(data.data_desinstalacao) >= new Date(data.data_instalacao),
+  {
+    message: 'Data de desinstalação deve ser posterior à instalação',
     path: ['data_desinstalacao'],
-  })
-  .refine(
-    (data) =>
-      !data.data_desinstalacao ||
-      new Date(data.data_desinstalacao) >= new Date(data.data_instalacao),
-    {
-      message: 'Data de desinstalação deve ser posterior à instalação',
-      path: ['data_desinstalacao'],
-    }
-  )
+  }
+)
 
 // For creating individual ItemLocal
 export const itemLocalSchema = itemLocalBaseSchema

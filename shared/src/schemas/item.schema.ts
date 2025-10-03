@@ -12,7 +12,7 @@ const itemBaseSchema = z.object({
       error: () => 'Banda máxima é obrigatória',
     })
     .int()
-    .positive('Banda máxima deve ser >= 1'),
+    .nonnegative('Banda máxima deve ser >= 0'),
   quantidade_maxima: z
     .number({
       error: () => 'Quantidade máxima é obrigatória',
