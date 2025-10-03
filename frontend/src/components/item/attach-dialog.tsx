@@ -103,7 +103,7 @@ export function ItemAttachDialog({
       append({
         itemId: id,
         valor: cached?.valor ?? 0,
-        data_inicio: cached?.data_inicio ?? item?.data_instalacao ?? '',
+        data_inicio: cached?.data_inicio ?? '',
         data_fim: cached?.data_fim ?? null,
       })
     })
