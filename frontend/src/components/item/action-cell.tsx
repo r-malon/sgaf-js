@@ -64,13 +64,14 @@ export function ItemActionCell({
         },
         {
           key: 'link-locais',
+          show: () => isPrincipal,
           render: (item) => (
             <LocalAttachDialog
               item={item}
               title="Adicionar locais"
               triggerLabel={
                 <>
-                  <Link /> Locais
+                  <Link /> <MapPin />
                 </>
               }
             />

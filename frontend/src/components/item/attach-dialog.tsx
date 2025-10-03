@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from 'react'
-import { useState, useMemo } from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -21,6 +20,12 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 
+type SelectedState = {
+  valor: number
+  data_inicio: string
+  data_fim: string | null
+}
+
 interface ItemAttachDialogProps {
   afId: number
   afNumero?: string
@@ -36,8 +41,9 @@ export function ItemAttachDialog({
   triggerLabel,
   title,
 }: ItemAttachDialogProps) {
-  const [open, setOpen] = useState(false)
-  const [selectedIds, setSelectedIds] = useState<number[]>([])
+  const [open, setOpen] = React.useState(false)
+  const [selectedIds, setSelectedIds] = React.useState<number[]>([])
+  const [cache, setCache] = React.useState<Record<number, SelectedState>>({})
 
   const { handleCreate } = useEntityHandlers('valor')
   const { key } = useEntityHandlers('item')
@@ -46,7 +52,7 @@ export function ItemAttachDialog({
   const { data: attachedItems = [], isLoading: loadingAttached } =
     useAPISWR<Item>(key({ afId }))
 
-  const availableItems = useMemo(() => {
+  const availableItems = React.useMemo(() => {
     const attachedIds = new Set(attachedItems.map((item) => item.id))
     return principalItems.filter((item) => !attachedIds.has(item.id))
   }, [principalItems, attachedItems])
@@ -77,14 +83,27 @@ export function ItemAttachDialog({
       .map((f, idx) => ({ itemId: f.itemId, idx }))
       .filter(({ itemId }) => !selected.includes(itemId))
 
-    toRemove.reverse().forEach(({ idx }) => remove(idx))
+    toRemove.reverse().forEach(({ itemId, idx }) => {
+      const current = form.getValues(`items.${idx}`)
+      setCache((prev) => ({
+        ...prev,
+        [itemId]: {
+          valor: current.valor ?? 0,
+          data_inicio: current.data_inicio ?? '',
+          data_fim: current.data_fim ?? null,
+        },
+      }))
+      remove(idx)
+    })
+
     toAdd.forEach((id) => {
       const item = availableItems.find((i) => i.id === id)
+      const cached = cache[id]
       append({
         itemId: id,
-        valor: 0,
-        data_inicio: '',
-        data_fim: null,
+        valor: cached?.valor ?? 0,
+        data_inicio: cached?.data_inicio ?? item?.data_instalacao ?? '',
+        data_fim: cached?.data_fim ?? null,
       })
     })
   }
@@ -92,6 +111,15 @@ export function ItemAttachDialog({
   function removeItem(itemId: number) {
     const idx = fields.findIndex((f) => f.itemId === itemId)
     if (idx !== -1) {
+      const current = form.getValues(`items.${idx}`)
+      setCache((prev) => ({
+        ...prev,
+        [itemId]: {
+          valor: current.valor ?? 0,
+          data_inicio: current.data_inicio ?? '',
+          data_fim: current.data_fim ?? null,
+        },
+      }))
       remove(idx)
       setSelectedIds((prev) => prev.filter((id) => id !== itemId))
     }
@@ -106,6 +134,7 @@ export function ItemAttachDialog({
     setOpen(false)
     setSelectedIds([])
     form.reset({ afId, items: [] })
+    setCache({})
   }
 
   return (

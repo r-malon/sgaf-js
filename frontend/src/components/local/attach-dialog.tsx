@@ -22,6 +22,14 @@ import { attachLocaisSchema, type Item, type Local } from '@sgaf/shared'
 
 type AttachLocaisForm = z.infer<typeof attachLocaisSchema>
 
+type SelectedState = {
+  banda_instalada: number
+  data_instalacao: string
+  data_desinstalacao: string | null
+  quantidade: number
+  status: boolean
+}
+
 interface LocalAttachDialogProps {
   item: Item
   triggerLabel: React.ReactElement | string
@@ -35,6 +43,7 @@ export function LocalAttachDialog({
 }: LocalAttachDialogProps) {
   const [open, setOpen] = React.useState(false)
   const [selectedIds, setSelectedIds] = React.useState<number[]>([])
+  const [cache, setCache] = React.useState<Record<number, SelectedState>>({})
 
   const { handleCreate } = useEntityHandlers('item-local')
   const { key } = useEntityHandlers('local')
@@ -86,20 +95,46 @@ export function LocalAttachDialog({
       .map((f, idx) => ({ id: f.localId, idx }))
       .filter(({ id }) => !newIds.includes(id))
 
-    toRemove.reverse().forEach(({ idx }) => remove(idx))
-    toAdd.forEach((localId) =>
+    toRemove.reverse().forEach(({ id, idx }) => {
+      const current = form.getValues(`locais.${idx}`)
+      setCache((prev) => ({
+        ...prev,
+        [id]: {
+          banda_instalada: current.banda_instalada ?? 0,
+          data_instalacao: current.data_instalacao ?? new Date().toISOString().slice(0, 10),
+          data_desinstalacao: current.data_desinstalacao ?? null,
+          quantidade: current.quantidade ?? 1,
+          status: current.status ?? true,
+        },
+      }))
+      remove(idx)
+    })
+
+    toAdd.forEach((localId) => {
+      const cached = cache[localId]
       append({
         localId,
-        banda_instalada: 0,
-        data_instalacao: new Date().toISOString().slice(0, 10),
-        data_desinstalacao: null,
-        quantidade: 1,
-        status: true,
-      }),
-    )
+        banda_instalada: cached?.banda_instalada ?? 0,
+        data_instalacao: cached?.data_instalacao ?? new Date().toISOString().slice(0, 10),
+        data_desinstalacao: cached?.data_desinstalacao ?? null,
+        quantidade: cached?.quantidade ?? 1,
+        status: cached?.status ?? true,
+      })
+    })
   }
 
   function removeLocal(idx: number, localId: number) {
+    const current = form.getValues(`locais.${idx}`)
+    setCache((prev) => ({
+      ...prev,
+      [localId]: {
+        banda_instalada: current.banda_instalada ?? 0,
+        data_instalacao: current.data_instalacao ?? new Date().toISOString().slice(0, 10),
+        data_desinstalacao: current.data_desinstalacao ?? null,
+        quantidade: current.quantidade ?? 1,
+        status: current.status ?? true,
+      },
+    }))
     remove(idx)
     setSelectedIds((prev) => prev.filter((id) => id !== localId))
   }
@@ -113,6 +148,7 @@ export function LocalAttachDialog({
     setOpen(false)
     form.reset({ itemId: item.id, locais: [] })
     setSelectedIds([])
+    setCache({})
   }
 
   const hasBandaExceeded = fields.some((_, idx) => {
