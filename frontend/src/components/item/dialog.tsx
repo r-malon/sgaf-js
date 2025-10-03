@@ -34,7 +34,8 @@ export function ItemDialog({
         descricao: item?.descricao ?? '',
         banda_maxima: item?.banda_maxima ?? 0,
         quantidade_maxima: item?.quantidade_maxima ?? 1,
-        valor: item?.valor ?? 0,
+        data_alteracao: item?.data_alteracao ?? null,
+        valor: 0,
         principalId: item?.principalId ?? principalId,
       }}
       fields={[

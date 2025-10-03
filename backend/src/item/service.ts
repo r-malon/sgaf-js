@@ -19,10 +19,10 @@ export class ItemService {
 
       const item = await tx.item.create({
         data: {
-          principalId: createItemDto.principalId,
-          descricao: createItemDto.descricao,
-          banda_maxima: createItemDto.banda_maxima,
-          quantidade_maxima: createItemDto.quantidade_maxima,
+          ...omit(createItemDto, ['valor']),
+          data_alteracao: createItemDto.data_alteracao
+            ? new Date(createItemDto.data_alteracao)
+            : null,
         },
       })
 
@@ -66,7 +66,7 @@ export class ItemService {
     const { itemLocais, ...itemWithoutRelations } = item
 
     return {
-      ...omit(itemWithoutRelations, ['data_alteracao']),
+      ...itemWithoutRelations,
       data_alteracao: item.data_alteracao
         ? item.data_alteracao.toISOString().slice(0, 10)
         : null,
@@ -133,7 +133,7 @@ export class ItemService {
         const { itemLocais, ...itemWithoutRelations } = item
 
         return {
-          ...omit(itemWithoutRelations, ['data_alteracao']),
+          ...itemWithoutRelations,
           data_alteracao: item.data_alteracao
             ? item.data_alteracao.toISOString().slice(0, 10)
             : null,
@@ -167,6 +167,9 @@ export class ItemService {
         descricao: updateItemDto.descricao,
         banda_maxima: updateItemDto.banda_maxima,
         quantidade_maxima: updateItemDto.quantidade_maxima,
+        data_alteracao: updateItemDto.data_alteracao
+          ? new Date(updateItemDto.data_alteracao)
+          : null,
       },
       include: {
         itemLocais: {
@@ -185,7 +188,7 @@ export class ItemService {
     const { itemLocais, ...itemWithoutRelations } = item
 
     return {
-      ...omit(itemWithoutRelations, ['data_alteracao']),
+      ...itemWithoutRelations,
       data_alteracao: item.data_alteracao
         ? item.data_alteracao.toISOString().slice(0, 10)
         : null,
