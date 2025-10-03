@@ -1,7 +1,7 @@
 'use client'
 
 import { ColumnDef } from '@tanstack/react-table'
-import { Check, X } from 'lucide-react'
+import { Minus, Check, X } from 'lucide-react'
 import { DataTableColumnHeader } from '@/components/data-table-column-header'
 import { ItemLocalActionCell } from '@/components/item-local/action-cell'
 import { type ItemLocal } from '@sgaf/shared'
@@ -13,26 +13,7 @@ export function getItemLocalColumns(query?: {
   const showItem = !query?.itemId
   const showLocal = !query?.localId
 
-  const columns: ColumnDef<ItemLocal>[] = []
-
-  if (showItem) {
-    columns.push({
-      accessorKey: 'item.descricao',
-      header: 'Item',
-      cell: ({ row }) =>
-        row.original.item?.descricao ?? `Item ${row.original.itemId}`,
-    })
-  }
-
-  if (showLocal) {
-    columns.push({
-      accessorKey: 'local.nome',
-      header: 'Local',
-      cell: ({ row }) => row.original.local?.nome ?? '',
-    })
-  }
-
-  columns.push(
+  const columns: ColumnDef<ItemLocal>[] = [
     {
       accessorKey: 'banda_instalada',
       header: ({ column }) => (
@@ -56,7 +37,8 @@ export function getItemLocalColumns(query?: {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Desinstalação" />
       ),
-      cell: ({ row }) => row.original.data_desinstalacao ?? '-',
+      cell: ({ row }) =>
+        row.original.data_desinstalacao ?? <Minus color="lightgray" />,
     },
     {
       accessorKey: 'status',
@@ -71,7 +53,24 @@ export function getItemLocalColumns(query?: {
       header: 'Ações',
       cell: ({ row }) => <ItemLocalActionCell itemLocal={row.original} />,
     },
-  )
+  ]
+
+  if (showItem) {
+    columns.unshift({
+      accessorKey: 'item.descricao',
+      header: 'Item',
+      cell: ({ row }) =>
+        row.original.item?.descricao ?? `Item ${row.original.itemId}`,
+    })
+  }
+
+  if (showLocal) {
+    columns.unshift({
+      accessorKey: 'local.nome',
+      header: 'Local',
+      cell: ({ row }) => row.original.local?.nome ?? '',
+    })
+  }
 
   return columns
 }
