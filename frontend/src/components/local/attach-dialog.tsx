@@ -278,7 +278,7 @@ export function LocalAttachDialog({
                         name={`locais.${idx}.data_instalacao`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Data de Instalação</FormLabel>
+                            <FormLabel>Instalação</FormLabel>
                             <FormControl>
                               {getFieldInput(
                                 { type: 'date', name: field.name },
@@ -312,7 +312,7 @@ export function LocalAttachDialog({
                           name={`locais.${idx}.data_desinstalacao`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Data de Desinstalação</FormLabel>
+                              <FormLabel>Desinstalação</FormLabel>
                               <FormControl>
                                 {getFieldInput(
                                   { type: 'date', name: field.name },
