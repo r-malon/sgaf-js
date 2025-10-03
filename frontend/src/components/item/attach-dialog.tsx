@@ -4,13 +4,9 @@ import * as React from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { BaseDialog } from '@/components/base-dialog'
-import { getFieldInput } from '@/components/field-input'
-import { useEntityHandlers } from '@/lib/handlers'
-import { useAPISWR } from '@/lib/hooks'
-import { type Item, attachToAfSchema } from '@sgaf/shared'
 import {
   Form,
   FormControl,
@@ -19,6 +15,11 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { BaseDialog } from '@/components/base-dialog'
+import { getFieldInput } from '@/components/field-input'
+import { useEntityHandlers } from '@/lib/handlers'
+import { useAPISWR } from '@/lib/hooks'
+import { type Item, attachToAfSchema } from '@sgaf/shared'
 
 type SelectedState = {
   valor: number
@@ -191,7 +192,7 @@ export function ItemAttachDialog({
                         variant="ghost"
                         onClick={() => removeItem(field.itemId)}
                       >
-                        Remover
+                        <X color="red" />
                       </Button>
                     </div>
 
@@ -254,9 +255,6 @@ export function ItemAttachDialog({
           )}
 
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="ghost" onClick={resetDialog}>
-              Cancelar
-            </Button>
             <Button type="submit" disabled={fields.length === 0}>
               Confirmar
             </Button>

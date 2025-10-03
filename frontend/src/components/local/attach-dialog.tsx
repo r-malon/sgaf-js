@@ -4,6 +4,7 @@ import * as React from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import {
@@ -101,7 +102,8 @@ export function LocalAttachDialog({
         ...prev,
         [id]: {
           banda_instalada: current.banda_instalada ?? 0,
-          data_instalacao: current.data_instalacao ?? new Date().toISOString().slice(0, 10),
+          data_instalacao:
+            current.data_instalacao ?? new Date().toISOString().slice(0, 10),
           data_desinstalacao: current.data_desinstalacao ?? null,
           quantidade: current.quantidade ?? 1,
           status: current.status ?? true,
@@ -115,7 +117,8 @@ export function LocalAttachDialog({
       append({
         localId,
         banda_instalada: cached?.banda_instalada ?? 0,
-        data_instalacao: cached?.data_instalacao ?? new Date().toISOString().slice(0, 10),
+        data_instalacao:
+          cached?.data_instalacao ?? new Date().toISOString().slice(0, 10),
         data_desinstalacao: cached?.data_desinstalacao ?? null,
         quantidade: cached?.quantidade ?? 1,
         status: cached?.status ?? true,
@@ -129,7 +132,8 @@ export function LocalAttachDialog({
       ...prev,
       [localId]: {
         banda_instalada: current.banda_instalada ?? 0,
-        data_instalacao: current.data_instalacao ?? new Date().toISOString().slice(0, 10),
+        data_instalacao:
+          current.data_instalacao ?? new Date().toISOString().slice(0, 10),
         data_desinstalacao: current.data_desinstalacao ?? null,
         quantidade: current.quantidade ?? 1,
         status: current.status ?? true,
@@ -216,7 +220,7 @@ export function LocalAttachDialog({
                         variant="ghost"
                         onClick={() => removeLocal(idx, field.localId)}
                       >
-                        Remover
+                        <X color="red" />
                       </Button>
                     </div>
 
@@ -334,9 +338,6 @@ export function LocalAttachDialog({
           )}
 
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="ghost" onClick={resetDialog}>
-              Cancelar
-            </Button>
             <Button
               type="submit"
               disabled={
