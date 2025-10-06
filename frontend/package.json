@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "__NEXT_TEST_MODE=true next build --debug",
+    "build": "next build",
     "build:debug": "__NEXT_TEST_MODE=true next build --debug",
     "start": "next start",
     "lint": "next lint",
