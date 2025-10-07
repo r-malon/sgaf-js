@@ -11,19 +11,19 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common'
-import { ItemLocalService } from './service'
-import { CreateItemLocalDto } from './dto/create-item-local.dto'
-import { UpdateItemLocalDto } from './dto/update-item-local.dto'
+import { InstalacaoService } from './service'
+import { CreateInstalacaoDto } from './dto/create-instalacao.dto'
+import { UpdateInstalacaoDto } from './dto/update-instalacao.dto'
 import { AttachLocaisDto } from './dto/attach-locais.dto'
 
-@Controller('item-local')
-export class ItemLocalController {
-  constructor(private readonly itemLocalService: ItemLocalService) {}
+@Controller('instalacao')
+export class InstalacaoController {
+  constructor(private readonly instalacaoService: InstalacaoService) {}
 
   @Post()
   @HttpCode(HttpStatus.NO_CONTENT)
   async attachLocais(@Body() dto: AttachLocaisDto) {
-    await this.itemLocalService.attachLocais(dto)
+    await this.instalacaoService.attachLocais(dto)
   }
 
   @Get()
@@ -31,25 +31,25 @@ export class ItemLocalController {
     @Query('itemId', new ParseIntPipe({ optional: true })) itemId?: number,
     @Query('localId', new ParseIntPipe({ optional: true })) localId?: number,
   ) {
-    return await this.itemLocalService.findMany({ itemId, localId })
+    return await this.instalacaoService.findMany({ itemId, localId })
   }
 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    return await this.itemLocalService.findOne(id)
+    return await this.instalacaoService.findOne(id)
   }
 
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateDto: UpdateItemLocalDto,
+    @Body() updateDto: UpdateInstalacaoDto,
   ) {
-    return await this.itemLocalService.update(id, updateDto)
+    return await this.instalacaoService.update(id, updateDto)
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id', ParseIntPipe) id: number) {
-    await this.itemLocalService.delete(id)
+    await this.instalacaoService.delete(id)
   }
 }

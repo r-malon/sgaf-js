@@ -46,7 +46,7 @@ export function LocalAttachDialog({
   const [selectedIds, setSelectedIds] = React.useState<number[]>([])
   const [cache, setCache] = React.useState<Record<number, SelectedState>>({})
 
-  const { handleCreate } = useEntityHandlers('item-local')
+  const { handleCreate } = useEntityHandlers('instalacao')
   const { key } = useEntityHandlers('local')
   const { data: allLocals = [], isLoading } = useAPISWR<Local>(key())
 

@@ -12,9 +12,7 @@ model Local {
   nome            String @unique
   nome_normalized String @unique
 
-  itemLocais ItemLocal[]
-
-  @@map("Local")
+  instalacoes Instalacao[]
 }
 
 model Contrato {
@@ -25,13 +23,11 @@ model Contrato {
   cpf      String
 
   afs AF[]
-
-  @@map("Contrato")
 }
 
 model AF {
   id          Int      @id @default(autoincrement())
-  contratoId  Int      @map("Contrato_id")
+  contratoId  Int
   principal   Boolean
   numero      String   @unique
   fornecedor  String
@@ -46,30 +42,28 @@ model AF {
   valores        Valor[]
 
   @@index([contratoId])
-  @@map("AF")
 }
 
 model Item {
   id                Int       @id @default(autoincrement())
-  principalId       Int       @map("principal_id")
+  principalId       Int
   descricao         String?
   data_alteracao    DateTime?
   banda_maxima      Int
   quantidade_maxima Int
 
-  principal  AF          @relation("principalItems", fields: [principalId], references: [id], onDelete: Restrict)
-  afs        AF[]
-  valores    Valor[]
-  itemLocais ItemLocal[]
+  principal   AF           @relation("principalItems", fields: [principalId], references: [id], onDelete: Restrict)
+  afs         AF[]
+  valores     Valor[]
+  instalacoes Instalacao[]
 
   @@index([principalId])
-  @@map("Item")
 }
 
-model ItemLocal {
+model Instalacao {
   id                 Int       @id @default(autoincrement())
-  itemId             Int       @map("Item_id")
-  localId            Int       @map("Local_id")
+  itemId             Int
+  localId            Int
   banda_instalada    Int
   data_instalacao    DateTime
   data_desinstalacao DateTime?
@@ -82,13 +76,12 @@ model ItemLocal {
   @@unique([itemId, localId])
   @@index([itemId])
   @@index([localId])
-  @@map("ItemLocal")
 }
 
 model Valor {
   id          Int       @id @default(autoincrement())
-  itemId      Int       @map("Item_id")
-  afId        Int       @map("AF_id")
+  itemId      Int
+  afId        Int
   valor       Int
   data_inicio DateTime
   data_fim    DateTime?
@@ -98,5 +91,4 @@ model Valor {
 
   @@index([itemId])
   @@index([afId])
-  @@map("Valor")
 }

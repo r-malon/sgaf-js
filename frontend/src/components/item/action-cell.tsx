@@ -5,7 +5,7 @@ import { useEntityHandlers } from '@/lib/handlers'
 import { ActionCell } from '@/components/action-cell'
 import { ValorTableDialog } from '@/components/valor/table-dialog'
 import { LocalAttachDialog } from '@/components/local/attach-dialog'
-import { ItemLocalTableDialog } from '@/components/item-local/table-dialog'
+import { InstalacaoTableDialog } from '@/components/instalacao/table-dialog'
 import { type Item } from '@sgaf/shared'
 
 export function ItemActionCell({
@@ -81,7 +81,7 @@ export function ItemActionCell({
           key: 'list-instalados',
           show: (item) => item.instalados_count > 0,
           render: (item) => (
-            <ItemLocalTableDialog
+            <InstalacaoTableDialog
               itemId={item.id}
               triggerLabel={
                 <>

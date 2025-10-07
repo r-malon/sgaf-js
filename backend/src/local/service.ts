@@ -32,7 +32,7 @@ export class LocalService {
     return Promise.all(
       locais.map(async (local) => ({
         ...local,
-        instalados_count: await this.prisma.itemLocal.count({
+        instalados_count: await this.prisma.instalacao.count({
           where: { localId: local.id },
         }),
       })),
@@ -47,7 +47,7 @@ export class LocalService {
 
     return {
       ...local,
-      instalados_count: await this.prisma.itemLocal.count({
+      instalados_count: await this.prisma.instalacao.count({
         where: { localId: local.id },
       }),
     }
@@ -64,7 +64,7 @@ export class LocalService {
 
     return {
       ...local,
-      instalados_count: await this.prisma.itemLocal.count({
+      instalados_count: await this.prisma.instalacao.count({
         where: { localId: local.id },
       }),
     }

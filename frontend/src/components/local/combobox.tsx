@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/popover'
 import { ChevronsUpDown, Trash2, Pencil, List } from 'lucide-react'
 import { LocalDialog } from '@/components/local/dialog'
-import { ItemLocalTableDialog } from '@/components/item-local/table-dialog'
+import { InstalacaoTableDialog } from '@/components/instalacao/table-dialog'
 import { type Local } from '@sgaf/shared'
 import { useEntityHandlers } from '@/lib/handlers'
 import { useAPISWR } from '@/lib/hooks'
@@ -122,7 +122,7 @@ export function LocalCombobox({
             <Trash2 />
           </Button>
           {selected.instalados_count > 0 && (
-            <ItemLocalTableDialog
+            <InstalacaoTableDialog
               localId={selected.id}
               triggerLabel={
                 <>

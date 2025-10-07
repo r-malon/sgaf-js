@@ -1,23 +1,23 @@
 import { Injectable, BadRequestException } from '@nestjs/common'
 import { PrismaService } from '../prisma/service'
-import { CreateItemLocalDto } from './dto/create-item-local.dto'
-import { UpdateItemLocalDto } from './dto/update-item-local.dto'
+import { CreateInstalacaoDto } from './dto/create-instalacao.dto'
+import { UpdateInstalacaoDto } from './dto/update-instalacao.dto'
 import { AttachLocaisDto } from './dto/attach-locais.dto'
-import { type ItemLocal } from '@sgaf/shared'
+import { type Instalacao } from '@sgaf/shared'
 
 @Injectable()
-export class ItemLocalService {
+export class InstalacaoService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createDto: CreateItemLocalDto): Promise<ItemLocal> {
+  async create(createDto: CreateInstalacaoDto): Promise<Instalacao> {
     return await this.prisma.$transaction(async (tx) => {
       const item = await tx.item.findUniqueOrThrow({
         where: { id: createDto.itemId },
-        include: { itemLocais: true },
+        include: { instalacoes: true },
       })
 
       // Validate quantidade constraint
-      const currentTotal = item.itemLocais.reduce(
+      const currentTotal = item.instalacoes.reduce(
         (sum, il) => sum + il.quantidade,
         0,
       )
@@ -34,7 +34,7 @@ export class ItemLocalService {
         )
       }
 
-      const itemLocal = await tx.itemLocal.create({
+      const instalacao = await tx.instalacao.create({
         data: {
           itemId: createDto.itemId,
           localId: createDto.localId,
@@ -53,18 +53,18 @@ export class ItemLocalService {
       })
 
       return {
-        id: itemLocal.id,
-        itemId: itemLocal.itemId,
-        localId: itemLocal.localId,
-        banda_instalada: itemLocal.banda_instalada,
-        data_instalacao: itemLocal.data_instalacao.toISOString().slice(0, 10),
-        data_desinstalacao: itemLocal.data_desinstalacao
-          ? itemLocal.data_desinstalacao.toISOString().slice(0, 10)
+        id: instalacao.id,
+        itemId: instalacao.itemId,
+        localId: instalacao.localId,
+        banda_instalada: instalacao.banda_instalada,
+        data_instalacao: instalacao.data_instalacao.toISOString().slice(0, 10),
+        data_desinstalacao: instalacao.data_desinstalacao
+          ? instalacao.data_desinstalacao.toISOString().slice(0, 10)
           : null,
-        quantidade: itemLocal.quantidade,
-        status: itemLocal.status,
-        local: itemLocal.local,
-        item: itemLocal.item,
+        quantidade: instalacao.quantidade,
+        status: instalacao.status,
+        local: instalacao.local,
+        item: instalacao.item,
       }
     })
   }
@@ -73,11 +73,11 @@ export class ItemLocalService {
     return await this.prisma.$transaction(async (tx) => {
       const item = await tx.item.findUniqueOrThrow({
         where: { id: dto.itemId },
-        include: { itemLocais: true },
+        include: { instalacoes: true },
       })
 
       // Validate total quantidade
-      const currentTotal = item.itemLocais.reduce(
+      const currentTotal = item.instalacoes.reduce(
         (sum, il) => sum + il.quantidade,
         0,
       )
@@ -101,10 +101,10 @@ export class ItemLocalService {
         }
       }
 
-      // Create all ItemLocal records
+      // Create all Instalacao records
       await Promise.all(
         dto.locais.map((local) =>
-          tx.itemLocal.create({
+          tx.instalacao.create({
             data: {
               itemId: dto.itemId,
               localId: local.localId,
@@ -125,12 +125,12 @@ export class ItemLocalService {
   async findMany(query: {
     itemId?: number
     localId?: number
-  }): Promise<ItemLocal[]> {
+  }): Promise<Instalacao[]> {
     const where: any = {}
     if (query.itemId) where.itemId = query.itemId
     if (query.localId) where.localId = query.localId
 
-    const itemLocais = await this.prisma.itemLocal.findMany({
+    const instalacoes = await this.prisma.instalacao.findMany({
       where,
       include: {
         local: { select: { id: true, nome: true } },
@@ -138,7 +138,7 @@ export class ItemLocalService {
       },
     })
 
-    return itemLocais.map((il) => ({
+    return instalacoes.map((il) => ({
       id: il.id,
       itemId: il.itemId,
       localId: il.localId,
@@ -154,8 +154,8 @@ export class ItemLocalService {
     }))
   }
 
-  async findOne(id: number): Promise<ItemLocal | null> {
-    const itemLocal = await this.prisma.itemLocal.findUnique({
+  async findOne(id: number): Promise<Instalacao | null> {
+    const instalacao = await this.prisma.instalacao.findUnique({
       where: { id },
       include: {
         local: { select: { id: true, nome: true } },
@@ -163,33 +163,33 @@ export class ItemLocalService {
       },
     })
 
-    if (!itemLocal) return null
+    if (!instalacao) return null
 
     return {
-      id: itemLocal.id,
-      itemId: itemLocal.itemId,
-      localId: itemLocal.localId,
-      banda_instalada: itemLocal.banda_instalada,
-      data_instalacao: itemLocal.data_instalacao.toISOString().slice(0, 10),
-      data_desinstalacao: itemLocal.data_desinstalacao
-        ? itemLocal.data_desinstalacao.toISOString().slice(0, 10)
+      id: instalacao.id,
+      itemId: instalacao.itemId,
+      localId: instalacao.localId,
+      banda_instalada: instalacao.banda_instalada,
+      data_instalacao: instalacao.data_instalacao.toISOString().slice(0, 10),
+      data_desinstalacao: instalacao.data_desinstalacao
+        ? instalacao.data_desinstalacao.toISOString().slice(0, 10)
         : null,
-      quantidade: itemLocal.quantidade,
-      status: itemLocal.status,
-      local: itemLocal.local,
-      item: itemLocal.item,
+      quantidade: instalacao.quantidade,
+      status: instalacao.status,
+      local: instalacao.local,
+      item: instalacao.item,
     }
   }
 
-  async update(id: number, updateDto: UpdateItemLocalDto): Promise<ItemLocal> {
+  async update(id: number, updateDto: UpdateInstalacaoDto): Promise<Instalacao> {
     return await this.prisma.$transaction(async (tx) => {
-      const current = await tx.itemLocal.findUniqueOrThrow({
+      const current = await tx.instalacao.findUniqueOrThrow({
         where: { id },
       })
 
       const item = await tx.item.findUniqueOrThrow({
         where: { id: current.itemId },
-        include: { itemLocais: true },
+        include: { instalacoes: true },
       })
 
       // Validate banda constraint if updating
@@ -204,7 +204,7 @@ export class ItemLocalService {
 
       // Validate quantidade constraint if updating
       if (updateDto.quantidade !== undefined) {
-        const otherQuantidades = item.itemLocais
+        const otherQuantidades = item.instalacoes
           .filter((il) => il.id !== id)
           .reduce((sum, il) => sum + il.quantidade, 0)
 
@@ -215,7 +215,7 @@ export class ItemLocalService {
         }
       }
 
-      const updated = await tx.itemLocal.update({
+      const updated = await tx.instalacao.update({
         where: { id },
         data: {
           banda_instalada: updateDto.banda_instalada,
@@ -252,7 +252,7 @@ export class ItemLocalService {
   }
 
   async delete(id: number): Promise<void> {
-    await this.prisma.itemLocal.delete({
+    await this.prisma.instalacao.delete({
       where: { id },
     })
   }

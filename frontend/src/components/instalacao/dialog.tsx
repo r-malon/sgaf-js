@@ -4,34 +4,34 @@ import * as React from 'react'
 import { z } from 'zod'
 import { useEntityHandlers } from '@/lib/handlers'
 import { GenericDialogForm } from '@/components/generic-dialog-form'
-import { type ItemLocal, itemLocalSchema } from '@sgaf/shared'
+import { type Instalacao, instalacaoSchema } from '@sgaf/shared'
 
-interface ItemLocalDialogProps {
-  itemLocal: ItemLocal
+interface InstalacaoDialogProps {
+  instalacao: Instalacao
   triggerLabel?: React.ReactElement | string
   title?: React.ReactElement | string
-  onSubmit?: (values: z.infer<typeof itemLocalSchema>) => Promise<void>
+  onSubmit?: (values: z.infer<typeof instalacaoSchema>) => Promise<void>
 }
 
-export function ItemLocalDialog({
-  itemLocal,
+export function InstalacaoDialog({
+  instalacao,
   triggerLabel = 'Editar',
   title,
   onSubmit,
-}: ItemLocalDialogProps) {
-  const { handleEdit } = useEntityHandlers('item-local')
+}: InstalacaoDialogProps) {
+  const { handleEdit } = useEntityHandlers('instalacao')
 
   return (
     <GenericDialogForm
-      schema={itemLocalSchema}
+      schema={instalacaoSchema}
       defaultValues={{
-        itemId: itemLocal.itemId,
-        localId: itemLocal.localId,
-        banda_instalada: itemLocal.banda_instalada,
-        data_instalacao: itemLocal.data_instalacao,
-        data_desinstalacao: itemLocal.data_desinstalacao ?? '',
-        quantidade: itemLocal.quantidade,
-        status: itemLocal.status,
+        itemId: instalacao.itemId,
+        localId: instalacao.localId,
+        banda_instalada: instalacao.banda_instalada,
+        data_instalacao: instalacao.data_instalacao,
+        data_desinstalacao: instalacao.data_desinstalacao ?? '',
+        quantidade: instalacao.quantidade,
+        status: instalacao.status,
       }}
       fields={[
         {
@@ -47,7 +47,7 @@ export function ItemLocalDialog({
       title={title ?? 'Editar item instalado'}
       triggerLabel={triggerLabel}
       onSubmit={
-        onSubmit ?? (async (values) => await handleEdit(itemLocal.id, values))
+        onSubmit ?? (async (values) => await handleEdit(instalacao.id, values))
       }
     />
   )

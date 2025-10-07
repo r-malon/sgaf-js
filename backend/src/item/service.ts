@@ -54,7 +54,7 @@ export class ItemService {
     const item = await this.prisma.item.findUniqueOrThrow({
       where: { id },
       include: {
-        itemLocais: {
+        instalacoes: {
           include: { local: { select: { nome: true } } },
         },
       },
@@ -63,14 +63,14 @@ export class ItemService {
     const total = await getItemTotal(this.prisma, item.id, afId)
     const valor_count = await countValoresForItem(this.prisma, item.id)
 
-    const { itemLocais, ...itemWithoutRelations } = item
+    const { instalacoes, ...itemWithoutRelations } = item
 
     return {
       ...itemWithoutRelations,
       data_alteracao: item.data_alteracao
         ? item.data_alteracao.toISOString().slice(0, 10)
         : null,
-      locais: itemLocais.map((il) => ({
+      locais: instalacoes.map((il) => ({
         id: il.localId,
         nome: il.local.nome,
         banda_instalada: il.banda_instalada,
@@ -81,10 +81,10 @@ export class ItemService {
         quantidade: il.quantidade,
         status: il.status,
       })),
-      quantidade_total: itemLocais.reduce((sum, il) => sum + il.quantidade, 0),
+      quantidade_total: instalacoes.reduce((sum, il) => sum + il.quantidade, 0),
       total,
       valor_count,
-      instalados_count: itemLocais.length,
+      instalados_count: instalacoes.length,
     }
   }
 
@@ -99,7 +99,7 @@ export class ItemService {
       items = await this.prisma.item.findMany({
         where: { principalId: afId },
         include: {
-          itemLocais: {
+          instalacoes: {
             include: { local: { select: { nome: true } } },
           },
         },
@@ -111,7 +111,7 @@ export class ItemService {
         include: {
           item: {
             include: {
-              itemLocais: {
+              instalacoes: {
                 include: { local: { select: { nome: true } } },
               },
             },
@@ -130,14 +130,14 @@ export class ItemService {
           afId,
         )
 
-        const { itemLocais, ...itemWithoutRelations } = item
+        const { instalacoes, ...itemWithoutRelations } = item
 
         return {
           ...itemWithoutRelations,
           data_alteracao: item.data_alteracao
             ? item.data_alteracao.toISOString().slice(0, 10)
             : null,
-          locais: itemLocais.map((il) => ({
+          locais: instalacoes.map((il) => ({
             id: il.localId,
             nome: il.local.nome,
             banda_instalada: il.banda_instalada,
@@ -148,13 +148,13 @@ export class ItemService {
             quantidade: il.quantidade,
             status: il.status,
           })),
-          quantidade_total: itemLocais.reduce(
+          quantidade_total: instalacoes.reduce(
             (sum, il) => sum + il.quantidade,
             0,
           ),
           total,
           valor_count,
-          instalados_count: itemLocais.length,
+          instalados_count: instalacoes.length,
         }
       }),
     )
@@ -172,7 +172,7 @@ export class ItemService {
           : null,
       },
       include: {
-        itemLocais: {
+        instalacoes: {
           include: { local: { select: { nome: true } } },
         },
       },
@@ -185,14 +185,14 @@ export class ItemService {
       item.principalId,
     )
 
-    const { itemLocais, ...itemWithoutRelations } = item
+    const { instalacoes, ...itemWithoutRelations } = item
 
     return {
       ...itemWithoutRelations,
       data_alteracao: item.data_alteracao
         ? item.data_alteracao.toISOString().slice(0, 10)
         : null,
-      locais: itemLocais.map((il) => ({
+      locais: instalacoes.map((il) => ({
         id: il.localId,
         nome: il.local.nome,
         banda_instalada: il.banda_instalada,
@@ -203,10 +203,10 @@ export class ItemService {
         quantidade: il.quantidade,
         status: il.status,
       })),
-      quantidade_total: itemLocais.reduce((sum, il) => sum + il.quantidade, 0),
+      quantidade_total: instalacoes.reduce((sum, il) => sum + il.quantidade, 0),
       total,
       valor_count,
-      instalados_count: itemLocais.length,
+      instalados_count: instalacoes.length,
     }
   }
 

@@ -3,22 +3,22 @@
 import * as React from 'react'
 import { type Row } from '@tanstack/react-table'
 import { GenericTableDialog } from '@/components/generic-table-dialog'
-import { getItemLocalColumns } from '@/components/item-local/columns'
-import { type ItemLocal } from '@sgaf/shared'
+import { getInstalacaoColumns } from '@/components/instalacao/columns'
+import { type Instalacao } from '@sgaf/shared'
 
-interface ItemLocalTableDialogProps {
+interface InstalacaoTableDialogProps {
   itemId?: number
   localId?: number
   triggerLabel: React.ReactElement | string
   title?: React.ReactElement | string
 }
 
-export function ItemLocalTableDialog({
+export function InstalacaoTableDialog({
   itemId,
   localId,
   triggerLabel,
   title = 'Instalações',
-}: ItemLocalTableDialogProps) {
+}: InstalacaoTableDialogProps) {
   const query = React.useMemo(() => {
     const q: { itemId?: number; localId?: number } = {}
     if (itemId) q.itemId = itemId
@@ -26,19 +26,19 @@ export function ItemLocalTableDialog({
     return q
   }, [itemId, localId])
 
-  const columns = React.useMemo(() => getItemLocalColumns(query), [query])
+  const columns = React.useMemo(() => getInstalacaoColumns(query), [query])
 
   const rowClassName = React.useCallback(
-    (row: Row<ItemLocal>) => (row.original.status ? undefined : 'opacity-50'),
+    (row: Row<Instalacao>) => (row.original.status ? undefined : 'opacity-50'),
     [],
   )
 
   return (
-    <GenericTableDialog<ItemLocal>
+    <GenericTableDialog<Instalacao>
       triggerLabel={triggerLabel}
       title={title}
       contentClassName="sm:max-w-4xl"
-      entity="item-local"
+      entity="instalacao"
       query={query}
       columns={columns}
       rowClassName={rowClassName}

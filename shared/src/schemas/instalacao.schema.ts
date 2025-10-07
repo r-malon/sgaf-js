@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
-// Base schema for ItemLocal
-const itemLocalBaseSchema = z.object({
+// Base schema for Instalacao
+const instalacaoBaseSchema = z.object({
   itemId: z.number().int().positive(),
   localId: z.number().int().positive(),
   banda_instalada: z
@@ -35,14 +35,14 @@ const itemLocalBaseSchema = z.object({
   }
 )
 
-// For creating individual ItemLocal
-export const itemLocalSchema = itemLocalBaseSchema
+// For creating individual Instalacao
+export const instalacaoSchema = instalacaoBaseSchema
 
 // For bulk attachment
 export const attachLocaisSchema = z.object({
   itemId: z.number().int().positive(),
   locais: z
-    .array(itemLocalBaseSchema.omit({ itemId: true }))
+    .array(instalacaoBaseSchema.omit({ itemId: true }))
     .min(1, 'Pelo menos um local deve ser selecionado')
     .refine(
       (data) => new Set(data.map((l) => l.localId)).size === data.length,
@@ -54,12 +54,12 @@ export const attachLocaisSchema = z.object({
 })
 
 // For updates (partial)
-export const updateItemLocalSchema = itemLocalBaseSchema
+export const updateInstalacaoSchema = instalacaoBaseSchema
   .omit({ itemId: true, localId: true })
   .partial()
 
 // For responses
-export const itemLocalOutputSchema = itemLocalBaseSchema.safeExtend({
+export const instalacaoOutputSchema = instalacaoBaseSchema.safeExtend({
   id: z.number().int().positive().readonly(),
   local: z
     .object({
@@ -75,4 +75,4 @@ export const itemLocalOutputSchema = itemLocalBaseSchema.safeExtend({
     .optional(),
 })
 
-export type ItemLocal = z.infer<typeof itemLocalOutputSchema>
+export type Instalacao = z.infer<typeof instalacaoOutputSchema>

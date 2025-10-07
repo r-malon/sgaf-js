@@ -3,17 +3,17 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { Minus, Check, X } from 'lucide-react'
 import { DataTableColumnHeader } from '@/components/data-table-column-header'
-import { ItemLocalActionCell } from '@/components/item-local/action-cell'
-import { type ItemLocal } from '@sgaf/shared'
+import { InstalacaoActionCell } from '@/components/instalacao/action-cell'
+import { type Instalacao } from '@sgaf/shared'
 
-export function getItemLocalColumns(query?: {
+export function getInstalacaoColumns(query?: {
   itemId?: number
   localId?: number
-}): ColumnDef<ItemLocal>[] {
+}): ColumnDef<Instalacao>[] {
   const showItem = !query?.itemId
   const showLocal = !query?.localId
 
-  const columns: ColumnDef<ItemLocal>[] = [
+  const columns: ColumnDef<Instalacao>[] = [
     {
       accessorKey: 'banda_instalada',
       header: ({ column }) => (
@@ -51,7 +51,7 @@ export function getItemLocalColumns(query?: {
     {
       id: 'actions',
       header: 'Ações',
-      cell: ({ row }) => <ItemLocalActionCell itemLocal={row.original} />,
+      cell: ({ row }) => <InstalacaoActionCell instalacao={row.original} />,
     },
   ]
 
