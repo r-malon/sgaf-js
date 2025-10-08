@@ -22,7 +22,7 @@ const valorBaseSchema = z.object({
   (data) =>
     !data.data_fim || new Date(data.data_fim) >= new Date(data.data_inicio),
   {
-    message: 'Data final não pode ser anterior à data inicial',
+    message: 'Data final deve ser posterior à data inicial',
     path: ['data_fim'],
   },
 )

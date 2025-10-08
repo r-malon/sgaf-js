@@ -11,7 +11,7 @@ interface DescricaoColumnCellProps {
 export const DescricaoColumnCell = memo(function DescricaoColumnCell({
   descricao,
 }: DescricaoColumnCellProps) {
-  if (descricao === '') return <Minus color="lightgray" />
+  if (!descricao) return <Minus color="lightgray" />
   return descricao.length > 20 ? (
     <DescriptionCell trunc={20} text={descricao} />
   ) : (

@@ -68,7 +68,6 @@ export function ItemActionCell({
           render: (item) => (
             <LocalAttachDialog
               item={item}
-              title="Adicionar locais"
               triggerLabel={
                 <>
                   <Link /> <MapPin />

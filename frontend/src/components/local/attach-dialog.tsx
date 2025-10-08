@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { X } from 'lucide-react'
+import { X, Minus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import {
@@ -163,7 +163,13 @@ export function LocalAttachDialog({
   return (
     <BaseDialog
       triggerLabel={triggerLabel}
-      title={title ?? `Adicionar locais ao Item ${item.id}`}
+      title={
+        title ?? (
+          <>
+            Instalar {item.descricao ?? <Minus color="lightgray" />}
+          </>
+        )
+      }
       contentClassName="sm:max-w-2xl"
       onOpenChange={(newOpen) => {
         setOpen(newOpen)

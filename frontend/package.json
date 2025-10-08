@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "build:debug": "__NEXT_TEST_MODE=true next build --debug",
-    "start": "next start",
+    "start": "next build && next start",
     "lint": "next lint",
     "clean": "rimraf .next/ *.tsbuildinfo"
   },
