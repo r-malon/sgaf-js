@@ -5,7 +5,11 @@ import { useEntityHandlers } from '@/lib/handlers'
 import { ActionCell } from '@/components/action-cell'
 import { type Instalacao } from '@sgaf/shared'
 
-export function InstalacaoActionCell({ instalacao }: { instalacao: Instalacao }) {
+export function InstalacaoActionCell({
+  instalacao,
+}: {
+  instalacao: Instalacao
+}) {
   const { handleDelete } = useEntityHandlers('instalacao')
 
   return (
@@ -15,7 +19,10 @@ export function InstalacaoActionCell({ instalacao }: { instalacao: Instalacao })
         {
           key: 'edit',
           render: (instalacao) => (
-            <InstalacaoDialog instalacao={instalacao} triggerLabel={<Pencil />} />
+            <InstalacaoDialog
+              instalacao={instalacao}
+              triggerLabel={<Pencil />}
+            />
           ),
         },
         {

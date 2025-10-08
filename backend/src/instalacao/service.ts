@@ -181,7 +181,10 @@ export class InstalacaoService {
     }
   }
 
-  async update(id: number, updateDto: UpdateInstalacaoDto): Promise<Instalacao> {
+  async update(
+    id: number,
+    updateDto: UpdateInstalacaoDto,
+  ): Promise<Instalacao> {
     return await this.prisma.$transaction(async (tx) => {
       const current = await tx.instalacao.findUniqueOrThrow({
         where: { id },
