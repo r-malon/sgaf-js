@@ -17,8 +17,7 @@ export function AFActionCell({
   principalId: number
   principalItemCount: number
 }) {
-  const { handleEdit, handleDelete } = useEntityHandlers('af')
-  const { handleCreate } = useEntityHandlers('item')
+  const { handleDelete } = useEntityHandlers('af')
 
   return (
     <ActionCell<AF>

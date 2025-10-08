@@ -9,10 +9,10 @@ import { type Instalacao } from '@sgaf/shared'
 export class InstalacaoService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createDto: CreateInstalacaoDto): Promise<Instalacao> {
+  async create(dto: CreateInstalacaoDto): Promise<Instalacao> {
     return await this.prisma.$transaction(async (tx) => {
       const item = await tx.item.findUniqueOrThrow({
-        where: { id: createDto.itemId },
+        where: { id: dto.itemId },
         include: { instalacoes: true },
       })
 
@@ -21,14 +21,14 @@ export class InstalacaoService {
         (sum, il) => sum + il.quantidade,
         0,
       )
-      if (currentTotal + createDto.quantidade > item.quantidade_maxima) {
+      if (currentTotal + dto.quantidade > item.quantidade_maxima) {
         throw new BadRequestException(
-          `Quantidade total (${currentTotal + createDto.quantidade}) excede máximo (${item.quantidade_maxima})`,
+          `Quantidade total (${currentTotal + dto.quantidade}) excede máximo (${item.quantidade_maxima})`,
         )
       }
 
       // Validate banda constraint
-      if (createDto.banda_instalada > item.banda_maxima) {
+      if (dto.banda_instalada > item.banda_maxima) {
         throw new BadRequestException(
           'Banda instalada não pode exceder banda máxima',
         )
@@ -36,15 +36,15 @@ export class InstalacaoService {
 
       const instalacao = await tx.instalacao.create({
         data: {
-          itemId: createDto.itemId,
-          localId: createDto.localId,
-          banda_instalada: createDto.banda_instalada,
-          data_instalacao: new Date(createDto.data_instalacao),
-          data_desinstalacao: createDto.data_desinstalacao
-            ? new Date(createDto.data_desinstalacao)
+          itemId: dto.itemId,
+          localId: dto.localId,
+          banda_instalada: dto.banda_instalada,
+          data_instalacao: new Date(dto.data_instalacao),
+          data_desinstalacao: dto.data_desinstalacao
+            ? new Date(dto.data_desinstalacao)
             : null,
-          quantidade: createDto.quantidade,
-          status: createDto.status,
+          quantidade: dto.quantidade,
+          status: dto.status,
         },
         include: {
           local: { select: { id: true, nome: true } },
@@ -126,7 +126,7 @@ export class InstalacaoService {
     itemId?: number
     localId?: number
   }): Promise<Instalacao[]> {
-    const where: any = {}
+    const where: { itemId?: number; localId?: number } = {}
     if (query.itemId) where.itemId = query.itemId
     if (query.localId) where.localId = query.localId
 
@@ -155,15 +155,13 @@ export class InstalacaoService {
   }
 
   async findOne(id: number): Promise<Instalacao | null> {
-    const instalacao = await this.prisma.instalacao.findUnique({
+    const instalacao = await this.prisma.instalacao.findUniqueOrThrow({
       where: { id },
       include: {
         local: { select: { id: true, nome: true } },
         item: { select: { id: true, descricao: true } },
       },
     })
-
-    if (!instalacao) return null
 
     return {
       id: instalacao.id,
@@ -213,7 +211,7 @@ export class InstalacaoService {
 
         if (otherQuantidades + updateDto.quantidade > item.quantidade_maxima) {
           throw new BadRequestException(
-            `Total quantidade (${otherQuantidades + updateDto.quantidade}) excederia máximo (${item.quantidade_maxima})`,
+            `Quantidade (${otherQuantidades + updateDto.quantidade}) excede máximo (${item.quantidade_maxima})`,
           )
         }
       }

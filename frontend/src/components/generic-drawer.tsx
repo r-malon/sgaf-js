@@ -10,7 +10,6 @@ import {
 } from '@/components/ui/drawer'
 import { Button } from '@/components/ui/button'
 import { DataTable } from '@/components/data-table'
-import { DataTableFilter } from '@/components/data-table-filter'
 import {
   type Row,
   useReactTable,

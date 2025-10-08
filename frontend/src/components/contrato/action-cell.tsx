@@ -9,7 +9,6 @@ import { type Contrato } from '@sgaf/shared'
 
 export function ContratoActionCell({ contrato }: { contrato: Contrato }) {
   const { handleEdit, handleDelete } = useEntityHandlers('contrato')
-  const { handleCreate } = useEntityHandlers('af')
 
   return (
     <ActionCell<Contrato>

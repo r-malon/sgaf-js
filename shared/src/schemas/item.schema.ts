@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { instalacaoOutputSchema } from './instalacao.schema'
 
 const itemBaseSchema = z.object({
   principalId: z.number().int().positive().readonly(),
@@ -21,7 +22,6 @@ const itemBaseSchema = z.object({
     .positive('Quantidade máxima deve ser >= 1'),
 })
 
-// For input DTOs
 export const itemSchema = itemBaseSchema.extend({
   valor: z
     .number({
@@ -32,18 +32,13 @@ export const itemSchema = itemBaseSchema.extend({
     .nonnegative(),
 })
 
-// For responses
 export const itemOutputSchema = itemBaseSchema.extend({
   id: z.number().int().positive().readonly(),
-  locais: z.array(
-    z.object({
-      id: z.number().int().positive(),
-      nome: z.string(),
-      banda_instalada: z.number().int().nonnegative(),
-      data_instalacao: z.string(),
-      data_desinstalacao: z.string().nullish(),
-      quantidade: z.number().int().positive(),
-      status: z.boolean(),
+  instalacoes: z.array(
+    instalacaoOutputSchema.pick({
+      id: true,
+      localId: true,
+      quantidade: true,
     })
   ),
   quantidade_total: z.number().int().nonnegative(),

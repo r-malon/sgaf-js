@@ -4,28 +4,29 @@ import {
   ArgumentsHost,
   HttpStatus,
 } from '@nestjs/common'
+import { type Response } from 'express'
 import { Prisma } from '@prisma/client'
 
 @Catch(Prisma.PrismaClientKnownRequestError)
 export class PrismaExceptionFilter implements ExceptionFilter {
   catch(exception: Prisma.PrismaClientKnownRequestError, host: ArgumentsHost) {
     const ctx = host.switchToHttp()
-    const response = ctx.getResponse()
+    const response = ctx.getResponse<Response>()
 
     let status = HttpStatus.INTERNAL_SERVER_ERROR
     let message: string
 
     switch (exception.code) {
-      case 'P2002': // Unique constraint failed
+      case 'P2002':
         message = 'Já existe um registro com esses dados únicos'
         status = HttpStatus.CONFLICT
         break
-      case 'P2003': // Foreign key constraint failed
+      case 'P2003':
         message =
-          'Não é possível remover ou atualizar pois há registros relacionados'
+          'Não é possível remover/atualizar pois há registros relacionados'
         status = HttpStatus.BAD_REQUEST
         break
-      case 'P2025': // Record not found
+      case 'P2025':
         message = 'Registro não encontrado'
         status = HttpStatus.NOT_FOUND
         break
@@ -34,10 +35,6 @@ export class PrismaExceptionFilter implements ExceptionFilter {
         status = HttpStatus.BAD_REQUEST
     }
 
-    // Send JSON response for frontend toast
-    response.status(status).json({
-      statusCode: status,
-      message,
-    })
+    response.status(status).json({ statusCode: status, message })
   }
 }

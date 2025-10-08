@@ -1,4 +1,4 @@
-import { Pencil, Plus, Trash2, List, Link, MapPin } from 'lucide-react'
+import { Pencil, Trash2, List, Link, MapPin } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ItemDialog } from '@/components/item/dialog'
 import { useEntityHandlers } from '@/lib/handlers'
@@ -17,7 +17,7 @@ export function ItemActionCell({
   afId: number
   isPrincipal: boolean
 }) {
-  const { handleEdit, handleDelete } = useEntityHandlers('item')
+  const { handleDelete } = useEntityHandlers('item')
 
   return (
     <ActionCell<Item>

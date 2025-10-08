@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { ColumnDef, type Row } from '@tanstack/react-table'
+import { type Row } from '@tanstack/react-table'
 import { GenericTableDialog } from '@/components/generic-table-dialog'
 import { valorColumns } from '@/components/valor/columns'
 import { type Valor } from '@sgaf/shared'

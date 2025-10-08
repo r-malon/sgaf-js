@@ -41,7 +41,7 @@ export class ItemService {
         data_alteracao: item.data_alteracao
           ? item.data_alteracao.toISOString().slice(0, 10)
           : null,
-        locais: [],
+        instalacoes: [],
         quantidade_total: 0,
         total: 0,
         valor_count: 1,
@@ -55,37 +55,16 @@ export class ItemService {
       where: { id },
       include: {
         instalacoes: {
-          include: { local: { select: { nome: true } } },
+          select: {
+            id: true,
+            localId: true,
+            quantidade: true,
+          },
         },
       },
     })
 
-    const total = await getItemTotal(this.prisma, item.id, afId)
-    const valor_count = await countValoresForItem(this.prisma, item.id)
-
-    const { instalacoes, ...itemWithoutRelations } = item
-
-    return {
-      ...itemWithoutRelations,
-      data_alteracao: item.data_alteracao
-        ? item.data_alteracao.toISOString().slice(0, 10)
-        : null,
-      locais: instalacoes.map((il) => ({
-        id: il.localId,
-        nome: il.local.nome,
-        banda_instalada: il.banda_instalada,
-        data_instalacao: il.data_instalacao.toISOString().slice(0, 10),
-        data_desinstalacao: il.data_desinstalacao
-          ? il.data_desinstalacao.toISOString().slice(0, 10)
-          : null,
-        quantidade: il.quantidade,
-        status: il.status,
-      })),
-      quantidade_total: instalacoes.reduce((sum, il) => sum + il.quantidade, 0),
-      total,
-      valor_count,
-      instalados_count: instalacoes.length,
-    }
+    return this.formatItem(item, afId)
   }
 
   async findManyByAf(afId: number): Promise<Item[]> {
@@ -94,70 +73,39 @@ export class ItemService {
       select: { principal: true },
     })
 
-    let items
-    if (af.principal) {
-      items = await this.prisma.item.findMany({
-        where: { principalId: afId },
-        include: {
-          instalacoes: {
-            include: { local: { select: { nome: true } } },
-          },
-        },
-      })
-    } else {
-      // AF relacionada: items via current Valor (data_fim: null)
-      const currentValores = await this.prisma.valor.findMany({
-        where: { afId: afId, data_fim: null },
-        include: {
-          item: {
-            include: {
-              instalacoes: {
-                include: { local: { select: { nome: true } } },
+    const items = af.principal
+      ? await this.prisma.item.findMany({
+          where: { principalId: afId },
+          include: {
+            instalacoes: {
+              select: {
+                id: true,
+                localId: true,
+                quantidade: true,
               },
             },
           },
-        },
-      })
-      items = currentValores.map((v) => v.item)
-    }
+        })
+      : await this.prisma.valor
+          .findMany({
+            where: { afId, data_fim: null },
+            include: {
+              item: {
+                include: {
+                  instalacoes: {
+                    select: {
+                      id: true,
+                      localId: true,
+                      quantidade: true,
+                    },
+                  },
+                },
+              },
+            },
+          })
+          .then((valores) => valores.map((v) => v.item))
 
-    return Promise.all(
-      items.map(async (item) => {
-        const total = await getItemTotal(this.prisma, item.id, afId)
-        const valor_count = await countValoresForItem(
-          this.prisma,
-          item.id,
-          afId,
-        )
-
-        const { instalacoes, ...itemWithoutRelations } = item
-
-        return {
-          ...itemWithoutRelations,
-          data_alteracao: item.data_alteracao
-            ? item.data_alteracao.toISOString().slice(0, 10)
-            : null,
-          locais: instalacoes.map((il) => ({
-            id: il.localId,
-            nome: il.local.nome,
-            banda_instalada: il.banda_instalada,
-            data_instalacao: il.data_instalacao.toISOString().slice(0, 10),
-            data_desinstalacao: il.data_desinstalacao
-              ? il.data_desinstalacao.toISOString().slice(0, 10)
-              : null,
-            quantidade: il.quantidade,
-            status: il.status,
-          })),
-          quantidade_total: instalacoes.reduce(
-            (sum, il) => sum + il.quantidade,
-            0,
-          ),
-          total,
-          valor_count,
-          instalados_count: instalacoes.length,
-        }
-      }),
-    )
+    return Promise.all(items.map((item) => this.formatItem(item, afId)))
   }
 
   async update(id: number, updateItemDto: UpdateItemDto): Promise<Item> {
@@ -173,46 +121,56 @@ export class ItemService {
       },
       include: {
         instalacoes: {
-          include: { local: { select: { nome: true } } },
+          select: {
+            id: true,
+            localId: true,
+            quantidade: true,
+          },
         },
       },
     })
 
-    const total = await getItemTotal(this.prisma, item.id, item.principalId)
-    const valor_count = await countValoresForItem(
-      this.prisma,
-      item.id,
-      item.principalId,
-    )
+    return this.formatItem(item, item.principalId)
+  }
 
-    const { instalacoes, ...itemWithoutRelations } = item
+  async delete(id: number): Promise<void> {
+    await this.prisma.item.delete({ where: { id } })
+  }
+
+  private async formatItem(
+    item: {
+      id: number
+      principalId: number
+      descricao: string | null
+      data_alteracao: Date | null
+      banda_maxima: number
+      quantidade_maxima: number
+      instalacoes: Array<{
+        id: number
+        localId: number
+        quantidade: number
+      }>
+    },
+    afId: number,
+  ): Promise<Item> {
+    const total = await getItemTotal(this.prisma, item.id, afId)
+    const valor_count = await countValoresForItem(this.prisma, item.id, afId)
+    const { instalacoes, ...rest } = item
 
     return {
-      ...itemWithoutRelations,
+      ...rest,
       data_alteracao: item.data_alteracao
         ? item.data_alteracao.toISOString().slice(0, 10)
         : null,
-      locais: instalacoes.map((il) => ({
-        id: il.localId,
-        nome: il.local.nome,
-        banda_instalada: il.banda_instalada,
-        data_instalacao: il.data_instalacao.toISOString().slice(0, 10),
-        data_desinstalacao: il.data_desinstalacao
-          ? il.data_desinstalacao.toISOString().slice(0, 10)
-          : null,
-        quantidade: il.quantidade,
-        status: il.status,
+      instalacoes: instalacoes.map((i) => ({
+        id: i.id,
+        localId: i.localId,
+        quantidade: i.quantidade,
       })),
-      quantidade_total: instalacoes.reduce((sum, il) => sum + il.quantidade, 0),
+      quantidade_total: instalacoes.reduce((sum, i) => sum + i.quantidade, 0),
       total,
       valor_count,
       instalados_count: instalacoes.length,
     }
-  }
-
-  async delete(id: number): Promise<void> {
-    await this.prisma.item.delete({
-      where: { id },
-    })
   }
 }

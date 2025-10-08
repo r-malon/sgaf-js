@@ -1,6 +1,5 @@
 import { z } from 'zod'
 
-// Base schema for Instalacao
 const instalacaoBaseSchema = z.object({
   itemId: z.number().int().positive(),
   localId: z.number().int().positive(),
@@ -35,10 +34,8 @@ const instalacaoBaseSchema = z.object({
   }
 )
 
-// For creating individual Instalacao
 export const instalacaoSchema = instalacaoBaseSchema
 
-// For bulk attachment
 export const attachLocaisSchema = z.object({
   itemId: z.number().int().positive(),
   locais: z
@@ -53,26 +50,20 @@ export const attachLocaisSchema = z.object({
     ),
 })
 
-// For updates (partial)
 export const updateInstalacaoSchema = instalacaoBaseSchema
   .omit({ itemId: true, localId: true })
   .partial()
 
-// For responses
 export const instalacaoOutputSchema = instalacaoBaseSchema.safeExtend({
   id: z.number().int().positive().readonly(),
-  local: z
-    .object({
-      id: z.number().int().positive(),
-      nome: z.string(),
-    })
-    .optional(),
-  item: z
-    .object({
-      id: z.number().int().positive(),
-      descricao: z.string().nullish(),
-    })
-    .optional(),
+  local: z.object({
+    id: z.number().int().positive(),
+    nome: z.string(),
+  }).optional(),
+  item: z.object({
+    id: z.number().int().positive(),
+    descricao: z.string().nullish(),
+  }).optional(),
 })
 
 export type Instalacao = z.infer<typeof instalacaoOutputSchema>

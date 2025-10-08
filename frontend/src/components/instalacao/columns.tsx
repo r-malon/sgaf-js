@@ -55,22 +55,20 @@ export function getInstalacaoColumns(query?: {
     },
   ]
 
-  if (showItem) {
+  if (showItem)
     columns.unshift({
       accessorKey: 'item.descricao',
       header: 'Item',
       cell: ({ row }) =>
         row.original.item?.descricao ?? `Item ${row.original.itemId}`,
     })
-  }
 
-  if (showLocal) {
+  if (showLocal)
     columns.unshift({
       accessorKey: 'local.nome',
       header: 'Local',
       cell: ({ row }) => row.original.local?.nome ?? '',
     })
-  }
 
   return columns
 }

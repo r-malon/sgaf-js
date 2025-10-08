@@ -5,7 +5,6 @@ import { z } from 'zod'
 import { type Item, itemSchema } from '@sgaf/shared'
 import { GenericDialogForm } from '@/components/generic-dialog-form'
 import { useEntityHandlers } from '@/lib/handlers'
-import { LocalCombobox } from '@/components/local/combobox'
 
 interface ItemDialogProps {
   item?: Item

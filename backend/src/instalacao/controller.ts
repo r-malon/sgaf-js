@@ -12,7 +12,6 @@ import {
   HttpStatus,
 } from '@nestjs/common'
 import { InstalacaoService } from './service'
-import { CreateInstalacaoDto } from './dto/create-instalacao.dto'
 import { UpdateInstalacaoDto } from './dto/update-instalacao.dto'
 import { AttachLocaisDto } from './dto/attach-locais.dto'
 

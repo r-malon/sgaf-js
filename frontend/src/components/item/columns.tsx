@@ -1,10 +1,9 @@
 'use client'
 
-import { ColumnDef, type Row } from '@tanstack/react-table'
-import { Minus, Check, X } from 'lucide-react'
+import { ColumnDef } from '@tanstack/react-table'
+import { Minus } from 'lucide-react'
 import { DataTableColumnHeader } from '@/components/data-table-column-header'
 import { ItemActionCell } from '@/components/item/action-cell'
-import { DescriptionCell } from '@/components/description-cell'
 import { MoneyColumn } from '@/components/money-column'
 import { DescricaoColumnCell } from '@/components/descricao-column-cell'
 import { type Item } from '@sgaf/shared'

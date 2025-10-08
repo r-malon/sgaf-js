@@ -65,8 +65,8 @@ export function LocalAttachDialog({
   })
 
   const attachedLocalIds = React.useMemo(
-    () => new Set(item.locais.map((l) => l.id)),
-    [item.locais],
+    () => new Set(item.instalacoes.map((i) => i.localId)),
+    [item.instalacoes],
   )
 
   const availableLocals = React.useMemo(
@@ -75,8 +75,8 @@ export function LocalAttachDialog({
   )
 
   const currentQuantidadeTotal = React.useMemo(
-    () => item.locais.reduce((sum, l) => sum + l.quantidade, 0),
-    [item.locais],
+    () => item.instalacoes.reduce((sum, i) => sum + i.quantidade, 0),
+    [item.instalacoes],
   )
 
   const selectedQuantidadeTotal = form
@@ -164,11 +164,7 @@ export function LocalAttachDialog({
     <BaseDialog
       triggerLabel={triggerLabel}
       title={
-        title ?? (
-          <>
-            Instalar {item.descricao ?? <Minus color="lightgray" />}
-          </>
-        )
+        title ?? <>Instalar {item.descricao ?? <Minus color="lightgray" />}</>
       }
       contentClassName="sm:max-w-2xl"
       onOpenChange={(newOpen) => {

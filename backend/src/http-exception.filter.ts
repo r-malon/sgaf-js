@@ -5,7 +5,7 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common'
-import { Response } from 'express'
+import { type Response } from 'express'
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -18,26 +18,18 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     if (exception instanceof HttpException) {
       status = exception.getStatus()
-
       const res = exception.getResponse()
+
       if (typeof res === 'string') {
         message = res
-      } else if (typeof res === 'object' && res !== null) {
-        const { message: msg } = res as any
-        if (Array.isArray(msg)) {
-          // Nest validation pipes often return an array
-          message = msg.join(', ')
-        } else if (msg) {
-          message = msg
-        }
+      } else if (typeof res === 'object' && res !== null && 'message' in res) {
+        const msg = res.message
+        message = Array.isArray(msg) ? msg.join(', ') : String(msg)
       }
     } else if (exception instanceof Error) {
-      message = exception.message || message
+      message = exception.message
     }
 
-    response.status(status).json({
-      statusCode: status,
-      message,
-    })
+    response.status(status).json({ statusCode: status, message })
   }
 }
