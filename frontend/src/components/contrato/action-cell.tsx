@@ -1,4 +1,4 @@
-import { Pencil, Plus, Trash2 } from 'lucide-react'
+import { Pencil, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useEntityHandlers } from '@/lib/handlers'
 import { ActionCell } from '@/components/action-cell'
@@ -44,11 +44,6 @@ export function ContratoActionCell({ contrato }: { contrato: Contrato }) {
             <AFDialog
               contratoId={contrato.id}
               contratoNumero={contrato.numero}
-              triggerLabel={
-                <>
-                  <Plus /> AF
-                </>
-              }
             />
           ),
         },

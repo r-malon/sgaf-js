@@ -76,7 +76,11 @@ export function LocalCombobox({
             size="sm"
             className="w-[220px] justify-between"
           >
-            {selected ? selected.nome : 'Selecionar local...'}
+            {selected
+              ? selected.nome.length > 25
+                ? selected.nome.slice(0, 22).trimEnd() + '…'
+                : selected.nome
+              : 'Selecionar local...'}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>

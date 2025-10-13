@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { Pencil } from 'lucide-react'
 import { z } from 'zod'
 import { useEntityHandlers } from '@/lib/handlers'
 import { GenericDialogForm } from '@/components/generic-dialog-form'
@@ -15,7 +16,7 @@ interface InstalacaoDialogProps {
 
 export function InstalacaoDialog({
   instalacao,
-  triggerLabel = 'Editar',
+  triggerLabel = <Pencil />,
   title,
   onSubmit,
 }: InstalacaoDialogProps) {

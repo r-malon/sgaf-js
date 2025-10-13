@@ -1,4 +1,4 @@
-import { Pencil, Plus, Link, Trash2 } from 'lucide-react'
+import { Pencil, Link, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useEntityHandlers } from '@/lib/handlers'
 import { ActionCell } from '@/components/action-cell'
@@ -50,15 +50,7 @@ export function AFActionCell({
           key: 'add-item',
           show: (af) => af.status && af.principal,
           render: (af) => (
-            <ItemDialog
-              principalId={af.id}
-              afNumero={af.numero}
-              triggerLabel={
-                <>
-                  <Plus /> Item
-                </>
-              }
-            />
+            <ItemDialog principalId={af.id} afNumero={af.numero} />
           ),
         },
         {

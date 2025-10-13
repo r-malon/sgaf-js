@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { Plus } from 'lucide-react'
 import { z } from 'zod'
 import { type Contrato, contratoSchema } from '@sgaf/shared'
 import { GenericDialogForm } from '@/components/generic-dialog-form'
@@ -15,7 +16,11 @@ interface ContratoDialogProps {
 
 export function ContratoDialog({
   contrato,
-  triggerLabel = 'Novo Contrato',
+  triggerLabel = (
+    <>
+      <Plus /> Contrato
+    </>
+  ),
   title,
   onSubmit,
 }: ContratoDialogProps) {

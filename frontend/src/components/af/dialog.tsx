@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { Plus } from 'lucide-react'
 import { z } from 'zod'
 import { type AF, afSchema } from '@sgaf/shared'
 import { GenericDialogForm } from '@/components/generic-dialog-form'
@@ -19,7 +20,11 @@ export function AFDialog({
   af,
   contratoId,
   contratoNumero,
-  triggerLabel = 'Nova AF',
+  triggerLabel = (
+    <>
+      <Plus /> AF
+    </>
+  ),
   title,
   onSubmit,
 }: AFDialogProps) {

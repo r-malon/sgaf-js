@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { z } from 'zod'
+import { Plus } from 'lucide-react'
 import { type Item, itemSchema } from '@sgaf/shared'
 import { GenericDialogForm } from '@/components/generic-dialog-form'
 import { useEntityHandlers } from '@/lib/handlers'
@@ -19,7 +20,11 @@ export function ItemDialog({
   item,
   principalId,
   afNumero,
-  triggerLabel = 'Novo Item',
+  triggerLabel = (
+    <>
+      <Plus /> Item
+    </>
+  ),
   title,
   onSubmit,
 }: ItemDialogProps) {

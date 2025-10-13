@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
-import { Plus, List } from 'lucide-react'
+import { List } from 'lucide-react'
 import { GenericDrawer } from '@/components/generic-drawer'
 import { useAPISWR } from '@/lib/hooks'
 import { useEntityHandlers } from '@/lib/handlers'
@@ -41,15 +41,7 @@ export function AFDrawer({ contratoId, contratoNumero }: AFDrawerProps) {
         principalItemCount: principal?.item_count,
       }}
       createDialog={
-        <AFDialog
-          contratoId={contratoId}
-          contratoNumero={contratoNumero}
-          triggerLabel={
-            <>
-              <Plus /> AF
-            </>
-          }
-        />
+        <AFDialog contratoId={contratoId} contratoNumero={contratoNumero} />
       }
     />
   )

@@ -1,4 +1,4 @@
-import { Pencil, Trash2 } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { InstalacaoDialog } from '@/components/instalacao/dialog'
 import { useEntityHandlers } from '@/lib/handlers'
@@ -18,12 +18,7 @@ export function InstalacaoActionCell({
       actions={[
         {
           key: 'edit',
-          render: (instalacao) => (
-            <InstalacaoDialog
-              instalacao={instalacao}
-              triggerLabel={<Pencil />}
-            />
-          ),
+          render: (instalacao) => <InstalacaoDialog instalacao={instalacao} />,
         },
         {
           key: 'delete',
