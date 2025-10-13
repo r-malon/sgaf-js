@@ -5,7 +5,7 @@ import { Check, X } from 'lucide-react'
 import { DataTableColumnHeader } from '@/components/data-table-column-header'
 import { AFActionCell } from '@/components/af/action-cell'
 import { MoneyColumn } from '@/components/money-column'
-import { DescricaoColumnCell } from '@/components/descricao-column-cell'
+import { TruncColumnCell } from '@/components/trunc-column-cell'
 import { type AF } from '@sgaf/shared'
 
 export const afColumns: ColumnDef<AF>[] = [
@@ -24,9 +24,7 @@ export const afColumns: ColumnDef<AF>[] = [
   {
     accessorKey: 'descricao',
     header: 'Descrição',
-    cell: ({ row }) => (
-      <DescricaoColumnCell descricao={row.original.descricao ?? ''} />
-    ),
+    cell: ({ row }) => <TruncColumnCell text={row.original.descricao ?? ''} />,
   },
   {
     accessorKey: 'data_inicio',

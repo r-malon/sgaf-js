@@ -37,7 +37,7 @@ export function InstalacaoTableDialog({
     <GenericTableDialog<Instalacao>
       triggerLabel={triggerLabel}
       title={title}
-      contentClassName="sm:max-w-4xl"
+      contentClassName="sm:max-w-5xl"
       entity="instalacao"
       query={query}
       columns={columns}

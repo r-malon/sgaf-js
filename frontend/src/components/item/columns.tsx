@@ -5,16 +5,14 @@ import { Minus } from 'lucide-react'
 import { DataTableColumnHeader } from '@/components/data-table-column-header'
 import { ItemActionCell } from '@/components/item/action-cell'
 import { MoneyColumn } from '@/components/money-column'
-import { DescricaoColumnCell } from '@/components/descricao-column-cell'
+import { TruncColumnCell } from '@/components/trunc-column-cell'
 import { type Item } from '@sgaf/shared'
 
 export const itemColumns: ColumnDef<Item>[] = [
   {
     accessorKey: 'descricao',
     header: 'Descrição',
-    cell: ({ row }) => (
-      <DescricaoColumnCell descricao={row.original.descricao ?? ''} />
-    ),
+    cell: ({ row }) => <TruncColumnCell text={row.original.descricao ?? ''} />,
   },
   {
     accessorKey: 'banda_maxima',

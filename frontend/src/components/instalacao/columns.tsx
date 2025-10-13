@@ -3,6 +3,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { Minus, Check, X } from 'lucide-react'
 import { DataTableColumnHeader } from '@/components/data-table-column-header'
+import { TruncColumnCell } from '@/components/trunc-column-cell'
 import { InstalacaoActionCell } from '@/components/instalacao/action-cell'
 import { type Instalacao } from '@sgaf/shared'
 
@@ -59,15 +60,20 @@ export function getInstalacaoColumns(query?: {
     columns.unshift({
       accessorKey: 'item.descricao',
       header: 'Item',
-      cell: ({ row }) =>
-        row.original.item?.descricao ?? `Item ${row.original.itemId}`,
+      cell: ({ row }) => (
+        <TruncColumnCell
+          text={row.original.item?.descricao ?? `Item ${row.original.itemId}`}
+        />
+      ),
     })
 
   if (showLocal)
     columns.unshift({
       accessorKey: 'local.nome',
       header: 'Local',
-      cell: ({ row }) => row.original.local?.nome ?? '',
+      cell: ({ row }) => (
+        <TruncColumnCell text={row.original.local?.nome ?? ''} />
+      ),
     })
 
   return columns
