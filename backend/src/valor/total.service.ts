@@ -26,7 +26,6 @@ export async function getValorTotal(
   const endYear = end.getFullYear()
 
   if (startYear === endYear && startMonth === endMonth) {
-    // Same month - prorate within the month
     const daysInMonth = new Date(startYear, startMonth + 1, 0).getDate()
     const days = end.getDate() - start.getDate()
     return Math.round((valor.valor * days) / daysInMonth)
@@ -42,20 +41,11 @@ export async function getValorTotal(
   }
 
   // Full months between
-  let currentYear = startYear
-  let currentMonth = startMonth + 1
+  const startMonthNum = startYear * 12 + startMonth
+  const endMonthNum = endYear * 12 + endMonth
 
-  while (
-    currentYear < endYear ||
-    (currentYear === endYear && currentMonth < endMonth)
-  ) {
+  for (let monthNum = startMonthNum + 1; monthNum < endMonthNum; monthNum++)
     total += valor.valor
-    currentMonth++
-    if (currentMonth === 12) {
-      currentMonth = 0
-      currentYear++
-    }
-  }
 
   // Last partial month (if end is not first day of month)
   if (end.getDate() > 1) {
