@@ -4,10 +4,6 @@ import { instalacaoOutputSchema } from './instalacao.schema'
 const itemBaseSchema = z.object({
   principalId: z.number().int().positive().readonly(),
   descricao: z.string().trim().nullish(),
-  data_alteracao: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Data inválida')
-    .nullish(),
   banda_maxima: z
     .number({
       error: () => 'Banda máxima é obrigatória',

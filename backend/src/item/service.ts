@@ -20,9 +20,6 @@ export class ItemService {
       const item = await tx.item.create({
         data: {
           ...omit(createItemDto, ['valor']),
-          data_alteracao: createItemDto.data_alteracao
-            ? new Date(createItemDto.data_alteracao)
-            : null,
         },
       })
 
@@ -37,10 +34,7 @@ export class ItemService {
       })
 
       return {
-        ...omit(item, ['data_alteracao']),
-        data_alteracao: item.data_alteracao
-          ? item.data_alteracao.toISOString().slice(0, 10)
-          : null,
+        ...item,
         instalacoes: [],
         quantidade_total: 0,
         total: 0,
@@ -115,9 +109,6 @@ export class ItemService {
         descricao: updateItemDto.descricao,
         banda_maxima: updateItemDto.banda_maxima,
         quantidade_maxima: updateItemDto.quantidade_maxima,
-        data_alteracao: updateItemDto.data_alteracao
-          ? new Date(updateItemDto.data_alteracao)
-          : null,
       },
       include: {
         instalacoes: {
@@ -142,7 +133,6 @@ export class ItemService {
       id: number
       principalId: number
       descricao: string | null
-      data_alteracao: Date | null
       banda_maxima: number
       quantidade_maxima: number
       instalacoes: Array<{
@@ -159,9 +149,6 @@ export class ItemService {
 
     return {
       ...rest,
-      data_alteracao: item.data_alteracao
-        ? item.data_alteracao.toISOString().slice(0, 10)
-        : null,
       instalacoes: instalacoes.map((i) => ({
         id: i.id,
         localId: i.localId,

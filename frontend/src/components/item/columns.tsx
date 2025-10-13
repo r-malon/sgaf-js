@@ -27,14 +27,6 @@ export const itemColumns: ColumnDef<Item>[] = [
       ),
   },
   {
-    accessorKey: 'data_alteracao',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Alteração" />
-    ),
-    cell: ({ row }) =>
-      row.original.data_alteracao ?? <Minus color="lightgray" />,
-  },
-  {
     accessorKey: 'quantidade_maxima',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Qtd. Max." />

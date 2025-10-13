@@ -48,7 +48,6 @@ model Item {
   id                Int       @id @default(autoincrement())
   principalId       Int
   descricao         String?
-  data_alteracao    DateTime?
   banda_maxima      Int
   quantidade_maxima Int
 
