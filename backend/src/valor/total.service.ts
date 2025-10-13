@@ -20,39 +20,41 @@ export async function getValorTotal(
 
   if (start >= end) return 0
 
+  const startDay = start.getDate()
   const startMonth = start.getMonth()
   const startYear = start.getFullYear()
+  const endDay = end.getDate()
   const endMonth = end.getMonth()
   const endYear = end.getFullYear()
 
+  const daysInStartMonth = new Date(startYear, startMonth + 1, 0).getDate()
+  const daysInEndMonth = new Date(endYear, endMonth + 1, 0).getDate()
+
   if (startYear === endYear && startMonth === endMonth) {
-    const daysInMonth = new Date(startYear, startMonth + 1, 0).getDate()
-    const days = end.getDate() - start.getDate()
-    return Math.round((valor.valor * days) / daysInMonth)
+    const days = endDay - startDay + 1
+    return Math.round((valor.valor * days) / daysInStartMonth)
   }
 
   let total = 0
 
   // First partial month
-  if (start.getDate() > 1) {
-    const daysInStartMonth = new Date(startYear, startMonth + 1, 0).getDate()
-    const daysFromStart = daysInStartMonth - start.getDate() + 1
+  if (startDay > 1) {
+    const daysFromStart = daysInStartMonth - startDay + 1
     total += Math.round((valor.valor * daysFromStart) / daysInStartMonth)
   }
 
   // Full months between
   const startMonthNum = startYear * 12 + startMonth
   const endMonthNum = endYear * 12 + endMonth
+  const startLoop = startDay === 1 ? startMonthNum : startMonthNum + 1
+  const endLoop = endDay === daysInEndMonth ? endMonthNum : endMonthNum - 1
 
-  for (let monthNum = startMonthNum + 1; monthNum < endMonthNum; monthNum++)
+  for (let monthNum = startLoop; monthNum <= endLoop; monthNum++)
     total += valor.valor
 
-  // Last partial month (if end is not first day of month)
-  if (end.getDate() > 1) {
-    const daysInEndMonth = new Date(endYear, endMonth + 1, 0).getDate()
-    const daysToEnd = end.getDate() - 1
-    total += Math.round((valor.valor * daysToEnd) / daysInEndMonth)
-  }
+  // Last partial month (if end is not on last day of month)
+  if (endDay < daysInEndMonth)
+    total += Math.round((valor.valor * endDay) / daysInEndMonth)
 
   return total
 }
