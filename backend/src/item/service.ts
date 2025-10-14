@@ -36,7 +36,7 @@ export class ItemService {
       return {
         ...item,
         instalacoes: [],
-        quantidade_total: 0,
+        quantidade_usada: 0,
         total: 0,
         valor_count: 1,
         instalados_count: 0,
@@ -58,7 +58,7 @@ export class ItemService {
       },
     })
 
-    return this.formatItem(item, afId)
+    return this.format(item, afId)
   }
 
   async findManyByAf(afId: number): Promise<Item[]> {
@@ -99,7 +99,7 @@ export class ItemService {
           })
           .then((valores) => valores.map((v) => v.item))
 
-    return Promise.all(items.map((item) => this.formatItem(item, afId)))
+    return Promise.all(items.map((item) => this.format(item, afId)))
   }
 
   async update(id: number, updateItemDto: UpdateItemDto): Promise<Item> {
@@ -121,14 +121,14 @@ export class ItemService {
       },
     })
 
-    return this.formatItem(item, item.principalId)
+    return this.format(item, item.principalId)
   }
 
   async delete(id: number): Promise<void> {
     await this.prisma.item.delete({ where: { id } })
   }
 
-  private async formatItem(
+  private async format(
     item: {
       id: number
       principalId: number
@@ -154,7 +154,7 @@ export class ItemService {
         localId: i.localId,
         quantidade: i.quantidade,
       })),
-      quantidade_total: instalacoes.reduce((sum, i) => sum + i.quantidade, 0),
+      quantidade_usada: instalacoes.reduce((sum, i) => sum + i.quantidade, 0),
       total,
       valor_count,
       instalados_count: instalacoes.length,

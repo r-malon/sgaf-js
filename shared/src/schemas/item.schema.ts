@@ -37,7 +37,7 @@ export const itemOutputSchema = itemBaseSchema.extend({
       quantidade: true,
     })
   ),
-  quantidade_total: z.number().int().nonnegative(),
+  quantidade_usada: z.number().int().nonnegative(),
   valor_count: z.number().int().nonnegative(),
   instalados_count: z.number().int().nonnegative(),
   total: z.number().int().nonnegative(),

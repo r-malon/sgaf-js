@@ -36,7 +36,7 @@ export class ValorService {
         })
 
         if (openValor) {
-          if (startDate <= openValor.data_inicio)
+          if (startDate < openValor.data_inicio)
             throw new Error('Valor retroativo')
           await tx.valor.update({
             where: { id: openValor.id },

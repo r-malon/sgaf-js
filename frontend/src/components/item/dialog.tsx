@@ -43,7 +43,7 @@ export function ItemDialog({
       }}
       fields={[
         { name: 'descricao', label: 'Descrição', type: 'textarea' },
-        { name: 'valor', label: 'Valor mensal', type: 'money' },
+        { name: 'valor', label: 'Valor unitário', type: 'money' },
         {
           name: 'banda_maxima',
           label: (
