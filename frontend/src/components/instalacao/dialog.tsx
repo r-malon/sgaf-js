@@ -30,7 +30,7 @@ export function InstalacaoDialog({
         localId: instalacao.localId,
         banda_instalada: instalacao.banda_instalada,
         data_instalacao: instalacao.data_instalacao,
-        data_desinstalacao: instalacao.data_desinstalacao ?? '',
+        data_desinstalacao: instalacao.data_desinstalacao ?? null,
         quantidade: instalacao.quantidade,
         status: instalacao.status,
       }}
