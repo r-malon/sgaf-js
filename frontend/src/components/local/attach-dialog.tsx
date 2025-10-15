@@ -28,7 +28,6 @@ type SelectedState = {
   data_instalacao: string
   data_desinstalacao: string | null
   quantidade: number
-  status: boolean
 }
 
 interface LocalAttachDialogProps {
@@ -106,7 +105,6 @@ export function LocalAttachDialog({
             current.data_instalacao ?? new Date().toISOString().slice(0, 10),
           data_desinstalacao: current.data_desinstalacao ?? null,
           quantidade: current.quantidade ?? 1,
-          status: current.status ?? true,
         },
       }))
       remove(idx)
@@ -121,7 +119,6 @@ export function LocalAttachDialog({
           cached?.data_instalacao ?? new Date().toISOString().slice(0, 10),
         data_desinstalacao: cached?.data_desinstalacao ?? null,
         quantidade: cached?.quantidade ?? 1,
-        status: cached?.status ?? true,
       })
     })
   }
@@ -136,7 +133,6 @@ export function LocalAttachDialog({
           current.data_instalacao ?? new Date().toISOString().slice(0, 10),
         data_desinstalacao: current.data_desinstalacao ?? null,
         quantidade: current.quantidade ?? 1,
-        status: current.status ?? true,
       },
     }))
     remove(idx)
@@ -204,7 +200,6 @@ export function LocalAttachDialog({
                 const local = availableLocals.find(
                   (l) => l.id === field.localId,
                 )
-                const status = form.watch(`locais.${idx}.status`)
                 const bandaInstalada =
                   form.watch(`locais.${idx}.banda_instalada`) || 0
                 const bandaExceeded = bandaInstalada > item.banda_maxima
@@ -291,41 +286,6 @@ export function LocalAttachDialog({
                           </FormItem>
                         )}
                       />
-
-                      <FormField
-                        control={form.control}
-                        name={`locais.${idx}.status`}
-                        render={({ field }) => (
-                          <FormItem className="flex items-center gap-2 space-y-0 pt-8">
-                            <FormControl>
-                              {getFieldInput(
-                                { type: 'switch', name: field.name },
-                                field,
-                              )}
-                            </FormControl>
-                            <FormLabel>Ativo?</FormLabel>
-                          </FormItem>
-                        )}
-                      />
-
-                      {!status && (
-                        <FormField
-                          control={form.control}
-                          name={`locais.${idx}.data_desinstalacao`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Desinstalação</FormLabel>
-                              <FormControl>
-                                {getFieldInput(
-                                  { type: 'date', name: field.name },
-                                  field,
-                                )}
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      )}
                     </div>
                   </div>
                 )

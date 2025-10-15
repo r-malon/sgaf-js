@@ -42,14 +42,6 @@ export function getInstalacaoColumns(query?: {
         row.original.data_desinstalacao ?? <Minus color="lightgray" />,
     },
     {
-      accessorKey: 'status',
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Status" />
-      ),
-      cell: ({ row }) =>
-        row.original.status ? <Check color="green" /> : <X color="red" />,
-    },
-    {
       id: 'actions',
       header: 'Ações',
       cell: ({ row }) => <InstalacaoActionCell instalacao={row.original} />,

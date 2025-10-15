@@ -45,7 +45,7 @@ model AF {
 }
 
 model Item {
-  id                Int       @id @default(autoincrement())
+  id                Int     @id @default(autoincrement())
   principalId       Int
   descricao         String?
   banda_maxima      Int
@@ -67,7 +67,6 @@ model Instalacao {
   data_instalacao    DateTime
   data_desinstalacao DateTime?
   quantidade         Int
-  status             Boolean
 
   item  Item  @relation(fields: [itemId], references: [id], onDelete: Cascade)
   local Local @relation(fields: [localId], references: [id], onDelete: Restrict)

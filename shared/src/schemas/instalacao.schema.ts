@@ -18,11 +18,6 @@ const instalacaoBaseSchema = z.object({
     .number()
     .int()
     .positive('Quantidade deve ser >= 1'),
-  status: z.boolean(),
-})
-.refine((data) => data.status || data.data_desinstalacao, {
-  message: 'Data de desinstalação é obrigatória se inativo',
-  path: ['data_desinstalacao'],
 })
 .refine(
   (data) =>

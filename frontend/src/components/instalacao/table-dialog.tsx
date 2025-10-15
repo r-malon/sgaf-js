@@ -29,7 +29,8 @@ export function InstalacaoTableDialog({
   const columns = React.useMemo(() => getInstalacaoColumns(query), [query])
 
   const rowClassName = React.useCallback(
-    (row: Row<Instalacao>) => (row.original.status ? undefined : 'opacity-50'),
+    (row: Row<Instalacao>) =>
+      !row.original.data_desinstalacao ? undefined : 'opacity-50',
     [],
   )
 

@@ -18,7 +18,7 @@ export class InstalacaoService {
 
       // Validate quantidade constraint
       const currentTotal = item.instalacoes.reduce(
-        (sum, il) => sum + il.quantidade,
+        (sum, i) => sum + i.quantidade,
         0,
       )
       if (currentTotal + dto.quantidade > item.quantidade_maxima) {
@@ -44,7 +44,6 @@ export class InstalacaoService {
             ? new Date(dto.data_desinstalacao)
             : null,
           quantidade: dto.quantidade,
-          status: dto.status,
         },
         include: {
           local: { select: { id: true, nome: true } },
@@ -62,7 +61,6 @@ export class InstalacaoService {
           ? instalacao.data_desinstalacao.toISOString().slice(0, 10)
           : null,
         quantidade: instalacao.quantidade,
-        status: instalacao.status,
         local: instalacao.local,
         item: instalacao.item,
       }
@@ -78,7 +76,7 @@ export class InstalacaoService {
 
       // Validate total quantidade
       const currentTotal = item.instalacoes.reduce(
-        (sum, il) => sum + il.quantidade,
+        (sum, i) => sum + i.quantidade,
         0,
       )
       const newTotal = dto.locais.reduce(
@@ -114,7 +112,6 @@ export class InstalacaoService {
                 ? new Date(local.data_desinstalacao)
                 : null,
               quantidade: local.quantidade,
-              status: local.status,
             },
           }),
         ),
@@ -138,19 +135,18 @@ export class InstalacaoService {
       },
     })
 
-    return instalacoes.map((il) => ({
-      id: il.id,
-      itemId: il.itemId,
-      localId: il.localId,
-      banda_instalada: il.banda_instalada,
-      data_instalacao: il.data_instalacao.toISOString().slice(0, 10),
-      data_desinstalacao: il.data_desinstalacao
-        ? il.data_desinstalacao.toISOString().slice(0, 10)
+    return instalacoes.map((i) => ({
+      id: i.id,
+      itemId: i.itemId,
+      localId: i.localId,
+      banda_instalada: i.banda_instalada,
+      data_instalacao: i.data_instalacao.toISOString().slice(0, 10),
+      data_desinstalacao: i.data_desinstalacao
+        ? i.data_desinstalacao.toISOString().slice(0, 10)
         : null,
-      quantidade: il.quantidade,
-      status: il.status,
-      local: il.local,
-      item: il.item,
+      quantidade: i.quantidade,
+      local: i.local,
+      item: i.item,
     }))
   }
 
@@ -173,7 +169,6 @@ export class InstalacaoService {
         ? instalacao.data_desinstalacao.toISOString().slice(0, 10)
         : null,
       quantidade: instalacao.quantidade,
-      status: instalacao.status,
       local: instalacao.local,
       item: instalacao.item,
     }
@@ -206,8 +201,8 @@ export class InstalacaoService {
       // Validate quantidade constraint if updating
       if (updateDto.quantidade !== undefined) {
         const otherQuantidades = item.instalacoes
-          .filter((il) => il.id !== id)
-          .reduce((sum, il) => sum + il.quantidade, 0)
+          .filter((i) => i.id !== id)
+          .reduce((sum, i) => sum + i.quantidade, 0)
 
         if (otherQuantidades + updateDto.quantidade > item.quantidade_maxima) {
           throw new BadRequestException(
@@ -216,7 +211,7 @@ export class InstalacaoService {
         }
       }
 
-      const updated = await tx.instalacao.update({
+      const instalacao = await tx.instalacao.update({
         where: { id },
         data: {
           banda_instalada: updateDto.banda_instalada,
@@ -227,7 +222,6 @@ export class InstalacaoService {
             ? new Date(updateDto.data_desinstalacao)
             : undefined,
           quantidade: updateDto.quantidade,
-          status: updateDto.status,
         },
         include: {
           local: { select: { id: true, nome: true } },
@@ -236,18 +230,17 @@ export class InstalacaoService {
       })
 
       return {
-        id: updated.id,
-        itemId: updated.itemId,
-        localId: updated.localId,
-        banda_instalada: updated.banda_instalada,
-        data_instalacao: updated.data_instalacao.toISOString().slice(0, 10),
-        data_desinstalacao: updated.data_desinstalacao
-          ? updated.data_desinstalacao.toISOString().slice(0, 10)
+        id: instalacao.id,
+        itemId: instalacao.itemId,
+        localId: instalacao.localId,
+        banda_instalada: instalacao.banda_instalada,
+        data_instalacao: instalacao.data_instalacao.toISOString().slice(0, 10),
+        data_desinstalacao: instalacao.data_desinstalacao
+          ? instalacao.data_desinstalacao.toISOString().slice(0, 10)
           : null,
-        quantidade: updated.quantidade,
-        status: updated.status,
-        local: updated.local,
-        item: updated.item,
+        quantidade: instalacao.quantidade,
+        local: instalacao.local,
+        item: instalacao.item,
       }
     })
   }

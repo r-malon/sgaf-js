@@ -32,7 +32,6 @@ export function InstalacaoDialog({
         data_instalacao: instalacao.data_instalacao,
         data_desinstalacao: instalacao.data_desinstalacao ?? null,
         quantidade: instalacao.quantidade,
-        status: instalacao.status,
       }}
       fields={[
         {
@@ -43,7 +42,6 @@ export function InstalacaoDialog({
         { name: 'data_instalacao', label: 'Instalação', type: 'date' },
         { name: 'data_desinstalacao', label: 'Desinstalação', type: 'date' },
         { name: 'quantidade', label: 'Quantidade', type: 'number' },
-        { name: 'status', label: 'Ativo?', type: 'switch' },
       ]}
       title={title ?? 'Editar item instalado'}
       triggerLabel={triggerLabel}
