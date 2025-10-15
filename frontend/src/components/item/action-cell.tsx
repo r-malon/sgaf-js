@@ -1,4 +1,4 @@
-import { Pencil, Trash2, List, Link, MapPin } from 'lucide-react'
+import { Pencil, Trash2, List, Link, MapPin, DollarSign } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ItemDialog } from '@/components/item/dialog'
 import { useEntityHandlers } from '@/lib/handlers'
@@ -56,7 +56,7 @@ export function ItemActionCell({
               afId={afId}
               triggerLabel={
                 <>
-                  <List /> Valores
+                  <List /> <DollarSign color="green" />
                 </>
               }
             />

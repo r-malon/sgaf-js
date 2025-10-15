@@ -17,7 +17,7 @@ export const itemColumns: ColumnDef<Item>[] = [
   {
     accessorKey: 'banda_maxima',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Banda Máxima" />
+      <DataTableColumnHeader column={column} title="Banda Max." />
     ),
     cell: ({ row }) =>
       row.original.banda_maxima > 0 ? (
