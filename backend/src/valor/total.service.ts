@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import { getInstalacaoTotal } from '../instalacao/total.service'
 
 export async function getValorTotal(
   prisma: PrismaClient,
@@ -8,8 +9,14 @@ export async function getValorTotal(
     where: { id: valorId },
     include: {
       af: { select: { data_inicio: true, data_fim: true } },
+      item: { include: { instalacoes: true } },
     },
   })
+
+  const totals = await Promise.all(
+    valor.item.instalacoes.map(i => getInstalacaoTotal(prisma, i.id))
+  )
+  const v = totals.reduce((sum, total) => sum + total, 0)
 
   const start = new Date(
     Math.max(valor.data_inicio.getTime(), valor.af.data_inicio.getTime()),
@@ -56,5 +63,5 @@ export async function getValorTotal(
   if (endDay < daysInEndMonth)
     total += Math.round((valor.valor * endDay) / daysInEndMonth)
 
-  return total
+  return v
 }
