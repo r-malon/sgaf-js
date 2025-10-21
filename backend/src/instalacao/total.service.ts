@@ -75,7 +75,6 @@ export async function getInstalacaoTotal(
     )
   }
 
-  console.log(endDay)
   return total
 }
 

@@ -14,7 +14,7 @@ export async function getValorTotal(
   })
 
   const totals = await Promise.all(
-    valor.item.instalacoes.map(i => getInstalacaoTotal(prisma, i.id))
+    valor.item.instalacoes.map((i) => getInstalacaoTotal(prisma, i.id)),
   )
   const v = totals.reduce((sum, total) => sum + total, 0)
 
