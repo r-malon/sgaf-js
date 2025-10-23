@@ -30,13 +30,7 @@ export const itemSchema = itemBaseSchema.extend({
 
 export const itemOutputSchema = itemBaseSchema.extend({
   id: z.number().int().positive().readonly(),
-  instalacoes: z.array(
-    instalacaoOutputSchema.pick({
-      id: true,
-      localId: true,
-      quantidade: true,
-    })
-  ),
+  instalacoes: z.array(instalacaoOutputSchema),
   quantidade_usada: z.number().int().nonnegative(),
   valor_count: z.number().int().nonnegative(),
   instalados_count: z.number().int().nonnegative(),

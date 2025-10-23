@@ -6,6 +6,10 @@ import { getItemTotal } from './total.service'
 import { countValoresForItem } from './valor-count.service'
 import { type Item } from '@sgaf/shared'
 import { omit } from '../utils/omit'
+import {
+  Item as PrismaItem,
+  Instalacao as PrismaInstalacao,
+} from '@prisma/client'
 
 @Injectable()
 export class ItemService {
@@ -47,15 +51,7 @@ export class ItemService {
   async findOne(id: number, afId: number): Promise<Item | null> {
     const item = await this.prisma.item.findUniqueOrThrow({
       where: { id },
-      include: {
-        instalacoes: {
-          select: {
-            id: true,
-            localId: true,
-            quantidade: true,
-          },
-        },
-      },
+      include: { instalacoes: true },
     })
 
     return this.format(item, afId)
@@ -70,31 +66,13 @@ export class ItemService {
     const items = af.principal
       ? await this.prisma.item.findMany({
           where: { principalId: afId },
-          include: {
-            instalacoes: {
-              select: {
-                id: true,
-                localId: true,
-                quantidade: true,
-              },
-            },
-          },
+          include: { instalacoes: true },
         })
       : await this.prisma.valor
           .findMany({
             where: { afId, data_fim: null },
             include: {
-              item: {
-                include: {
-                  instalacoes: {
-                    select: {
-                      id: true,
-                      localId: true,
-                      quantidade: true,
-                    },
-                  },
-                },
-              },
+              item: { include: { instalacoes: true } },
             },
           })
           .then((valores) => valores.map((v) => v.item))
@@ -110,15 +88,7 @@ export class ItemService {
         banda_maxima: updateItemDto.banda_maxima,
         quantidade_maxima: updateItemDto.quantidade_maxima,
       },
-      include: {
-        instalacoes: {
-          select: {
-            id: true,
-            localId: true,
-            quantidade: true,
-          },
-        },
-      },
+      include: { instalacoes: true },
     })
 
     return this.format(item, item.principalId)
@@ -129,18 +99,7 @@ export class ItemService {
   }
 
   private async format(
-    item: {
-      id: number
-      principalId: number
-      descricao: string | null
-      banda_maxima: number
-      quantidade_maxima: number
-      instalacoes: Array<{
-        id: number
-        localId: number
-        quantidade: number
-      }>
-    },
+    item: PrismaItem & { instalacoes: PrismaInstalacao[] },
     afId: number,
   ): Promise<Item> {
     const total = await getItemTotal(this.prisma, item.id, afId)
@@ -150,9 +109,11 @@ export class ItemService {
     return {
       ...rest,
       instalacoes: instalacoes.map((i) => ({
-        id: i.id,
-        localId: i.localId,
-        quantidade: i.quantidade,
+        ...i,
+        data_instalacao: i.data_instalacao.toISOString().slice(0, 10),
+        data_desinstalacao: i.data_desinstalacao
+          ? i.data_desinstalacao.toISOString().slice(0, 10)
+          : null,
       })),
       quantidade_usada: instalacoes.reduce((sum, i) => sum + i.quantidade, 0),
       total,
