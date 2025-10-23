@@ -1,4 +1,4 @@
-import { Pencil, Link, Trash2 } from 'lucide-react'
+import { Pencil, Link, Trash2, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useEntityHandlers } from '@/lib/handlers'
 import { ActionCell } from '@/components/action-cell'
@@ -6,6 +6,7 @@ import { AFDialog } from '@/components/af/dialog'
 import { ItemAttachDialog } from '@/components/item/attach-dialog'
 import { ItemDialog } from '@/components/item/dialog'
 import { ItemDrawer } from '@/components/item/drawer'
+import { GenerateBordereauDialog } from '@/components/af/bordereau-dialog'
 import { type AF } from '@sgaf/shared'
 
 export function AFActionCell({
@@ -73,6 +74,16 @@ export function AFActionCell({
           key: 'list-items',
           show: (af) => af.item_count > 0,
           render: (af) => <ItemDrawer af={af} />,
+        },
+        {
+          key: 'bordereau',
+          show: (af) => af.item_count > 0,
+          render: (af) => (
+            <GenerateBordereauDialog
+              afNumero={af.numero}
+              triggerLabel={<FileText />}
+            />
+          ),
         },
       ]}
     />
