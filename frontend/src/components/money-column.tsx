@@ -3,6 +3,7 @@
 import { memo } from 'react'
 import { ColumnDef } from '@tanstack/react-table'
 import { DataTableColumnHeader } from '@/components/data-table-column-header'
+import { formatBRL } from '@/lib/utils'
 
 interface MoneyColumnProps<T> {
   header?: string
@@ -12,16 +13,8 @@ interface MoneyColumnProps<T> {
 }
 
 const MoneyCell = memo(function MoneyCell({ value }: { value: number }) {
-  const cents = value ?? 0
   return (
-    <span className="font-medium tabular-nums">
-      {new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(cents / 100)}
-    </span>
+    <span className="font-medium tabular-nums">{formatBRL(value ?? 0)}</span>
   )
 })
 

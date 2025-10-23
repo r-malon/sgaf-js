@@ -126,3 +126,9 @@ button { cursor: pointer; }
     @apply bg-background text-foreground;
   }
 }
+
+@page { size: A4; }
+
+@media print {
+  .no-print, .no-print * { display: none !important; }
+}

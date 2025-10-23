@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { Input } from '@/components/ui/input'
+import { formatBRL } from '@/lib/utils'
 
 interface MoneyInputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
@@ -11,13 +12,7 @@ interface MoneyInputProps
 
 export const MoneyInput = React.forwardRef<HTMLInputElement, MoneyInputProps>(
   ({ value, onChange, className, ...props }, ref) => {
-    const displayValue =
-      value !== undefined
-        ? (value / 100).toLocaleString('pt-BR', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })
-        : ''
+    const displayValue = value ? formatBRL(value, false) : ''
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const raw = e.target.value.replace(/\D/g, '')
