@@ -11,6 +11,7 @@ import {
 import { BaseDialog } from '@/components/base-dialog'
 
 interface Props {
+  afId: number
   afNumero: string
   open?: boolean
   onOpenChange?: (open: boolean) => void
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export function GenerateBordereauDialog({
+  afId,
   afNumero,
   open,
   onOpenChange,
@@ -45,7 +47,7 @@ export function GenerateBordereauDialog({
   const years = Array.from({ length: 11 }, (_, i) => (2020 + i).toString())
 
   const handleGenerate = () => {
-    router.push(`/af/${year}/${month}`)
+    router.push(`/af/${afId}/${year}/${month}`)
     if (onOpenChange) onOpenChange(false)
   }
 

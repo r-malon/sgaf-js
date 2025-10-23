@@ -80,6 +80,7 @@ export function AFActionCell({
           show: (af) => af.item_count > 0,
           render: (af) => (
             <GenerateBordereauDialog
+              afId={af.id}
               afNumero={af.numero}
               triggerLabel={<FileText />}
             />
