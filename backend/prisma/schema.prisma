@@ -16,11 +16,10 @@ model Local {
 }
 
 model Contrato {
-  id       Int    @id @default(autoincrement())
-  numero   String @unique
-  nome     String
-  endereco String
-  cpf      String
+  id         Int    @id @default(autoincrement())
+  numero     String @unique
+  fornecedor String
+  cpf        String
 
   afs AF[]
 }
@@ -30,7 +29,6 @@ model AF {
   contratoId  Int
   principal   Boolean
   numero      String   @unique
-  fornecedor  String
   descricao   String?
   data_inicio DateTime
   data_fim    DateTime

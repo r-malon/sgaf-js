@@ -36,7 +36,6 @@ export function AFDialog({
       schema={afSchema}
       defaultValues={{
         numero: af?.numero ?? '',
-        fornecedor: af?.fornecedor ?? '',
         descricao: af?.descricao ?? '',
         data_inicio: af?.data_inicio ?? '',
         data_fim: af?.data_fim ?? '',
@@ -50,7 +49,6 @@ export function AFDialog({
           type: 'text',
           description: 'Formato: número/ano (ex: 123/2025)',
         },
-        { name: 'fornecedor', label: 'Fornecedor', type: 'text' },
         { name: 'descricao', label: 'Descrição', type: 'textarea' },
         { name: 'data_inicio', label: 'Início', type: 'date' },
         { name: 'data_fim', label: 'Fim', type: 'date' },

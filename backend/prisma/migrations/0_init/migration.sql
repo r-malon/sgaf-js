@@ -9,8 +9,7 @@ CREATE TABLE "Local" (
 CREATE TABLE "Contrato" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "numero" TEXT NOT NULL,
-    "nome" TEXT NOT NULL,
-    "endereco" TEXT NOT NULL,
+    "fornecedor" TEXT NOT NULL,
     "cpf" TEXT NOT NULL
 );
 
@@ -20,7 +19,6 @@ CREATE TABLE "AF" (
     "contratoId" INTEGER NOT NULL,
     "principal" BOOLEAN NOT NULL,
     "numero" TEXT NOT NULL,
-    "fornecedor" TEXT NOT NULL,
     "descricao" TEXT,
     "data_inicio" DATETIME NOT NULL,
     "data_fim" DATETIME NOT NULL,
@@ -33,7 +31,6 @@ CREATE TABLE "Item" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "principalId" INTEGER NOT NULL,
     "descricao" TEXT,
-    "data_alteracao" DATETIME,
     "banda_maxima" INTEGER NOT NULL,
     "quantidade_maxima" INTEGER NOT NULL,
     CONSTRAINT "Item_principalId_fkey" FOREIGN KEY ("principalId") REFERENCES "AF" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
@@ -48,7 +45,6 @@ CREATE TABLE "Instalacao" (
     "data_instalacao" DATETIME NOT NULL,
     "data_desinstalacao" DATETIME,
     "quantidade" INTEGER NOT NULL,
-    "status" BOOLEAN NOT NULL,
     CONSTRAINT "Instalacao_itemId_fkey" FOREIGN KEY ("itemId") REFERENCES "Item" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "Instalacao_localId_fkey" FOREIGN KEY ("localId") REFERENCES "Local" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );

@@ -14,15 +14,9 @@ export const contratoColumns: ColumnDef<Contrato>[] = [
     ),
   },
   {
-    accessorKey: 'nome',
+    accessorKey: 'fornecedor',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Nome" />
-    ),
-  },
-  {
-    accessorKey: 'endereco',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Endereço" />
+      <DataTableColumnHeader column={column} title="Fornecedor" />
     ),
   },
   {

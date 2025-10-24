@@ -16,12 +16,6 @@ export const afColumns: ColumnDef<AF>[] = [
     ),
   },
   {
-    accessorKey: 'fornecedor',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Fornecedor" />
-    ),
-  },
-  {
     accessorKey: 'descricao',
     header: 'Descrição',
     cell: ({ row }) => <TruncColumnCell text={row.original.descricao ?? ''} />,

@@ -10,11 +10,6 @@ export const afSchema = z.object({
           : 'Número é obrigatório',
     })
     .regex(/^\d+\/\d{4}$/, 'Formato: número/ano'),
-  fornecedor: z
-    .string({
-      error: () => 'Fornecedor é obrigatório',
-    })
-    .min(1),
   descricao: z.string().trim().nullish(),
   status: z.boolean({
     error: () => 'Status inválido',

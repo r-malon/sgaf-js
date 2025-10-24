@@ -9,16 +9,9 @@ const contratoBaseSchema = z.object({
           : 'Número é obrigatório',
     })
     .regex(/^\d+\/\d{4}$/, 'Formato: número/ano'),
-  nome: z
+  fornecedor: z
     .string({
-      error: () => 'Nome é obrigatório',
-    })
-    .trim()
-    .min(1)
-    .transform((v) => v.replace(/\s\s+/g, ' ')),
-  endereco: z
-    .string({
-      error: () => 'Endereço é obrigatório',
+      error: () => 'Fornecedor é obrigatório',
     })
     .trim()
     .min(1)

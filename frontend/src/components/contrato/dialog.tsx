@@ -32,8 +32,7 @@ export function ContratoDialog({
       schema={contratoSchema}
       defaultValues={{
         numero: contrato?.numero ?? '',
-        nome: contrato?.nome ?? '',
-        endereco: contrato?.endereco ?? '',
+        fornecedor: contrato?.fornecedor ?? '',
         cpf: contrato?.cpf ?? '',
       }}
       fields={[
@@ -43,8 +42,7 @@ export function ContratoDialog({
           type: 'text',
           description: 'Formato: número/ano (ex: 123/2025)',
         },
-        { name: 'nome', label: 'Nome', type: 'text' },
-        { name: 'endereco', label: 'Endereço', type: 'text' },
+        { name: 'fornecedor', label: 'Fornecedor', type: 'text' },
         { name: 'cpf', label: 'CPF/CNPJ', type: 'text' },
       ]}
       title={title ?? (isEdit ? 'Editar Contrato' : 'Novo Contrato')}
