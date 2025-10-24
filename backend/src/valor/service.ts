@@ -69,7 +69,9 @@ export class ValorService {
     return valores.map((valor) => ({
       ...valor,
       data_inicio: valor.data_inicio.toISOString().slice(0, 10),
-      data_fim: valor.data_fim ? valor.data_fim.toISOString().slice(0, 10) : null,
+      data_fim: valor.data_fim
+        ? valor.data_fim.toISOString().slice(0, 10)
+        : null,
     }))
   }
 

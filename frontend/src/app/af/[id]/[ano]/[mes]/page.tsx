@@ -4,7 +4,13 @@ import { useParams } from 'next/navigation'
 import { useAPISWR } from '@/lib/hooks'
 import { useEntityHandlers } from '@/lib/handlers'
 import { formatBRL, formatDate, formatMonth, overlaps } from '@/lib/utils'
-import { type AF, type Contrato, type Item, type Instalacao, type Valor } from '@sgaf/shared'
+import {
+  type AF,
+  type Contrato,
+  type Item,
+  type Instalacao,
+  type Valor,
+} from '@sgaf/shared'
 
 function calculatePrice(
   valor: number,
@@ -24,7 +30,7 @@ function calculatePrice(
 
   if (efetivo_inicio > efetivo_fim) return 0
 
-  const dias = efetivo_fim.getDate() - efetivo_inicio.getDate() + 1
+  const dias = 1 + (efetivo_fim.getTime() - efetivo_inicio.getTime()) / 86400000
   const bandaRatio = bandaMaxima > 0 ? bandaInstalada / bandaMaxima : 1
 
   return Math.round((valor * quantidade * bandaRatio * dias) / 30)
@@ -45,19 +51,46 @@ export default function Bordereau() {
   const valorHandlers = useEntityHandlers('valor')
   const instalacaoHandlers = useEntityHandlers('instalacao')
 
-  const { data: af, isLoading: afLoading, error: afError } = useAPISWR<AF>(`${afHandlers.baseURL}/${afId}`)
-  const { data: contrato, isLoading: contratoLoading, error: contratoError } = useAPISWR<Contrato>(
-    af ? `${contratoHandlers.baseURL}/${af.contratoId}` : null
+  const {
+    data: af,
+    isLoading: afLoading,
+    error: afError,
+  } = useAPISWR<AF>(`${afHandlers.baseURL}/${afId}`)
+  const {
+    data: contrato,
+    isLoading: contratoLoading,
+    error: contratoError,
+  } = useAPISWR<Contrato>(
+    af ? `${contratoHandlers.baseURL}/${af.contratoId}` : null,
   )
-  const { data: items = [], isLoading: itemsLoading, error: itemsError } = useAPISWR<Item>(itemHandlers.key({ afId }))
-  const { data: valores = [], isLoading: valoresLoading, error: valoresError } = useAPISWR<Valor>(valorHandlers.key({ afId }))
-  const { data: allInstalacoes = [], isLoading: instalacoesLoading, error: instalacoesError } = useAPISWR<Instalacao>(instalacaoHandlers.key())
+  const {
+    data: items = [],
+    isLoading: itemsLoading,
+    error: itemsError,
+  } = useAPISWR<Item>(itemHandlers.key({ afId }))
+  const {
+    data: valores = [],
+    isLoading: valoresLoading,
+    error: valoresError,
+  } = useAPISWR<Valor>(valorHandlers.key({ afId }))
+  const {
+    data: allInstalacoes = [],
+    isLoading: instalacoesLoading,
+    error: instalacoesError,
+  } = useAPISWR<Instalacao>(instalacaoHandlers.key())
 
-  const loading = afLoading || contratoLoading || itemsLoading || valoresLoading || instalacoesLoading
-  const error = afError || contratoError || itemsError || valoresError || instalacoesError
+  const loading =
+    afLoading ||
+    contratoLoading ||
+    itemsLoading ||
+    valoresLoading ||
+    instalacoesLoading
+  const error =
+    afError || contratoError || itemsError || valoresError || instalacoesError
 
   if (loading) return <div className="p-8">Carregando...</div>
-  if (error) return <div className="p-8 text-red-500">Erro: {error.message}</div>
+  if (error)
+    return <div className="p-8 text-red-500">Erro: {error.message}</div>
   if (!af || !contrato) return <div className="p-8">Dados não encontrados</div>
 
   // Build valor lookup by itemId
@@ -70,7 +103,8 @@ export default function Bordereau() {
   // Build instalacoes lookup by itemId
   const instalacoesPorItem = new Map<number, Instalacao[]>()
   for (const inst of allInstalacoes) {
-    if (!instalacoesPorItem.has(inst.itemId)) instalacoesPorItem.set(inst.itemId, [])
+    if (!instalacoesPorItem.has(inst.itemId))
+      instalacoesPorItem.set(inst.itemId, [])
     instalacoesPorItem.get(inst.itemId)!.push(inst)
   }
 
@@ -82,8 +116,8 @@ export default function Bordereau() {
         new Date(v.data_inicio),
         v.data_fim ? new Date(v.data_fim) : null,
         mesInicio,
-        mesFim
-      )
+        mesFim,
+      ),
     )
     const insts = instalacoesPorItem.get(item.id) ?? []
     const hasInstalacaoAtiva = insts.some((i) =>
@@ -91,8 +125,8 @@ export default function Bordereau() {
         new Date(i.data_instalacao),
         i.data_desinstalacao ? new Date(i.data_desinstalacao) : null,
         mesInicio,
-        mesFim
-      )
+        mesFim,
+      ),
     )
     return hasValorAtivo && hasInstalacaoAtiva
   })
@@ -135,13 +169,15 @@ export default function Bordereau() {
             new Date(v.data_inicio),
             v.data_fim ? new Date(v.data_fim) : null,
             mesInicio,
-            mesFim
-          )
+            mesFim,
+          ),
         )
-        
+
         // Get most recent valor
         const valorAtivo = valsAtivos.sort(
-          (a, b) => new Date(b.data_inicio).getTime() - new Date(a.data_inicio).getTime()
+          (a, b) =>
+            new Date(b.data_inicio).getTime() -
+            new Date(a.data_inicio).getTime(),
         )[0]
 
         const insts = instalacoesPorItem.get(item.id) ?? []
@@ -150,8 +186,8 @@ export default function Bordereau() {
             new Date(i.data_instalacao),
             i.data_desinstalacao ? new Date(i.data_desinstalacao) : null,
             mesInicio,
-            mesFim
-          )
+            mesFim,
+          ),
         )
 
         const qtdUsada = instsAtivas.reduce((sum, i) => sum + i.quantidade, 0)
@@ -191,12 +227,15 @@ export default function Bordereau() {
                     inst.data_instalacao,
                     inst.data_desinstalacao,
                     mesInicio,
-                    mesFim
+                    mesFim,
                   )
                   totalItem += preco
 
                   return (
-                    <tr key={inst.id} className={idx % 2 === 1 ? 'bg-gray-50' : 'bg-white'}>
+                    <tr
+                      key={inst.id}
+                      className={idx % 2 === 1 ? 'bg-gray-50' : 'bg-white'}
+                    >
                       <td className="border px-2 py-1">{inst.local?.nome}</td>
                       <td className="border px-2 py-1 text-center">
                         {inst.banda_instalada}
@@ -208,7 +247,9 @@ export default function Bordereau() {
                         {formatDate(inst.data_instalacao)}
                       </td>
                       <td className="border px-2 py-1 text-center">
-                        {inst.data_desinstalacao ? formatDate(inst.data_desinstalacao) : '⸻'}
+                        {inst.data_desinstalacao
+                          ? formatDate(inst.data_desinstalacao)
+                          : '⸻'}
                       </td>
                       <td className="border px-2 py-1 text-right">
                         {formatBRL(preco)}
@@ -218,13 +259,13 @@ export default function Bordereau() {
                 })}
               </tbody>
             </table>
-            
+
             <p className="text-sm font-medium text-right">
               <strong>Total:</strong> {formatBRL(totalItem)}
             </p>
-            
+
             {/* Hidden counter for grand total */}
-            <span className="hidden">{totalGeral += totalItem}</span>
+            <span className="hidden">{(totalGeral += totalItem)}</span>
           </section>
         )
       })}
