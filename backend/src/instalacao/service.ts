@@ -119,13 +119,10 @@ export class InstalacaoService {
     })
   }
 
-  async findMany(query: {
-    itemId?: number
-    localId?: number
-  }): Promise<Instalacao[]> {
+  async findMany(itemId?: number, localId?: number): Promise<Instalacao[]> {
     const where: { itemId?: number; localId?: number } = {}
-    if (query.itemId) where.itemId = query.itemId
-    if (query.localId) where.localId = query.localId
+    if (itemId) where.itemId = itemId
+    if (localId) where.localId = localId
 
     const instalacoes = await this.prisma.instalacao.findMany({
       where,

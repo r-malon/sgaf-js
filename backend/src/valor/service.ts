@@ -60,16 +60,16 @@ export class ValorService {
     })
   }
 
-  async findMany(itemId: number, afId: number): Promise<Valor[]> {
-    const valores = await this.prisma.valor.findMany({
-      where: { itemId, afId },
-    })
+  async findMany(itemId?: number, afId?: number): Promise<Valor[]> {
+    const where: { itemId?: number; afId?: number } = {}
+    if (itemId) where.itemId = itemId
+    if (afId) where.afId = afId
+
+    const valores = await this.prisma.valor.findMany({ where })
     return valores.map((valor) => ({
       ...valor,
       data_inicio: valor.data_inicio.toISOString().slice(0, 10),
-      data_fim: valor.data_fim
-        ? valor.data_fim.toISOString().slice(0, 10)
-        : null,
+      data_fim: valor.data_fim ? valor.data_fim.toISOString().slice(0, 10) : null,
     }))
   }
 

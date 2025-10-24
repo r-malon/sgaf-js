@@ -25,8 +25,8 @@ export class ValorController {
 
   @Get()
   async findMany(
-    @Query('itemId', ParseIntPipe) itemId: number,
-    @Query('afId', ParseIntPipe) afId: number,
+    @Query('itemId', new ParseIntPipe({ optional: true })) itemId?: number,
+    @Query('afId', new ParseIntPipe({ optional: true })) afId?: number,
   ) {
     return await this.valorService.findMany(itemId, afId)
   }

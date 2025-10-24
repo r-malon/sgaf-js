@@ -30,7 +30,7 @@ export class InstalacaoController {
     @Query('itemId', new ParseIntPipe({ optional: true })) itemId?: number,
     @Query('localId', new ParseIntPipe({ optional: true })) localId?: number,
   ) {
-    return await this.instalacaoService.findMany({ itemId, localId })
+    return await this.instalacaoService.findMany(itemId, localId)
   }
 
   @Get(':id')
