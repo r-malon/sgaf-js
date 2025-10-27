@@ -37,7 +37,9 @@ function calculatePrice(
 
   if (efetivo_inicio > efetivo_fim) return 0
 
-  const dias = 1 + (efetivo_fim.getTime() - efetivo_inicio.getTime()) / 86400000
+  const dias = Math.floor(
+    (efetivo_fim.getTime() - efetivo_inicio.getTime()) / 86400000,
+  )
 
   return Math.round((valor * quantidade * bandaRatio * dias) / 30)
 }
@@ -48,8 +50,8 @@ export default function Bordereau() {
   const ano = Number(params.ano)
   const mes = Number(params.mes)
 
-  const mesInicio = new Date(ano, mes - 1, 1)
-  const mesFim = new Date(ano, mes, 0)
+  const mesInicio = new Date(Date.UTC(ano, mes - 1, 1))
+  const mesFim = new Date(Date.UTC(ano, mes, 0))
 
   const afHandlers = useEntityHandlers('af')
   const contratoHandlers = useEntityHandlers('contrato')
