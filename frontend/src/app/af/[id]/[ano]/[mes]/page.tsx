@@ -24,6 +24,13 @@ function calculatePrice(
 ) {
   const inicio = new Date(dataInstalacao)
   const fim = dataDesinstalacao ? new Date(dataDesinstalacao) : mesFim
+  const bandaRatio = bandaMaxima > 0 ? bandaInstalada / bandaMaxima : 1
+
+  if (
+    inicio.getTime() === mesInicio.getTime() &&
+    fim.getTime() === mesFim.getTime()
+  )
+    return Math.round(valor * quantidade * bandaRatio)
 
   const efetivo_inicio = inicio > mesInicio ? inicio : mesInicio
   const efetivo_fim = fim < mesFim ? fim : mesFim
@@ -31,7 +38,6 @@ function calculatePrice(
   if (efetivo_inicio > efetivo_fim) return 0
 
   const dias = 1 + (efetivo_fim.getTime() - efetivo_inicio.getTime()) / 86400000
-  const bandaRatio = bandaMaxima > 0 ? bandaInstalada / bandaMaxima : 1
 
   return Math.round((valor * quantidade * bandaRatio * dias) / 30)
 }
