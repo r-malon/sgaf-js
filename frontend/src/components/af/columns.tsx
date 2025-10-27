@@ -40,11 +40,6 @@ export const afColumns: ColumnDef<AF>[] = [
     cell: ({ row }) =>
       row.original.status ? <Check color="green" /> : <X color="red" />,
   },
-  MoneyColumn<AF>({
-    header: 'Total',
-    accessor: (row) => row.total,
-    includeSumFooter: true,
-  }),
   {
     id: 'actions',
     header: 'Ações',

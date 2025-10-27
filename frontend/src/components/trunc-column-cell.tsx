@@ -11,7 +11,7 @@ interface TruncColumnCellProps {
 
 export const TruncColumnCell = memo(function TruncColumnCell({
   text,
-  trunc = 20,
+  trunc = 50,
 }: TruncColumnCellProps) {
   if (!text) return <Minus color="lightgray" />
   return text.length > trunc ? (

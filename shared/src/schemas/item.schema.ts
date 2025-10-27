@@ -34,7 +34,6 @@ export const itemOutputSchema = itemBaseSchema.extend({
   quantidade_usada: z.number().int().nonnegative(),
   valor_count: z.number().int().nonnegative(),
   instalados_count: z.number().int().nonnegative(),
-  total: z.number().int().nonnegative(),
 })
 
 export type Item = z.infer<typeof itemOutputSchema>

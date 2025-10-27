@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/service'
 import { CreateAfDto } from './dto/create-af.dto'
 import { UpdateAfDto } from './dto/update-af.dto'
-import { getAfTotal } from './total.service'
 import { countItemsForAF } from './item-count.service'
 import { type AF } from '@sgaf/shared'
 
@@ -26,7 +25,6 @@ export class AfService {
       ...af,
       data_inicio: af.data_inicio.toISOString().slice(0, 10),
       data_fim: af.data_fim.toISOString().slice(0, 10),
-      total: 0,
       item_count: 0,
     }
   }
@@ -35,13 +33,11 @@ export class AfService {
     const af = await this.prisma.aF.findUniqueOrThrow({
       where: { id },
     })
-    const total = await getAfTotal(this.prisma, af.id)
     const item_count = await countItemsForAF(this.prisma, af.id)
     return {
       ...af,
       data_inicio: af.data_inicio.toISOString().slice(0, 10),
       data_fim: af.data_fim.toISOString().slice(0, 10),
-      total,
       item_count,
     }
   }
@@ -54,7 +50,6 @@ export class AfService {
         ...af,
         data_inicio: af.data_inicio.toISOString().slice(0, 10),
         data_fim: af.data_fim.toISOString().slice(0, 10),
-        total: await getAfTotal(this.prisma, af.id),
         item_count: await countItemsForAF(this.prisma, af.id),
       })),
     )
@@ -67,14 +62,12 @@ export class AfService {
 
     return Promise.all(
       afs.map(async (af) => {
-        const total = await getAfTotal(this.prisma, af.id)
         const item_count = await countItemsForAF(this.prisma, af.id)
 
         return {
           ...af,
           data_inicio: af.data_inicio.toISOString().slice(0, 10),
           data_fim: af.data_fim.toISOString().slice(0, 10),
-          total,
           item_count,
         }
       }),
@@ -94,13 +87,11 @@ export class AfService {
           : undefined,
       },
     })
-    const total = await getAfTotal(this.prisma, af.id)
     const item_count = await countItemsForAF(this.prisma, af.id)
     return {
       ...af,
       data_inicio: af.data_inicio.toISOString().slice(0, 10),
       data_fim: af.data_fim.toISOString().slice(0, 10),
-      total,
       item_count,
     }
   }

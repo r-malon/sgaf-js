@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/service'
 import { CreateItemDto } from './dto/create-item.dto'
 import { UpdateItemDto } from './dto/update-item.dto'
-import { getItemTotal } from './total.service'
 import { countValoresForItem } from './valor-count.service'
 import { type Item } from '@sgaf/shared'
 import { omit } from '../utils/omit'
@@ -41,7 +40,6 @@ export class ItemService {
         ...item,
         instalacoes: [],
         quantidade_usada: 0,
-        total: 0,
         valor_count: 1,
         instalados_count: 0,
       }
@@ -102,7 +100,6 @@ export class ItemService {
     item: PrismaItem & { instalacoes: PrismaInstalacao[] },
     afId: number,
   ): Promise<Item> {
-    const total = await getItemTotal(this.prisma, item.id, afId)
     const valor_count = await countValoresForItem(this.prisma, item.id, afId)
     const { instalacoes, ...rest } = item
 
@@ -116,7 +113,6 @@ export class ItemService {
           : null,
       })),
       quantidade_usada: instalacoes.reduce((sum, i) => sum + i.quantidade, 0),
-      total,
       valor_count,
       instalados_count: instalacoes.length,
     }

@@ -74,7 +74,7 @@ export default function Bordereau() {
     error: valoresError,
   } = useAPISWR<Valor>(valorHandlers.key({ afId }))
   const {
-    data: allInstalacoes = [],
+    data: instalacoes = [],
     isLoading: instalacoesLoading,
     error: instalacoesError,
   } = useAPISWR<Instalacao>(instalacaoHandlers.key())
@@ -93,22 +93,19 @@ export default function Bordereau() {
     return <div className="p-8 text-red-500">Erro: {error.message}</div>
   if (!af || !contrato) return <div className="p-8">Dados não encontrados</div>
 
-  // Build valor lookup by itemId
   const valoresPorItem = new Map<number, Valor[]>()
   for (const v of valores) {
     if (!valoresPorItem.has(v.itemId)) valoresPorItem.set(v.itemId, [])
     valoresPorItem.get(v.itemId)!.push(v)
   }
 
-  // Build instalacoes lookup by itemId
   const instalacoesPorItem = new Map<number, Instalacao[]>()
-  for (const inst of allInstalacoes) {
+  for (const inst of instalacoes) {
     if (!instalacoesPorItem.has(inst.itemId))
       instalacoesPorItem.set(inst.itemId, [])
     instalacoesPorItem.get(inst.itemId)!.push(inst)
   }
 
-  // Filter and calculate
   const itemsAtivos = items.filter((item) => {
     const vals = valoresPorItem.get(item.id) ?? []
     const hasValorAtivo = vals.some((v) =>
@@ -139,7 +136,7 @@ export default function Bordereau() {
     )
   }
 
-  let totalGeral = 0
+  let total = 0
 
   return (
     <div className="p-8 print:p-0 max-w-4xl mx-auto">
@@ -173,7 +170,6 @@ export default function Bordereau() {
           ),
         )
 
-        // Get most recent valor
         const valorAtivo = valsAtivos.sort(
           (a, b) =>
             new Date(b.data_inicio).getTime() -
@@ -190,20 +186,19 @@ export default function Bordereau() {
           ),
         )
 
-        const qtdUsada = instsAtivas.reduce((sum, i) => sum + i.quantidade, 0)
         let totalItem = 0
 
         return (
           <section key={item.id} className="mb-6">
             <h3 className="text-lg font-medium mb-2">
-              {item.descricao ?? 'Sem descrição'}
+              {item.descricao ?? '⸻'}
             </h3>
             <p className="text-sm mb-1">
               <strong>Banda Máxima:</strong> {item.banda_maxima}
             </p>
             <p className="text-sm mb-1">
               <strong>Qtd.: </strong>
-              {qtdUsada} / {item.quantidade_maxima}
+              {item.quantidade_usada} / {item.quantidade_maxima}
             </p>
 
             <table className="w-full border-collapse text-sm mb-2">
@@ -232,10 +227,7 @@ export default function Bordereau() {
                   totalItem += preco
 
                   return (
-                    <tr
-                      key={inst.id}
-                      className={idx % 2 === 1 ? 'bg-gray-50' : 'bg-white'}
-                    >
+                    <tr key={inst.id}>
                       <td className="border px-2 py-1">{inst.local?.nome}</td>
                       <td className="border px-2 py-1 text-center">
                         {inst.banda_instalada}
@@ -264,15 +256,15 @@ export default function Bordereau() {
               <strong>Total:</strong> {formatBRL(totalItem)}
             </p>
 
-            {/* Hidden counter for grand total */}
-            <span className="hidden">{(totalGeral += totalItem)}</span>
+            {/* Hidden counter */}
+            <span className="hidden">{(total += totalItem)}</span>
           </section>
         )
       })}
 
       <footer className="mt-8 border-t pt-4">
-        <p className="text-lg font-semibold">
-          <strong>Valor total:</strong> {formatBRL(totalGeral)}
+        <p className="text-lg font-semibold text-right">
+          <strong>Valor total:</strong> {formatBRL(total)}
         </p>
       </footer>
     </div>

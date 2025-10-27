@@ -15,13 +15,17 @@ export function formatBRL(cents: number, symbol: boolean = true) {
 }
 
 export function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString('pt-BR')
+  return new Date(dateStr).toLocaleDateString('pt-BR', { timeZone: 'UTC' })
 }
 
 export function formatMonth(year?: number, month: number) {
   const date = new Date(year ?? 0, month - 1, 1)
   return capitalize(
-    date.toLocaleString('pt-BR', { month: 'long', year: 'numeric' }),
+    date.toLocaleString('pt-BR', {
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'UTC',
+    }),
   )
 }
 

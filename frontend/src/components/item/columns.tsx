@@ -38,11 +38,6 @@ export const itemColumns: ColumnDef<Item>[] = [
       <DataTableColumnHeader column={column} title="Qtd. Max." />
     ),
   },
-  MoneyColumn<Item>({
-    header: 'Total',
-    accessor: (row) => row.total,
-    includeSumFooter: true,
-  }),
   {
     id: 'actions',
     header: 'Ações',

@@ -31,7 +31,6 @@ export const afOutputSchema = afSchema.safeExtend({
   id: z.number().int().positive().readonly(),
   principal: z.boolean().readonly(),
   item_count: z.number().int().nonnegative(),
-  total: z.number().int().nonnegative(),
 })
 
 export type AF = z.infer<typeof afOutputSchema>

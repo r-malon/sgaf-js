@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/service'
 import { CreateContratoDto } from './dto/create-contrato.dto'
 import { UpdateContratoDto } from './dto/update-contrato.dto'
-import { getContratoTotal } from './total.service'
 import { countAFsForContrato } from './af-count.service'
 import { type Contrato } from '@sgaf/shared'
 
@@ -16,7 +15,6 @@ export class ContratoService {
     })
     return {
       ...contrato,
-      total: 0,
       af_count: 0,
     }
   }
@@ -25,11 +23,9 @@ export class ContratoService {
     const contrato = await this.prisma.contrato.findUniqueOrThrow({
       where: { id },
     })
-    const total = await getContratoTotal(this.prisma, contrato.id)
     const af_count = await countAFsForContrato(this.prisma, contrato.id)
     return {
       ...contrato,
-      total,
       af_count,
     }
   }
@@ -40,7 +36,6 @@ export class ContratoService {
     return Promise.all(
       contratos.map(async (contrato) => ({
         ...contrato,
-        total: await getContratoTotal(this.prisma, contrato.id),
         af_count: await countAFsForContrato(this.prisma, contrato.id),
       })),
     )
@@ -54,11 +49,9 @@ export class ContratoService {
       where: { id },
       data: updateContratoDto,
     })
-    const total = await getContratoTotal(this.prisma, contrato.id)
     const af_count = await countAFsForContrato(this.prisma, contrato.id)
     return {
       ...contrato,
-      total,
       af_count,
     }
   }

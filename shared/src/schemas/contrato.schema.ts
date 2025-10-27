@@ -35,7 +35,6 @@ export const contratoSchema = contratoBaseSchema
 export const contratoOutputSchema = contratoBaseSchema.safeExtend({
   id: z.number().int().positive().readonly(),
   af_count: z.number().int().nonnegative(),
-  total: z.number().int().nonnegative(),
 })
 
 export type Contrato = z.infer<typeof contratoOutputSchema>

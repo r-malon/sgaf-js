@@ -28,22 +28,9 @@ export const contratoColumns: ColumnDef<Contrato>[] = [
   {
     accessorKey: 'af_count',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Qtd." />
+      <DataTableColumnHeader column={column} title="# AFs" />
     ),
-    footer: ({ table }) =>
-      table
-        .getFilteredRowModel()
-        .rows.reduce(
-          (total: number, row: Row<Contrato>) =>
-            total + (row.getValue('af_count') as number),
-          0,
-        ),
   },
-  MoneyColumn<Contrato>({
-    header: 'Total',
-    accessor: (row) => row.total,
-    includeSumFooter: true,
-  }),
   {
     id: 'actions',
     header: 'Ações',
