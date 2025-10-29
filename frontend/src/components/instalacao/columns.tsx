@@ -1,7 +1,7 @@
 'use client'
 
 import { ColumnDef } from '@tanstack/react-table'
-import { Minus, Check, X } from 'lucide-react'
+import { Minus } from 'lucide-react'
 import { DataTableColumnHeader } from '@/components/data-table-column-header'
 import { TruncColumnCell } from '@/components/trunc-column-cell'
 import { InstalacaoActionCell } from '@/components/instalacao/action-cell'

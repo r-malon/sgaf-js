@@ -4,7 +4,6 @@ import { ColumnDef } from '@tanstack/react-table'
 import { Check, X } from 'lucide-react'
 import { DataTableColumnHeader } from '@/components/data-table-column-header'
 import { AFActionCell } from '@/components/af/action-cell'
-import { MoneyColumn } from '@/components/money-column'
 import { TruncColumnCell } from '@/components/trunc-column-cell'
 import { type AF } from '@sgaf/shared'
 

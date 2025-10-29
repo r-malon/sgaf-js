@@ -4,7 +4,6 @@ import { ColumnDef } from '@tanstack/react-table'
 import { Minus } from 'lucide-react'
 import { DataTableColumnHeader } from '@/components/data-table-column-header'
 import { ItemActionCell } from '@/components/item/action-cell'
-import { MoneyColumn } from '@/components/money-column'
 import { TruncColumnCell } from '@/components/trunc-column-cell'
 import { type Item } from '@sgaf/shared'
 

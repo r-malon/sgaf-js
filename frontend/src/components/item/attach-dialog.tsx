@@ -98,7 +98,6 @@ export function ItemAttachDialog({
     })
 
     toAdd.forEach((id) => {
-      const item = availableItems.find((i) => i.id === id)
       const cached = cache[id]
       append({
         itemId: id,

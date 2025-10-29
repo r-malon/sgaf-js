@@ -10,7 +10,6 @@ import { useEntityHandlers } from '@/lib/handlers'
 interface AFDialogProps {
   af?: AF
   contratoId: number
-  contratoNumero?: string
   triggerLabel?: React.ReactElement | string
   title?: React.ReactElement | string
   onSubmit?: (values: z.infer<typeof afSchema>) => Promise<void>
@@ -19,7 +18,6 @@ interface AFDialogProps {
 export function AFDialog({
   af,
   contratoId,
-  contratoNumero,
   triggerLabel = (
     <>
       <Plus /> AF

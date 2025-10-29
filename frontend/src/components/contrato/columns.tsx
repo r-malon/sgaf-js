@@ -1,9 +1,8 @@
 'use client'
 
-import { ColumnDef, type Row } from '@tanstack/react-table'
+import { ColumnDef } from '@tanstack/react-table'
 import { DataTableColumnHeader } from '@/components/data-table-column-header'
 import { ContratoActionCell } from '@/components/contrato/action-cell'
-import { MoneyColumn } from '@/components/money-column'
 import { type Contrato } from '@sgaf/shared'
 
 export const contratoColumns: ColumnDef<Contrato>[] = [

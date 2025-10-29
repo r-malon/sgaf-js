@@ -40,9 +40,7 @@ export function AFDrawer({ contratoId, contratoNumero }: AFDrawerProps) {
         principalId: principal?.id,
         principalItemCount: principal?.item_count,
       }}
-      createDialog={
-        <AFDialog contratoId={contratoId} contratoNumero={contratoNumero} />
-      }
+      createDialog={<AFDialog contratoId={contratoId} />}
     />
   )
 }

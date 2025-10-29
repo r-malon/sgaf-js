@@ -46,7 +46,7 @@ export class ItemService {
     })
   }
 
-  async findOne(id: number, afId: number): Promise<Item | null> {
+  async findOne(id: number, afId: number): Promise<Item> {
     const item = await this.prisma.item.findUniqueOrThrow({
       where: { id },
       include: { instalacoes: true },

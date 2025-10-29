@@ -221,7 +221,7 @@ export default function Bordereau() {
                 </tr>
               </thead>
               <tbody>
-                {instsAtivas.map((inst, idx) => {
+                {instsAtivas.map((inst) => {
                   const preco = calculatePrice(
                     valorAtivo.valor,
                     inst.quantidade,

@@ -40,12 +40,7 @@ export function ContratoActionCell({ contrato }: { contrato: Contrato }) {
         },
         {
           key: 'add-af',
-          render: (contrato) => (
-            <AFDialog
-              contratoId={contrato.id}
-              contratoNumero={contrato.numero}
-            />
-          ),
+          render: (contrato) => <AFDialog contratoId={contrato.id} />,
         },
         {
           key: 'list-afs',
